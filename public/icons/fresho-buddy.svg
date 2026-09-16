@@ -1,0 +1,277 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background / Ambient Gradients -->
+    <radialGradient id="ffMascotBodyGrad" cx="38%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="25%" stop-color="#f2faee" />
+      <stop offset="65%" stop-color="#ddf7d5" />
+      <stop offset="100%" stop-color="#b6f0aa" />
+    </radialGradient>
+
+    <!-- Leaf Cap Vibrant Foliage Gradients -->
+    <linearGradient id="ffLeafTopGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#86efac" />
+      <stop offset="20%" stop-color="#4ade80" />
+      <stop offset="55%" stop-color="#22c55e" />
+      <stop offset="85%" stop-color="#16a34a" />
+      <stop offset="100%" stop-color="#14532d" />
+    </linearGradient>
+
+    <linearGradient id="ffLeafSwoopGrad" x1="10%" y1="10%" x2="90%" y2="90%">
+      <stop offset="0%" stop-color="#86efac" />
+      <stop offset="35%" stop-color="#34d399" />
+      <stop offset="65%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <linearGradient id="ffLeafEarGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#4ade80" />
+      <stop offset="60%" stop-color="#22c55e" />
+      <stop offset="100%" stop-color="#15803d" />
+    </linearGradient>
+
+    <!-- Sprout Limbs & Vine Gradient -->
+    <linearGradient id="ffSproutLimbGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#86efac" />
+      <stop offset="45%" stop-color="#22c55e" />
+      <stop offset="100%" stop-color="#15803d" />
+    </linearGradient>
+
+    <linearGradient id="ffVineGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#22c55e" />
+      <stop offset="40%" stop-color="#16a34a" />
+      <stop offset="75%" stop-color="#15803d" />
+      <stop offset="100%" stop-color="#22c55e" />
+    </linearGradient>
+
+    <!-- Honeycrisp Apple Rich Gradients -->
+    <radialGradient id="ffAppleBodyGrad" cx="36%" cy="28%" r="72%">
+      <stop offset="0%" stop-color="#fca5a5" />
+      <stop offset="18%" stop-color="#f87171" />
+      <stop offset="42%" stop-color="#ef4444" />
+      <stop offset="70%" stop-color="#dc2626" />
+      <stop offset="90%" stop-color="#b91c1c" />
+      <stop offset="100%" stop-color="#7f1d1d" />
+    </radialGradient>
+
+    <linearGradient id="ffAppleStemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#92400e" />
+      <stop offset="60%" stop-color="#78350f" />
+      <stop offset="100%" stop-color="#451a03" />
+    </linearGradient>
+
+    <!-- Eyes Deep Gloss Gradient -->
+    <linearGradient id="ffEyeGrad" x1="20%" y1="10%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#052e16" />
+      <stop offset="65%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+
+    <!-- Rosy Blush Gradient -->
+    <radialGradient id="ffBlushGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.75" />
+      <stop offset="60%" stop-color="#fda4af" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#fda4af" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Mouth Cavity Gradient -->
+    <linearGradient id="ffMouthGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#450a0a" />
+      <stop offset="60%" stop-color="#881337" />
+      <stop offset="100%" stop-color="#9f1239" />
+    </linearGradient>
+
+    <!-- Sparkle Rays Gradient -->
+    <linearGradient id="ffSparkleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#eab308" />
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="ffMascotShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#14532d" flood-opacity="0.18" />
+    </filter>
+
+    <filter id="ffAppleGlow" x="-15%" y="-15%" width="135%" height="135%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#7f1d1d" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <g filter="url(#ffMascotShadow)">
+    <!-- 1. BASE CURVING VINE RUNNER UNDERNEATH -->
+    <g id="baseVine">
+      <!-- Outer vine ribbon -->
+      <path d="M 64 472 C 140 436, 215 464, 305 464 C 388 464, 432 438, 452 388 C 458 372, 474 382, 464 408 C 444 456, 388 488, 298 488 C 210 488, 140 460, 64 484 C 54 488, 50 478, 64 472 Z" fill="url(#ffVineGrad)" />
+      <!-- Top vine inner highlight -->
+      <path d="M 76 473 C 145 442, 216 466, 302 466 C 382 466, 426 442, 446 398" stroke="#86efac" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8" />
+      <!-- Sprouting leaf at the vine tail -->
+      <path d="M 444 416 C 468 402, 492 374, 484 366 C 472 374, 442 410, 412 432 Z" fill="url(#ffLeafTopGrad)" />
+      <path d="M 444 416 C 462 396, 480 376, 482 368" stroke="#14532d" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.7" />
+      <circle cx="468" cy="392" r="2.5" fill="#ffffff" opacity="0.85" />
+    </g>
+
+    <!-- 2. SPROUT FEET -->
+    <g id="sproutFeet">
+      <!-- Left leg & foot -->
+      <ellipse cx="204" cy="438" rx="34" ry="22" transform="rotate(-6 204 438)" fill="url(#ffSproutLimbGrad)" />
+      <ellipse cx="198" cy="432" rx="20" ry="10" transform="rotate(-6 198 432)" fill="#ffffff" opacity="0.32" />
+      <!-- Right leg & foot -->
+      <ellipse cx="294" cy="442" rx="34" ry="22" transform="rotate(8 294 442)" fill="url(#ffSproutLimbGrad)" />
+      <ellipse cx="290" cy="436" rx="20" ry="10" transform="rotate(8 290 436)" fill="#ffffff" opacity="0.32" />
+    </g>
+
+    <!-- 3. MAIN SPHERICAL ROUND HEAD / BODY -->
+    <g id="mascotBody">
+      <!-- Main spherical circle -->
+      <circle cx="268" cy="272" r="132" fill="url(#ffMascotBodyGrad)" stroke="#86efac" stroke-width="1.5" />
+      <!-- Soft organic body shading contour on bottom right -->
+      <path d="M 230 398 C 295 408, 360 380, 390 328 C 398 312, 388 348, 360 374 C 322 410, 260 410, 230 398 Z" fill="#15803d" opacity="0.15" />
+      <!-- Left upper perky leaf ear -->
+      <g id="leftLeafEar">
+        <path d="M 172 176 C 120 184, 84 212, 88 266 C 104 274, 150 248, 172 208 Z" fill="url(#ffLeafEarGrad)" />
+        <path d="M 172 176 C 140 210, 114 246, 92 264" stroke="#166534" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.65" />
+        <ellipse cx="130" cy="226" rx="3.5" ry="2" fill="#ffffff" opacity="0.8" />
+      </g>
+
+      <!-- Giant lush leafy top crown / hairdo -->
+      <g id="topCrownLeaf">
+        <!-- Main towering curved right leaf -->
+        <path d="M 252 144 C 290 80, 350 24, 388 28 C 430 76, 442 168, 360 216 C 300 248, 234 192, 252 144 Z" fill="url(#ffLeafTopGrad)" />
+        <!-- Leaf center spine / vein -->
+        <path d="M 264 162 C 320 106, 366 58, 386 32" stroke="#14532d" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.75" />
+        <path d="M 334 116 C 364 118, 394 134, 410 156" stroke="#14532d" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5" />
+        <path d="M 302 144 C 324 160, 348 178, 366 196" stroke="#14532d" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5" />
+        <!-- Dewdrop on top leaf -->
+        <circle cx="372" cy="74" r="5" fill="#ffffff" opacity="0.9" />
+        <circle cx="374" cy="73" r="2" fill="#ffffff" />
+      </g>
+
+      <!-- Sweeping Leaf Bangs / Forehead Swoop -->
+      <g id="foreheadLeafBangs">
+        <path d="M 188 152 C 248 116, 320 148, 358 190 C 378 214, 350 252, 290 248 C 220 244, 150 274, 134 266 C 132 230, 152 174, 188 152 Z" fill="url(#ffLeafSwoopGrad)" />
+        <!-- Front curl tip over the face -->
+        <path d="M 188 152 C 230 188, 240 218, 234 246" stroke="#064e3b" stroke-width="2.8" stroke-linecap="round" fill="none" opacity="0.6" />
+        <ellipse cx="236" cy="180" rx="4" ry="2.5" fill="#ffffff" opacity="0.7" />
+      </g>
+
+      <!-- 4. ADORABLE BIG ANIME EYES -->
+      <g id="mascotEyes">
+        <!-- Left Eye -->
+        <g id="leftEye">
+          <!-- Outer Eye Capsule -->
+          <ellipse cx="218" cy="282" rx="20" ry="26" transform="rotate(-4 218 282)" fill="url(#ffEyeGrad)" />
+          <!-- Inner emerald depth iris glow -->
+          <ellipse cx="218" cy="292" rx="14" ry="12" fill="#10b981" opacity="0.5" />
+          <!-- Big primary twinkle spark -->
+          <ellipse cx="212" cy="272" rx="8" ry="11" transform="rotate(-15 212 272)" fill="#ffffff" />
+          <!-- Small secondary twinkle spark -->
+          <circle cx="225" cy="294" r="3.8" fill="#ffffff" />
+          <!-- Eye shine edge ring -->
+          <path d="M 204 290 C 206 302, 224 306, 230 298" stroke="#34d399" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.8" />
+          <!-- Delicate Eyebrow -->
+          <path d="M 206 248 Q 220 240 234 248" stroke="#14532d" stroke-width="3" stroke-linecap="round" fill="none" />
+        </g>
+
+        <!-- Right Eye -->
+        <g id="rightEye">
+          <!-- Outer Eye Capsule -->
+          <ellipse cx="328" cy="296" rx="20" ry="26" transform="rotate(4 328 296)" fill="url(#ffEyeGrad)" />
+          <!-- Inner emerald depth iris glow -->
+          <ellipse cx="328" cy="306" rx="14" ry="12" fill="#10b981" opacity="0.5" />
+          <!-- Big primary twinkle spark -->
+          <ellipse cx="322" cy="286" rx="8" ry="11" transform="rotate(-10 322 286)" fill="#ffffff" />
+          <!-- Small secondary twinkle spark -->
+          <circle cx="335" cy="308" r="3.8" fill="#ffffff" />
+          <!-- Eye shine edge ring -->
+          <path d="M 314 304 C 316 316, 334 320, 340 312" stroke="#34d399" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.8" />
+          <!-- Delicate Eyebrow -->
+          <path d="M 326 264 Q 340 256 354 266" stroke="#14532d" stroke-width="3" stroke-linecap="round" fill="none" />
+        </g>
+      </g>
+
+      <!-- 5. ROSY PEACH BLUSH CHEEKS -->
+      <g id="blushCheeks">
+        <ellipse cx="180" cy="308" rx="20" ry="12" fill="url(#ffBlushGrad)" />
+        <ellipse cx="350" cy="330" rx="22" ry="14" fill="url(#ffBlushGrad)" />
+      </g>
+
+      <!-- 6. CHEERFUL OPEN SMILING MOUTH -->
+      <g id="mascotMouth">
+        <!-- Smiling open mouth path -->
+        <path d="M 244 316 C 242 344, 280 348, 290 322 C 294 314, 246 310, 244 316 Z" fill="url(#ffMouthGrad)" />
+        <!-- Happy pink tongue -->
+        <path d="M 252 330 C 262 322, 276 322, 286 330 C 282 342, 258 342, 252 330 Z" fill="#fb7185" />
+        <!-- Smile upper outline stroke -->
+        <path d="M 240 314 C 254 326, 278 326, 294 320" stroke="#14532d" stroke-width="2.5" stroke-linecap="round" fill="none" />
+      </g>
+    </g>
+
+    <!-- 7. THREE BRIGHT GOLDEN SPARKLE RAYS (RIGHT SIDE) -->
+    <g id="sparkleRays">
+      <!-- Top sparkle ray -->
+      <path d="M 428 238 C 444 230, 464 220, 468 222 C 470 224, 466 238, 442 254 C 430 262, 424 246, 428 238 Z" fill="url(#ffSparkleGrad)" />
+      <!-- Middle sparkle ray -->
+      <path d="M 444 278 C 466 274, 488 274, 490 278 C 490 282, 470 292, 448 294 C 434 294, 434 280, 444 278 Z" fill="url(#ffSparkleGrad)" />
+      <!-- Bottom sparkle ray -->
+      <path d="M 436 324 C 456 332, 474 346, 472 350 C 470 354, 452 354, 430 344 C 420 338, 426 322, 436 324 Z" fill="url(#ffSparkleGrad)" />
+    </g>
+
+    <!-- 8. THE PLUMP HONEYCRISP RED APPLE (LOVINGLY EMBRACED) -->
+    <g id="honeycrispApple" filter="url(#ffAppleGlow)">
+      <!-- Apple curved woody stem -->
+      <path d="M 130 288 C 124 266, 114 252, 102 248 C 100 248, 102 256, 110 268 C 118 280, 124 294, 126 304 Z" fill="url(#ffAppleStemGrad)" />
+      <!-- Little green leaf on apple stem -->
+      <path d="M 124 266 C 136 250, 160 252, 166 266 C 160 274, 136 278, 124 266 Z" fill="url(#ffLeafTopGrad)" />
+      <path d="M 124 266 C 140 262, 154 260, 164 266" stroke="#14532d" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.75" />
+
+      <!-- Apple Heart / Plump Contour -->
+      <path d="M 128 300 C 146 294, 172 300, 192 318 C 216 342, 222 384, 206 414 C 190 444, 146 448, 128 440 C 110 448, 66 444, 50 414 C 34 384, 40 342, 64 318 C 84 300, 110 294, 128 300 Z" fill="url(#ffAppleBodyGrad)" />
+
+      <!-- Glossy Light Highlights on Apple Skin -->
+      <!-- Curved upper gloss crescent -->
+      <path d="M 72 328 C 96 308, 130 306, 146 312 C 136 320, 104 322, 84 340 C 76 348, 70 338, 72 328 Z" fill="#ffffff" opacity="0.6" />
+      <ellipse cx="68" cy="352" rx="4" ry="12" transform="rotate(-15 68 352)" fill="#ffffff" opacity="0.4" />
+
+      <!-- Realistic Dewdrops on Apple Surface -->
+      <!-- Dewdrop 1 -->
+      <g transform="translate(86, 344)">
+        <ellipse cx="6" cy="6" rx="4.5" ry="3.5" fill="#7f1d1d" opacity="0.4" />
+        <ellipse cx="5" cy="4.5" rx="4" ry="3" fill="#ffffff" opacity="0.75" />
+        <circle cx="4" cy="3.5" r="1.5" fill="#ffffff" />
+      </g>
+      <!-- Dewdrop 2 -->
+      <g transform="translate(142, 334)">
+        <ellipse cx="5" cy="5" rx="3.5" ry="2.8" fill="#7f1d1d" opacity="0.4" />
+        <ellipse cx="4.5" cy="4" rx="3" ry="2.2" fill="#ffffff" opacity="0.8" />
+        <circle cx="3.8" cy="3.2" r="1.2" fill="#ffffff" />
+      </g>
+      <!-- Dewdrop 3 -->
+      <g transform="translate(108, 386)">
+        <ellipse cx="6" cy="6" rx="4.5" ry="3.5" fill="#7f1d1d" opacity="0.4" />
+        <ellipse cx="5" cy="4.5" rx="4" ry="3" fill="#ffffff" opacity="0.75" />
+        <circle cx="4" cy="3.5" r="1.5" fill="#ffffff" />
+      </g>
+      <!-- Dewdrop 4 -->
+      <g transform="translate(156, 376)">
+        <ellipse cx="4" cy="4" rx="3" ry="2.2" fill="#7f1d1d" opacity="0.4" />
+        <ellipse cx="3.5" cy="3.2" rx="2.5" ry="1.8" fill="#ffffff" opacity="0.7" />
+        <circle cx="3" cy="2.5" r="1" fill="#ffffff" />
+      </g>
+    </g>
+
+    <!-- 9. SPROUT ARMS HUGGING THE APPLE -->
+    <g id="sproutArms">
+      <!-- Left arm clasping from behind apple -->
+      <path d="M 66 360 C 50 366, 44 380, 52 396 C 60 410, 74 406, 76 390 C 78 376, 74 366, 66 360 Z" fill="url(#ffSproutLimbGrad)" />
+      <ellipse cx="60" cy="382" rx="8" ry="4" transform="rotate(-20 60 382)" fill="#ffffff" opacity="0.35" />
+
+      <!-- Right arm stretching across the front of apple -->
+      <path d="M 238 358 C 218 362, 186 376, 172 388 C 160 400, 168 418, 186 414 C 206 408, 226 388, 244 374 Z" fill="url(#ffSproutLimbGrad)" />
+      <!-- Rounded green hand / fingers holding apple -->
+      <circle cx="178" cy="402" r="10" fill="url(#ffSproutLimbGrad)" />
+      <circle cx="188" cy="406" r="8" fill="url(#ffSproutLimbGrad)" />
+      <ellipse cx="204" cy="384" rx="16" ry="6" transform="rotate(-24 204 384)" fill="#ffffff" opacity="0.32" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  --color-primary: #013a13;
+  --color-primary-container: #1e5128;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #8cc38f;
+  --color-primary-fixed: #b8f1b9;
+  --color-primary-fixed-dim: #9cd49e;
+
+  --color-secondary: #006e1c;
+  --color-secondary-container: #91f78e;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #00731e;
+
+  --color-tertiary: #5f1700;
+  --color-tertiary-container: #862400;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #ff9c7e;
+  --color-tertiary-fixed: #ffdbd0;
+  --color-tertiary-fixed-dim: #ffb59f;
+
+  --color-surface: #ebffe5;
+  --color-surface-dim: #c8e1c3;
+  --color-surface-bright: #ebffe5;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #e1fbdc;
+  --color-surface-container: #dcf5d6;
+  --color-surface-container-high: #d6efd0;
+  --color-surface-container-highest: #d0e9cb;
+  --color-surface-variant: #d0e9cb;
+
+  --color-on-surface: #0c200d;
+  --color-on-surface-variant: #414940;
+
+  --color-outline: #71796f;
+  --color-outline-variant: #c1c9bd;
+
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #93000a;
+}
+
+@keyframes mascotGentleBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-12px) scale(1.02, 0.98);
+  }
+  60% {
+    transform: translateY(-3px) scale(0.99, 1.01);
+  }
+  85% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes mascotLightBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(-8px) scale(1.02);
+  }
+  80% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes mascotGesture {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-3deg) scale(1.02);
+  }
+  50% {
+    transform: rotate(3deg) scale(1.03) translateY(-4px);
+  }
+  75% {
+    transform: rotate(-1deg) scale(1.01);
+  }
+}
+
+@keyframes mascotSparkle {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.animate-mascot-gentle-bounce {
+  animation: mascotGentleBounce 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 1;
+}
+
+.animate-mascot-light-bounce {
+  animation: mascotLightBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1;
+}
+
+.animate-mascot-gesture {
+  animation: mascotGesture 1s ease-in-out 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-mascot-gentle-bounce,
+  .animate-mascot-light-bounce,
+  .animate-mascot-gesture {
+    animation: none !important;
+  }
+}

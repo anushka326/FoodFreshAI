@@ -1,0 +1,153 @@
+/**
+ * Isolated Development & Prototype Demonstration Data
+ * 
+ * IMPORTANT:
+ * This file contains prototype/mock records originally created for Stitch visual design previews.
+ * It is completely isolated and is NEVER loaded into production-facing state or new user accounts.
+ * New users always start with an empty pantry history and empty Eat First roadmap.
+ */
+
+import { FOOD_ASSETS } from '../assets/food/index.js';
+
+export const DEMO_HISTORY_ITEMS = [
+  {
+    id: 'demo_hist_01',
+    foodName: 'Honeycrisp Apple',
+    cultivar: 'Orchard Fresh • Malus domestica',
+    status: 'Fresh (Grade A)',
+    statusCategory: 'fresh',
+    qualityPeriod: '3–4 days left',
+    storageEnvironment: 'Ambient Countertop',
+    analyzedTime: 'Today, 5:30 PM',
+    qualityScore: 88,
+    cellularIntegrity: 'Firm & Crisp',
+    guidance: 'Eat fresh, slice into salads, or store chilled away from ethylene-emitting bananas to prolong crunchiness for up to 9 days.',
+    imageSrc: FOOD_ASSETS.cuttingBoardSourdough,
+    imageCrop: 'object-left-top',
+  },
+  {
+    id: 'demo_hist_02',
+    foodName: 'Ripe Vine Tomatoes',
+    cultivar: 'Cluster Vine • Solanum lycopersicum',
+    status: 'Semi-Fresh (Softening)',
+    statusCategory: 'semi',
+    qualityPeriod: '1–2 days left',
+    storageEnvironment: 'Recommended for Sauce',
+    analyzedTime: 'Yesterday, 7:15 PM',
+    qualityScore: 68,
+    cellularIntegrity: 'Slight Yielding',
+    guidance: 'Best roasted or reduced into fresh pasta marinara before skin splits.',
+    imageSrc: FOOD_ASSETS.cuttingBoardSourdough,
+    imageCrop: 'object-center',
+  },
+  {
+    id: 'demo_hist_03',
+    foodName: 'Cavendish Banana',
+    cultivar: 'Tropical • High Sugar Spotting',
+    status: 'Needs Attention',
+    statusCategory: 'attention',
+    qualityPeriod: 'Consume within 24h',
+    storageEnvironment: 'Ideal for Banana Bread',
+    analyzedTime: 'Sep 13, 2026',
+    qualityScore: 48,
+    cellularIntegrity: 'Soft & High Fructose',
+    guidance: 'Starches have fully converted to sugars. Blend into morning smoothie or freeze for baking.',
+    imageSrc: FOOD_ASSETS.cuttingBoardSourdough,
+    imageCrop: 'object-right-top',
+  },
+  {
+    id: 'demo_hist_04',
+    foodName: 'Haas Avocado',
+    cultivar: 'Peak Creaminess • Persea americana',
+    status: 'Fresh (Peak Ripeness)',
+    statusCategory: 'fresh',
+    qualityPeriod: '2–3 days left',
+    storageEnvironment: 'Crisper Drawer Chill',
+    analyzedTime: 'Sep 12, 2026',
+    qualityScore: 85,
+    cellularIntegrity: 'Creamy Firmness',
+    guidance: 'Move to refrigerator crisper to maintain peak buttery texture for up to 5 additional days.',
+    imageSrc: FOOD_ASSETS.cuttingBoardSourdough,
+    imageCrop: 'object-bottom',
+  },
+  {
+    id: 'demo_hist_05',
+    foodName: 'Artisanal Sourdough',
+    cultivar: 'Country Loaf • Natural Ferment',
+    status: 'Semi-Fresh (Firming)',
+    statusCategory: 'semi',
+    qualityPeriod: '2 days left',
+    storageEnvironment: 'Linen Breadbox',
+    analyzedTime: 'Sep 10, 2026',
+    qualityScore: 70,
+    cellularIntegrity: 'Crust Firming',
+    guidance: 'Slice and freeze, or toast with salted butter and garlic for rustic croutons.',
+    imageSrc: FOOD_ASSETS.cuttingBoardSourdough,
+    imageCrop: 'object-right-bottom',
+  },
+  {
+    id: 'demo_hist_06',
+    foodName: 'Baby Spinach Greens',
+    cultivar: 'Organic Tender Leaves • Spinacia oleracea',
+    status: 'Fresh (Vibrant)',
+    statusCategory: 'fresh',
+    qualityPeriod: '3 days left',
+    storageEnvironment: 'Ventilated Crisper',
+    analyzedTime: 'Sep 08, 2026',
+    qualityScore: 90,
+    cellularIntegrity: 'Crisp & Turgid',
+    guidance: 'Line storage container with a paper towel to absorb moisture and preserve chlorophyll.',
+    imageSrc: FOOD_ASSETS.cuttingBoardSourdough,
+    imageCrop: 'object-left-bottom',
+  },
+];
+
+export const DEMO_ACTIVE_ROADMAP = [
+  {
+    id: 'demo_rd_tomato',
+    name: 'Ripe Vine Tomato',
+    priorityRank: 1,
+    priorityTag: '🥇 Eat First',
+    badgeType: 'urgent',
+    qualityWindow: '1–2 days left',
+    urgencyText: 'Needs cook soon',
+    status: 'Semi-Fresh (Softening)',
+    description: 'Best roasted, blended into sauce, or fresh in salad today.',
+    imageSrc: FOOD_ASSETS.vineTomatoes,
+  },
+  {
+    id: 'demo_rd_banana',
+    name: 'Cavendish Banana',
+    priorityRank: 2,
+    priorityTag: '🥈 Eat Next',
+    badgeType: 'warning',
+    qualityWindow: 'Consume within 24h',
+    urgencyText: 'Eat within 24h',
+    status: 'Needs Attention (High Sugar)',
+    description: 'Sugar spots expanding. Perfect for smoothies, oat topping, or baking.',
+    imageSrc: FOOD_ASSETS.cavendishBananas,
+  },
+  {
+    id: 'demo_rd_avocado',
+    name: 'Haas Avocado',
+    priorityRank: 3,
+    priorityTag: '🟢 Can Wait',
+    badgeType: 'fresh',
+    qualityWindow: '2–3 days left',
+    urgencyText: 'Optimal fresh window',
+    status: 'Fresh (Peak Ripeness)',
+    description: 'Yields to gentle pressure. Good for toast, guacamole, or salad.',
+    imageSrc: '',
+    fallbackEmoji: '🥑',
+  },
+];
+
+export const DEMO_COMPLETED_ROADMAP = [
+  {
+    id: 'demo_rd_sourdough',
+    name: 'Artisanal Sourdough',
+    statusText: 'Was: Semi-Fresh (Firming) • French toast prep',
+    eatenWhen: 'Eaten Today',
+    fallbackEmoji: '🍞',
+  },
+];
