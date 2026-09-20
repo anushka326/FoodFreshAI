@@ -1,0 +1,25 @@
+food,freshness_stage,class_name,shelf_life_min,shelf_life_max,shelf_life_midpoint,image_count
+Banana,Fresh,Fresh Banana(1-4),1,4,2.5,590
+Bittermelon,Fresh,Fresh Bittermelon(1-3),1,3,2.0,590
+Cucumber,Fresh,Fresh Cucumber(1-6),1,6,3.5,590
+Eggplant,Fresh,Fresh eggplant(1-4),1,4,2.5,590
+Orange,Fresh,Fresh Orange(1-9),1,9,5.0,590
+Papaya,Fresh,Fresh Papaya(1-4),1,4,2.5,590
+Pineapple,Fresh,Fresh pineapple(1-15),1,15,8.0,590
+Tomato,Fresh,Fresh Tomato(1-10),1,10,5.5,590
+Banana,Rotten,Rotten banana(7-13),7,13,10.0,590
+Bittermelon,Rotten,Rotten Bittermelon(5-8),5,8,6.5,590
+Cucumber,Rotten,Rotten Cucumber(12-20),12,20,16.0,590
+Eggplant,Rotten,Rotten eggplant(8-15),8,15,11.5,590
+Orange,Rotten,Rotten Orange(20-35),20,35,27.5,590
+Papaya,Rotten,Rotten Papaya(7-12),7,12,9.5,590
+Pineapple,Rotten,Rotten Pineapple(25-35),25,35,30.0,590
+Tomato,Rotten,Rotten Tomato(24-35),24,35,29.5,590
+Banana,Semi-Fresh,Semi fresh banana(4-7),4,7,5.5,590
+Bittermelon,Semi-Fresh,Semi Fresh Bittermelon ( 3-5),3,5,4.0,590
+Cucumber,Semi-Fresh,Semi Fresh Cucumber(6-12),6,12,9.0,590
+Orange,Semi-Fresh,Semi fresh Orange(9-20),9,20,14.5,590
+Papaya,Semi-Fresh,Semi Fresh Papaya(4-7),4,7,5.5,590
+Pineapple,Semi-Fresh,Semi fresh Pineapple (15-25),15,25,20.0,590
+Tomato,Semi-Fresh,Semi fresh Tomato(10-24),10,24,17.0,590
+Eggplant,Semi-Fresh,Semi_Fresh eggplant(4-8),4,8,6.0,590

@@ -1,0 +1,9 @@
+food,has_fresh,has_semi_fresh,has_rotten,stage_count,coverage_type
+Banana,True,True,True,3,Full (Fresh + Semi-Fresh + Rotten)
+Bittermelon,True,True,True,3,Full (Fresh + Semi-Fresh + Rotten)
+Cucumber,True,True,True,3,Full (Fresh + Semi-Fresh + Rotten)
+Eggplant,True,True,True,3,Full (Fresh + Semi-Fresh + Rotten)
+Orange,True,True,True,3,Full (Fresh + Semi-Fresh + Rotten)
+Papaya,True,True,True,3,Full (Fresh + Semi-Fresh + Rotten)
+Pineapple,True,True,True,3,Full (Fresh + Semi-Fresh + Rotten)
+Tomato,True,True,True,3,Full (Fresh + Semi-Fresh + Rotten)

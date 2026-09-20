@@ -1,0 +1,264 @@
+original_class_name,normalized_food,mapping_confidence,mapping_reason
+Almonds 1,Almonds,High,Primary noun derived from class name
+Apple 10,Apple,High,Apple variety
+Apple 11,Apple,High,Apple variety
+Apple 12,Apple,High,Apple variety
+Apple 13,Apple,High,Apple variety
+Apple 14,Apple,High,Apple variety
+Apple 17,Apple,High,Apple variety
+Apple 18,Apple,High,Apple variety
+Apple 19,Apple,High,Apple variety
+Apple 20,Apple,High,Apple variety
+Apple 21,Apple,High,Apple variety
+Apple 22,Apple,High,Apple variety
+Apple 23,Apple,High,Apple variety
+Apple 5,Apple,High,Apple variety
+Apple 6,Apple,High,Apple variety
+Apple 7,Apple,High,Apple variety
+Apple 8,Apple,High,Apple variety
+Apple 9,Apple,High,Apple variety
+Apple Braeburn 1,Apple,High,Apple variety
+Apple Crimson Snow 1,Apple,High,Apple variety
+Apple Golden 1,Apple,High,Apple variety
+Apple Golden 2,Apple,High,Apple variety
+Apple Golden 3,Apple,High,Apple variety
+Apple Granny Smith 1,Apple,High,Apple variety
+Apple Pink Lady 1,Apple,High,Apple variety
+Apple Red 1,Apple,High,Apple variety
+Apple Red 2,Apple,High,Apple variety
+Apple Red 3,Apple,High,Apple variety
+Apple Red Delicious 1,Apple,High,Apple variety
+Apple Red Yellow 1,Apple,High,Apple variety
+Apple Red Yellow 2,Apple,High,Apple variety
+Apricot 1,Apricot,High,Primary noun derived from class name
+Avocado 1,Avocado,High,Produce variety
+Avocado 2,Avocado,High,Produce variety
+Avocado Black 1,Avocado,High,Produce variety
+Avocado Black 2,Avocado,High,Produce variety
+Avocado Green 1,Avocado,High,Produce variety
+Banana 1,Banana,High,Banana variety
+Banana 3,Banana,High,Banana variety
+Banana 4,Banana,High,Banana variety
+Banana Lady Finger 1,Banana,High,Banana variety
+Banana Red 1,Banana,High,Banana variety
+Bean pod 1,Bean,High,Primary noun derived from class name
+Beetroot 1,Beetroot,High,Primary noun derived from class name
+BlackBerry 3,Blackberry,High,Berry variety
+BlackBerry 4,Blackberry,High,Berry variety
+Blackberry 1,Blackberry,High,Berry variety
+Blackberry 2,Blackberry,High,Berry variety
+Blackberry 4,Blackberry,High,Berry variety
+Blackberry 5,Blackberry,High,Berry variety
+Blueberry 1,Blueberry,High,Berry variety
+Cabbage red 1,Cabbage,High,Cruciferous produce variety
+Cabbage white 1,Cabbage,High,Cruciferous produce variety
+Cactus fruit 1,Cactus Fruit,High,Multi-word botanical produce name
+Cactus fruit green 1,Cactus Fruit,High,Multi-word botanical produce name
+Cactus fruit red 1,Cactus Fruit,High,Multi-word botanical produce name
+Caju seed 1,Caju,High,Primary noun derived from class name
+Cantaloupe 1,Cantaloupe,High,Primary noun derived from class name
+Cantaloupe 2,Cantaloupe,High,Primary noun derived from class name
+Cantaloupe 3,Cantaloupe,High,Primary noun derived from class name
+Carambola 1,Carambola,High,Primary noun derived from class name
+Carambola 2,Carambola,High,Primary noun derived from class name
+Carambola 3,Carambola,High,Primary noun derived from class name
+Carrot 1,Carrot,High,Primary noun derived from class name
+Cauliflower 1,Cauliflower,High,Primary noun derived from class name
+Celery 1,Celery,High,Primary noun derived from class name
+Cherimoya 1,Cherimoya,High,Primary noun derived from class name
+Cherry 1,Cherry,High,Drupe variety
+Cherry 2,Cherry,High,Drupe variety
+Cherry 3,Cherry,High,Drupe variety
+Cherry 4,Cherry,High,Drupe variety
+Cherry 5,Cherry,High,Drupe variety
+Cherry Rainier 1,Cherry,High,Drupe variety
+Cherry Rainier 2,Cherry,High,Drupe variety
+Cherry Rainier 3,Cherry,High,Drupe variety
+Cherry Sour 1,Cherry,High,Drupe variety
+Cherry Wax 1,Cherry,High,Drupe variety
+Cherry Wax 2,Cherry,High,Drupe variety
+Cherry Wax Black 1,Cherry,High,Drupe variety
+Cherry Wax Red 1,Cherry,High,Drupe variety
+Cherry Wax Red 2,Cherry,High,Drupe variety
+Cherry Wax Red 3,Cherry,High,Drupe variety
+Cherry Wax Yellow 1,Cherry,High,Drupe variety
+Chestnut 1,Chestnut,High,Primary noun derived from class name
+Clementine 1,Clementine,High,Primary noun derived from class name
+Cocos 1,Cocos,High,Primary noun derived from class name
+Corn 1,Corn,High,Primary noun derived from class name
+Corn Husk 1,Corn,High,Primary noun derived from class name
+Cucumber 1,Cucumber,High,Cucurbit variety
+Cucumber 10,Cucumber,High,Cucurbit variety
+Cucumber 11,Cucumber,High,Cucurbit variety
+Cucumber 12,Cucumber,High,Cucurbit variety
+Cucumber 13,Cucumber,High,Cucurbit variety
+Cucumber 3,Cucumber,High,Cucurbit variety
+Cucumber 4,Cucumber,High,Cucurbit variety
+Cucumber 5,Cucumber,High,Cucurbit variety
+Cucumber 6,Cucumber,High,Cucurbit variety
+Cucumber 7,Cucumber,High,Cucurbit variety
+Cucumber 8,Cucumber,High,Cucurbit variety
+Cucumber 9,Cucumber,High,Cucurbit variety
+Dates 1,Dates,High,Primary noun derived from class name
+Dates 2,Dates,High,Primary noun derived from class name
+Eggplant 1,Eggplant,High,Eggplant variety
+Eggplant long 1,Eggplant,High,Eggplant variety
+Fig 1,Fig,High,Primary noun derived from class name
+Ginger 2,Ginger,High,Rhizome spice produce
+Ginger Root 1,Ginger,High,Rhizome spice produce
+Gooseberry 1,Gooseberry,High,Primary noun derived from class name
+Granadilla 1,Granadilla,High,Primary noun derived from class name
+Grape 1,Grape,High,Grape variety
+Grape Blue 1,Grape,High,Grape variety
+Grape Pink 1,Grape,High,Grape variety
+Grape White 1,Grape,High,Grape variety
+Grape White 2,Grape,High,Grape variety
+Grape White 3,Grape,High,Grape variety
+Grape White 4,Grape,High,Grape variety
+Grape pink 2,Grape,High,Grape variety
+Grapefruit Pink 1,Grapefruit,High,Citrus variety
+Grapefruit White 1,Grapefruit,High,Citrus variety
+Guava 1,Guava,High,Primary noun derived from class name
+Hazelnut 1,Hazelnut,High,Primary noun derived from class name
+Huckleberry 1,Huckleberry,High,Primary noun derived from class name
+Kaki 1,Kaki,High,Primary noun derived from class name
+Kiwi 1,Kiwi,High,Primary noun derived from class name
+Kohlrabi 1,Kohlrabi,High,Primary noun derived from class name
+Kumquats 1,Kumquats,High,Primary noun derived from class name
+Lemon 1,Lemon,High,Citrus variety
+Lemon Meyer 1,Lemon,High,Citrus variety
+Limes 1,Limes,High,Primary noun derived from class name
+Lychee 1,Lychee,High,Primary noun derived from class name
+Mandarine 1,Mandarine,High,Primary noun derived from class name
+Mango 1,Mango,High,Primary noun derived from class name
+Mango Red 1,Mango,High,Primary noun derived from class name
+Mangostan 1,Mangostan,High,Primary noun derived from class name
+Maracuja 1,Maracuja,High,Primary noun derived from class name
+Melon Piel de Sapo 1,Melon,High,Melon variety
+Mulberry 1,Mulberry,High,Primary noun derived from class name
+Mushroom champignon 1,Mushroom,High,Primary noun derived from class name
+Mushroom champignon 2,Mushroom,High,Primary noun derived from class name
+Nectarine 1,Nectarine,High,Primary noun derived from class name
+Nectarine Flat 1,Nectarine,High,Primary noun derived from class name
+Nectarine Flat 2,Nectarine,High,Primary noun derived from class name
+Nut 1,Nut,High,Nut variety
+Nut 2,Nut,High,Nut variety
+Nut 3,Nut,High,Nut variety
+Nut 4,Nut,High,Nut variety
+Nut 5,Nut,High,Nut variety
+Nut Forest 1,Nut,High,Nut variety
+Nut Pecan 1,Nut,High,Nut variety
+Onion 2,Onion,High,Allium produce variety
+Onion Red 1,Onion,High,Allium produce variety
+Onion Red 2,Onion,High,Allium produce variety
+Onion Red 3,Onion,High,Allium produce variety
+Onion White 1,Onion,High,Allium produce variety
+Onion White 2,Onion,High,Allium produce variety
+Orange 1,Orange,High,Citrus variety
+Orange 2,Orange,High,Citrus variety
+Orange 3,Orange,High,Citrus variety
+Orange peeled 1,Orange,High,Citrus variety
+Papaya 1,Papaya,High,Tropical fruit variety
+Papaya 2,Papaya,High,Tropical fruit variety
+Passion Fruit 1,Passion Fruit,High,Multi-word botanical produce name
+Peach 1,Peach,High,Stone fruit variety
+Peach 2,Peach,High,Stone fruit variety
+Peach 3,Peach,High,Stone fruit variety
+Peach 4,Peach,High,Stone fruit variety
+Peach 5,Peach,High,Stone fruit variety
+Peach 6,Peach,High,Stone fruit variety
+Peach Flat 1,Peach,High,Stone fruit variety
+Peanut shell 1x 1,Peanut,High,Primary noun derived from class name
+Pear 1,Pear,High,Pome fruit variety
+Pear 10,Pear,High,Pome fruit variety
+Pear 11,Pear,High,Pome fruit variety
+Pear 12,Pear,High,Pome fruit variety
+Pear 13,Pear,High,Pome fruit variety
+Pear 14,Pear,High,Pome fruit variety
+Pear 2,Pear,High,Pome fruit variety
+Pear 3,Pear,High,Pome fruit variety
+Pear 5,Pear,High,Pome fruit variety
+Pear 6,Pear,High,Pome fruit variety
+Pear 7,Pear,High,Pome fruit variety
+Pear 8,Pear,High,Pome fruit variety
+Pear 9,Pear,High,Pome fruit variety
+Pear Abate 1,Pear,High,Pome fruit variety
+Pear Forelle 1,Pear,High,Pome fruit variety
+Pear Kaiser 1,Pear,High,Pome fruit variety
+Pear Monster 1,Pear,High,Pome fruit variety
+Pear Red 1,Pear,High,Pome fruit variety
+Pear Stone 1,Pear,High,Pome fruit variety
+Pear Williams 1,Pear,High,Pome fruit variety
+Pepino 1,Pepino,High,Primary noun derived from class name
+Pepper 1,Pepper,High,Pepper variety
+Pepper 2,Pepper,High,Pepper variety
+Pepper Green 1,Pepper,High,Pepper variety
+Pepper Orange 1,Pepper,High,Pepper variety
+Pepper Orange 2,Pepper,High,Pepper variety
+Pepper Red 1,Pepper,High,Pepper variety
+Pepper Red 2,Pepper,High,Pepper variety
+Pepper Red 3,Pepper,High,Pepper variety
+Pepper Red 4,Pepper,High,Pepper variety
+Pepper Red 5,Pepper,High,Pepper variety
+Pepper Yellow 1,Pepper,High,Pepper variety
+Physalis 1,Physalis,High,Primary noun derived from class name
+Physalis with Husk 1,Physalis,High,Primary noun derived from class name
+Pineapple 1,Pineapple,High,Tropical fruit variety
+Pineapple Mini 1,Pineapple,High,Tropical fruit variety
+Pistachio 1,Pistachio,High,Primary noun derived from class name
+Pitahaya Red 1,Pitahaya Red,High,Multi-word botanical produce name
+Plum 1,Plum,High,Stone fruit variety
+Plum 2,Plum,High,Stone fruit variety
+Plum 3,Plum,High,Stone fruit variety
+Plum 4,Plum,High,Stone fruit variety
+Plum 5,Plum,High,Stone fruit variety
+Pomegranate 1,Pomegranate,High,Primary noun derived from class name
+Pomelo Sweetie 1,Pomelo,High,Primary noun derived from class name
+Potato Red 1,Potato,High,Tuber produce variety
+Potato Red 2,Potato,High,Tuber produce variety
+Potato Sweet 1,Potato,High,Tuber produce variety
+Potato White 1,Potato,High,Tuber produce variety
+Quince 1,Quince,High,Primary noun derived from class name
+Quince 2,Quince,High,Primary noun derived from class name
+Quince 3,Quince,High,Primary noun derived from class name
+Quince 4,Quince,High,Primary noun derived from class name
+Rambutan 1,Rambutan,High,Primary noun derived from class name
+Raspberry 1,Raspberry,High,Berry variety
+Raspberry 2,Raspberry,High,Berry variety
+Raspberry 3,Raspberry,High,Berry variety
+Raspberry 4,Raspberry,High,Berry variety
+Raspberry 5,Raspberry,High,Berry variety
+Raspberry 6,Raspberry,High,Berry variety
+Redcurrant 1,Redcurrant,High,Primary noun derived from class name
+Salak 1,Salak,High,Primary noun derived from class name
+Strawberry 1,Strawberry,High,Berry variety
+Strawberry 2,Strawberry,High,Berry variety
+Strawberry 3,Strawberry,High,Berry variety
+Strawberry Wedge 1,Strawberry,High,Berry variety
+Tamarillo 1,Tamarillo,High,Primary noun derived from class name
+Tangelo 1,Tangelo,High,Primary noun derived from class name
+Tomato 1,Tomato,High,Tomato variety
+Tomato 10,Tomato,High,Tomato variety
+Tomato 11,Tomato,High,Tomato variety
+Tomato 2,Tomato,High,Tomato variety
+Tomato 3,Tomato,High,Tomato variety
+Tomato 4,Tomato,High,Tomato variety
+Tomato 5,Tomato,High,Tomato variety
+Tomato 7,Tomato,High,Tomato variety
+Tomato 8,Tomato,High,Tomato variety
+Tomato 9,Tomato,High,Tomato variety
+Tomato Cherry Maroon 1,Tomato,High,Tomato variety
+Tomato Cherry Orange 1,Tomato,High,Tomato variety
+Tomato Cherry Red 1,Tomato,High,Tomato variety
+Tomato Cherry Red 2,Tomato,High,Tomato variety
+Tomato Cherry Yellow 1,Tomato,High,Tomato variety
+Tomato Heart 1,Tomato,High,Tomato variety
+Tomato Maroon 1,Tomato,High,Tomato variety
+Tomato Maroon 2,Tomato,High,Tomato variety
+Tomato Yellow 1,Tomato,High,Tomato variety
+Walnut 1,Walnut,High,Primary noun derived from class name
+Watermelon 1,Watermelon,High,Melon variety
+Zucchini 1,Zucchini,High,Cucurbit variety
+Zucchini Green 1,Zucchini,High,Cucurbit variety
+Zucchini dark 1,Zucchini,High,Cucurbit variety
+orange 4,Orange,High,Citrus variety

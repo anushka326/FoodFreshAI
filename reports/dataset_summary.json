@@ -1,0 +1,512 @@
+{
+  "inspection_date": "2026-09-18 00:27:07",
+  "datasets": {
+    "agrifreshnet": {
+      "path": "data/raw/AgriFreshNET Freshness and Shelf-Life Image Datase",
+      "class_path": "data/raw/AgriFreshNET Freshness and Shelf-Life Image Datase/Processed Data/Processed Data",
+      "total_images": 14160,
+      "classes": [
+        "Fresh Banana(1-4)",
+        "Fresh Bittermelon(1-3)",
+        "Fresh Cucumber(1-6)",
+        "Fresh eggplant(1-4)",
+        "Fresh Orange(1-9)",
+        "Fresh Papaya(1-4)",
+        "Fresh pineapple(1-15)",
+        "Fresh Tomato(1-10)",
+        "Rotten banana(7-13)",
+        "Rotten Bittermelon(5-8)",
+        "Rotten Cucumber(12-20)",
+        "Rotten eggplant(8-15)",
+        "Rotten Orange(20-35)",
+        "Rotten Papaya(7-12)",
+        "Rotten Pineapple(25-35)",
+        "Rotten Tomato(24-35)",
+        "Semi fresh banana(4-7)",
+        "Semi Fresh Bittermelon ( 3-5)",
+        "Semi Fresh Cucumber(6-12)",
+        "Semi fresh Orange(9-20)",
+        "Semi Fresh Papaya(4-7)",
+        "Semi fresh Pineapple (15-25)",
+        "Semi fresh Tomato(10-24)",
+        "Semi_Fresh eggplant(4-8)"
+      ],
+      "class_distribution": {
+        "Fresh Banana(1-4)": 590,
+        "Fresh Bittermelon(1-3)": 590,
+        "Fresh Cucumber(1-6)": 590,
+        "Fresh eggplant(1-4)": 590,
+        "Fresh Orange(1-9)": 590,
+        "Fresh Papaya(1-4)": 590,
+        "Fresh pineapple(1-15)": 590,
+        "Fresh Tomato(1-10)": 590,
+        "Rotten banana(7-13)": 590,
+        "Rotten Bittermelon(5-8)": 590,
+        "Rotten Cucumber(12-20)": 590,
+        "Rotten eggplant(8-15)": 590,
+        "Rotten Orange(20-35)": 590,
+        "Rotten Papaya(7-12)": 590,
+        "Rotten Pineapple(25-35)": 590,
+        "Rotten Tomato(24-35)": 590,
+        "Semi fresh banana(4-7)": 590,
+        "Semi Fresh Bittermelon ( 3-5)": 590,
+        "Semi Fresh Cucumber(6-12)": 590,
+        "Semi fresh Orange(9-20)": 590,
+        "Semi Fresh Papaya(4-7)": 590,
+        "Semi fresh Pineapple (15-25)": 590,
+        "Semi fresh Tomato(10-24)": 590,
+        "Semi_Fresh eggplant(4-8)": 590
+      },
+      "freshness_distribution": {
+        "Fresh": 4720,
+        "Rotten": 4720,
+        "Semi-Fresh": 4720
+      },
+      "food_distribution": {
+        "Banana": 1770,
+        "Bittermelon": 1770,
+        "Cucumber": 1770,
+        "Eggplant": 1770,
+        "Orange": 1770,
+        "Papaya": 1770,
+        "Pineapple": 1770,
+        "Tomato": 1770
+      },
+      "shelf_life_ranges": {
+        "Fresh Banana(1-4)": {
+          "min": 1,
+          "max": 4,
+          "food": "Banana",
+          "stage": "Fresh"
+        },
+        "Fresh Bittermelon(1-3)": {
+          "min": 1,
+          "max": 3,
+          "food": "Bittermelon",
+          "stage": "Fresh"
+        },
+        "Fresh Cucumber(1-6)": {
+          "min": 1,
+          "max": 6,
+          "food": "Cucumber",
+          "stage": "Fresh"
+        },
+        "Fresh eggplant(1-4)": {
+          "min": 1,
+          "max": 4,
+          "food": "Eggplant",
+          "stage": "Fresh"
+        },
+        "Fresh Orange(1-9)": {
+          "min": 1,
+          "max": 9,
+          "food": "Orange",
+          "stage": "Fresh"
+        },
+        "Fresh Papaya(1-4)": {
+          "min": 1,
+          "max": 4,
+          "food": "Papaya",
+          "stage": "Fresh"
+        },
+        "Fresh pineapple(1-15)": {
+          "min": 1,
+          "max": 15,
+          "food": "Pineapple",
+          "stage": "Fresh"
+        },
+        "Fresh Tomato(1-10)": {
+          "min": 1,
+          "max": 10,
+          "food": "Tomato",
+          "stage": "Fresh"
+        },
+        "Rotten banana(7-13)": {
+          "min": 7,
+          "max": 13,
+          "food": "Banana",
+          "stage": "Rotten"
+        },
+        "Rotten Bittermelon(5-8)": {
+          "min": 5,
+          "max": 8,
+          "food": "Bittermelon",
+          "stage": "Rotten"
+        },
+        "Rotten Cucumber(12-20)": {
+          "min": 12,
+          "max": 20,
+          "food": "Cucumber",
+          "stage": "Rotten"
+        },
+        "Rotten eggplant(8-15)": {
+          "min": 8,
+          "max": 15,
+          "food": "Eggplant",
+          "stage": "Rotten"
+        },
+        "Rotten Orange(20-35)": {
+          "min": 20,
+          "max": 35,
+          "food": "Orange",
+          "stage": "Rotten"
+        },
+        "Rotten Papaya(7-12)": {
+          "min": 7,
+          "max": 12,
+          "food": "Papaya",
+          "stage": "Rotten"
+        },
+        "Rotten Pineapple(25-35)": {
+          "min": 25,
+          "max": 35,
+          "food": "Pineapple",
+          "stage": "Rotten"
+        },
+        "Rotten Tomato(24-35)": {
+          "min": 24,
+          "max": 35,
+          "food": "Tomato",
+          "stage": "Rotten"
+        },
+        "Semi fresh banana(4-7)": {
+          "min": 4,
+          "max": 7,
+          "food": "Banana",
+          "stage": "Semi-Fresh"
+        },
+        "Semi Fresh Bittermelon ( 3-5)": {
+          "min": 3,
+          "max": 5,
+          "food": "Bittermelon",
+          "stage": "Semi-Fresh"
+        },
+        "Semi Fresh Cucumber(6-12)": {
+          "min": 6,
+          "max": 12,
+          "food": "Cucumber",
+          "stage": "Semi-Fresh"
+        },
+        "Semi fresh Orange(9-20)": {
+          "min": 9,
+          "max": 20,
+          "food": "Orange",
+          "stage": "Semi-Fresh"
+        },
+        "Semi Fresh Papaya(4-7)": {
+          "min": 4,
+          "max": 7,
+          "food": "Papaya",
+          "stage": "Semi-Fresh"
+        },
+        "Semi fresh Pineapple (15-25)": {
+          "min": 15,
+          "max": 25,
+          "food": "Pineapple",
+          "stage": "Semi-Fresh"
+        },
+        "Semi fresh Tomato(10-24)": {
+          "min": 10,
+          "max": 24,
+          "food": "Tomato",
+          "stage": "Semi-Fresh"
+        },
+        "Semi_Fresh eggplant(4-8)": {
+          "min": 4,
+          "max": 8,
+          "food": "Eggplant",
+          "stage": "Semi-Fresh"
+        }
+      },
+      "sampled_dimensions": [
+        [
+          512,
+          512
+        ]
+      ],
+      "format_distribution": {
+        ".jpg": 13890,
+        ".jpeg": 270
+      },
+      "duplicate_count": 40,
+      "corrupted_files_count": 0
+    },
+    "fruits360": {
+      "path": "data/raw/fruits-360-100x100-main",
+      "training_path": "data/raw/fruits-360-100x100-main/Training",
+      "test_path": "data/raw/fruits-360-100x100-main/Test",
+      "training_images": 138642,
+      "test_images": 46196,
+      "total_images": 184838,
+      "training_classes_count": 262,
+      "test_classes_count": 262,
+      "distinct_classes_count": 263,
+      "classes_in_both_count": 261,
+      "train_only_classes": [
+        "BlackBerry 4"
+      ],
+      "test_only_classes": [
+        "Blackberry 4"
+      ],
+      "balance_stats": {
+        "largest_class": {
+          "class": "Grape Blue 1",
+          "count": 1312
+        },
+        "smallest_class": {
+          "class": "Blackberry 4",
+          "count": 145
+        },
+        "average_per_class": 702.81,
+        "median_per_class": 656,
+        "q25": 602.0,
+        "q75": 928.0,
+        "iqr": 326.0,
+        "low_outliers": [],
+        "high_outliers": []
+      },
+      "sampled_dimensions": [
+        [
+          100,
+          100
+        ]
+      ],
+      "corrupted_files_count": 0,
+      "duplicate_scan_note": "Full duplicate hash scan not performed in STEP 2 due to dataset size (184,838 images)."
+    },
+    "foodkeeper": {
+      "path": "data/raw/foodkeeper/FoodKeeper.json",
+      "valid_json": true,
+      "file_size_bytes": 631800,
+      "top_level_keys": [
+        "fileName",
+        "sheets"
+      ],
+      "sheets": [
+        {
+          "name": "Version",
+          "row_count": 21
+        },
+        {
+          "name": "Category",
+          "row_count": 25
+        },
+        {
+          "name": "Product",
+          "row_count": 661
+        },
+        {
+          "name": "CookingTips",
+          "row_count": 93
+        },
+        {
+          "name": "CookingMethods",
+          "row_count": 89
+        },
+        {
+          "name": "Data Dictionary",
+          "row_count": 62
+        }
+      ],
+      "product_record_count": 661,
+      "fields": [
+        "Category_ID",
+        "DOP_Freeze_Max",
+        "DOP_Freeze_Metric",
+        "DOP_Freeze_Min",
+        "DOP_Freeze_Tips",
+        "DOP_Pantry_Max",
+        "DOP_Pantry_Metric",
+        "DOP_Pantry_Min",
+        "DOP_Pantry_tips",
+        "DOP_Refrigerate_Max",
+        "DOP_Refrigerate_Metric",
+        "DOP_Refrigerate_Min",
+        "DOP_Refrigerate_tips",
+        "Freeze_Max",
+        "Freeze_Metric",
+        "Freeze_Min",
+        "Freeze_Tips",
+        "ID",
+        "Keywords",
+        "Name",
+        "Name_subtitle",
+        "Pantry_After_Opening_Max",
+        "Pantry_After_Opening_Metric",
+        "Pantry_After_Opening_Min",
+        "Pantry_Max",
+        "Pantry_Metric",
+        "Pantry_Min",
+        "Pantry_tips",
+        "Refrigerate_After_Opening_Max",
+        "Refrigerate_After_Opening_Metric",
+        "Refrigerate_After_Opening_Min",
+        "Refrigerate_After_Thawing_Max",
+        "Refrigerate_After_Thawing_Metric",
+        "Refrigerate_After_Thawing_Min",
+        "Refrigerate_Max",
+        "Refrigerate_Metric",
+        "Refrigerate_Min",
+        "Refrigerate_tips"
+      ],
+      "storage_fields": [
+        "DOP_Freeze_Max",
+        "DOP_Freeze_Metric",
+        "DOP_Freeze_Min",
+        "DOP_Freeze_Tips",
+        "DOP_Pantry_Max",
+        "DOP_Pantry_Metric",
+        "DOP_Pantry_Min",
+        "DOP_Pantry_tips",
+        "DOP_Refrigerate_Max",
+        "DOP_Refrigerate_Metric",
+        "DOP_Refrigerate_Min",
+        "DOP_Refrigerate_tips",
+        "Freeze_Max",
+        "Freeze_Metric",
+        "Freeze_Min",
+        "Freeze_Tips",
+        "Pantry_After_Opening_Max",
+        "Pantry_After_Opening_Metric",
+        "Pantry_After_Opening_Min",
+        "Pantry_Max",
+        "Pantry_Metric",
+        "Pantry_Min",
+        "Pantry_tips",
+        "Refrigerate_After_Opening_Max",
+        "Refrigerate_After_Opening_Metric",
+        "Refrigerate_After_Opening_Min",
+        "Refrigerate_After_Thawing_Max",
+        "Refrigerate_After_Thawing_Metric",
+        "Refrigerate_After_Thawing_Min",
+        "Refrigerate_Max",
+        "Refrigerate_Metric",
+        "Refrigerate_Min",
+        "Refrigerate_tips"
+      ],
+      "metadata_fields": [
+        "Category_ID",
+        "ID",
+        "Keywords",
+        "Name",
+        "Name_subtitle"
+      ],
+      "sample_records": [
+        {
+          "ID": 248.0,
+          "Name": "Apples",
+          "Category_ID": 18.0,
+          "Keywords": "Apples,apple",
+          "Pantry_Min": null,
+          "Pantry_Max": null,
+          "Pantry_Metric": null,
+          "Pantry_tips": null,
+          "Refrigerate_Min": null,
+          "Refrigerate_Max": null,
+          "Refrigerate_Metric": null,
+          "Refrigerate_tips": null,
+          "Freeze_Min": 8.0,
+          "Freeze_Max": 8.0,
+          "Freeze_Metric": "Months",
+          "Freeze_Tips": "Freezing guidance applies to cooked product."
+        },
+        {
+          "ID": 251.0,
+          "Name": "Bananas",
+          "Category_ID": 18.0,
+          "Keywords": "Bananas,banana",
+          "Pantry_Min": null,
+          "Pantry_Max": null,
+          "Pantry_Metric": "When Ripe",
+          "Pantry_tips": "Ripe is when this item is tender, fully developed and ready to eat.",
+          "Refrigerate_Min": 3.0,
+          "Refrigerate_Max": 3.0,
+          "Refrigerate_Metric": "Days",
+          "Refrigerate_tips": "Timeline for refrigerator applies to ripe fruit; skin will blacken.",
+          "Freeze_Min": 2.0,
+          "Freeze_Max": 3.0,
+          "Freeze_Metric": "Months",
+          "Freeze_Tips": null
+        },
+        {
+          "ID": 283.0,
+          "Name": "Cucumbers",
+          "Category_ID": 19.0,
+          "Keywords": "Cucumbers,cucumber",
+          "Pantry_Min": null,
+          "Pantry_Max": null,
+          "Pantry_Metric": null,
+          "Pantry_tips": null,
+          "Refrigerate_Min": null,
+          "Refrigerate_Max": null,
+          "Refrigerate_Metric": null,
+          "Refrigerate_tips": null,
+          "Freeze_Min": null,
+          "Freeze_Max": null,
+          "Freeze_Metric": "Not Recommended",
+          "Freeze_Tips": null
+        },
+        {
+          "ID": 284.0,
+          "Name": "Eggplant",
+          "Category_ID": 19.0,
+          "Keywords": "Eggplant,egg",
+          "Pantry_Min": null,
+          "Pantry_Max": null,
+          "Pantry_Metric": null,
+          "Pantry_tips": null,
+          "Refrigerate_Min": null,
+          "Refrigerate_Max": null,
+          "Refrigerate_Metric": null,
+          "Refrigerate_tips": null,
+          "Freeze_Min": null,
+          "Freeze_Max": null,
+          "Freeze_Metric": null,
+          "Freeze_Tips": null
+        },
+        {
+          "ID": 306.0,
+          "Name": "Tomatoes",
+          "Category_ID": 19.0,
+          "Keywords": "Tomatoes,tomato",
+          "Pantry_Min": null,
+          "Pantry_Max": null,
+          "Pantry_Metric": "When Ripe",
+          "Pantry_tips": "Until Ripe, then 7 days. Ripe is when this item is tender, fully developed and ready to eat. Refrigeration may affect flavor; USDA recommends pantry storage.",
+          "Refrigerate_Min": null,
+          "Refrigerate_Max": null,
+          "Refrigerate_Metric": null,
+          "Refrigerate_tips": null,
+          "Freeze_Min": null,
+          "Freeze_Max": null,
+          "Freeze_Metric": null,
+          "Freeze_Tips": null
+        }
+      ]
+    },
+    "cross_dataset_overlap": {
+      "agrifreshnet_foods": [
+        "Banana",
+        "Bittermelon",
+        "Cucumber",
+        "Eggplant",
+        "Orange",
+        "Papaya",
+        "Pineapple",
+        "Tomato"
+      ],
+      "overlap_agrifreshnet_fruits360": [
+        "Banana",
+        "Cucumber",
+        "Eggplant",
+        "Orange",
+        "Papaya",
+        "Pineapple",
+        "Tomato"
+      ],
+      "agrifreshnet_unique": [
+        "Bittermelon"
+      ]
+    }
+  }
+}

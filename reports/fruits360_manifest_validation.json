@@ -1,0 +1,14 @@
+{
+  "train_manifest_valid": true,
+  "test_manifest_valid": true,
+  "selected_foods_count": 12,
+  "train_image_count": 69130,
+  "test_image_count": 22996,
+  "total_image_count": 92126,
+  "missing_train_files": 0,
+  "missing_test_files": 0,
+  "duplicate_train_paths": 0,
+  "duplicate_test_paths": 0,
+  "train_test_overlap": 0,
+  "invalid_labels": 0
+}

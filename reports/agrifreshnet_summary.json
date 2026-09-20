@@ -1,0 +1,203 @@
+{
+  "inspection_date": "2026-09-18 00:34:55",
+  "dataset_path": "D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/AgriFreshNET Freshness and Shelf-Life Image Datase/Processed Data/Processed Data",
+  "total_images": 14160,
+  "total_classes": 24,
+  "food_count": 8,
+  "freshness_stages": [
+    "Fresh",
+    "Rotten",
+    "Semi-Fresh"
+  ],
+  "freshness_distribution": {
+    "Fresh": 4720,
+    "Rotten": 4720,
+    "Semi-Fresh": 4720
+  },
+  "food_distribution": {
+    "Banana": 1770,
+    "Bittermelon": 1770,
+    "Cucumber": 1770,
+    "Eggplant": 1770,
+    "Orange": 1770,
+    "Papaya": 1770,
+    "Pineapple": 1770,
+    "Tomato": 1770
+  },
+  "image_extensions": {
+    ".jpg": 13890,
+    ".jpeg": 270
+  },
+  "image_dimensions": {
+    "common_width": 512,
+    "common_height": 512,
+    "color_mode": "RGB",
+    "uniform": true,
+    "inspection_type": "FULL"
+  },
+  "class_distribution": {
+    "Fresh Banana(1-4)": 590,
+    "Fresh Bittermelon(1-3)": 590,
+    "Fresh Cucumber(1-6)": 590,
+    "Fresh eggplant(1-4)": 590,
+    "Fresh Orange(1-9)": 590,
+    "Fresh Papaya(1-4)": 590,
+    "Fresh pineapple(1-15)": 590,
+    "Fresh Tomato(1-10)": 590,
+    "Rotten banana(7-13)": 590,
+    "Rotten Bittermelon(5-8)": 590,
+    "Rotten Cucumber(12-20)": 590,
+    "Rotten eggplant(8-15)": 590,
+    "Rotten Orange(20-35)": 590,
+    "Rotten Papaya(7-12)": 590,
+    "Rotten Pineapple(25-35)": 590,
+    "Rotten Tomato(24-35)": 590,
+    "Semi fresh banana(4-7)": 590,
+    "Semi Fresh Bittermelon ( 3-5)": 590,
+    "Semi Fresh Cucumber(6-12)": 590,
+    "Semi fresh Orange(9-20)": 590,
+    "Semi Fresh Papaya(4-7)": 590,
+    "Semi fresh Pineapple (15-25)": 590,
+    "Semi fresh Tomato(10-24)": 590,
+    "Semi_Fresh eggplant(4-8)": 590
+  },
+  "shelf_life_ranges": {
+    "Fresh Banana(1-4)": {
+      "min": 1,
+      "max": 4,
+      "midpoint": 2.5
+    },
+    "Fresh Bittermelon(1-3)": {
+      "min": 1,
+      "max": 3,
+      "midpoint": 2.0
+    },
+    "Fresh Cucumber(1-6)": {
+      "min": 1,
+      "max": 6,
+      "midpoint": 3.5
+    },
+    "Fresh eggplant(1-4)": {
+      "min": 1,
+      "max": 4,
+      "midpoint": 2.5
+    },
+    "Fresh Orange(1-9)": {
+      "min": 1,
+      "max": 9,
+      "midpoint": 5.0
+    },
+    "Fresh Papaya(1-4)": {
+      "min": 1,
+      "max": 4,
+      "midpoint": 2.5
+    },
+    "Fresh pineapple(1-15)": {
+      "min": 1,
+      "max": 15,
+      "midpoint": 8.0
+    },
+    "Fresh Tomato(1-10)": {
+      "min": 1,
+      "max": 10,
+      "midpoint": 5.5
+    },
+    "Rotten banana(7-13)": {
+      "min": 7,
+      "max": 13,
+      "midpoint": 10.0
+    },
+    "Rotten Bittermelon(5-8)": {
+      "min": 5,
+      "max": 8,
+      "midpoint": 6.5
+    },
+    "Rotten Cucumber(12-20)": {
+      "min": 12,
+      "max": 20,
+      "midpoint": 16.0
+    },
+    "Rotten eggplant(8-15)": {
+      "min": 8,
+      "max": 15,
+      "midpoint": 11.5
+    },
+    "Rotten Orange(20-35)": {
+      "min": 20,
+      "max": 35,
+      "midpoint": 27.5
+    },
+    "Rotten Papaya(7-12)": {
+      "min": 7,
+      "max": 12,
+      "midpoint": 9.5
+    },
+    "Rotten Pineapple(25-35)": {
+      "min": 25,
+      "max": 35,
+      "midpoint": 30.0
+    },
+    "Rotten Tomato(24-35)": {
+      "min": 24,
+      "max": 35,
+      "midpoint": 29.5
+    },
+    "Semi fresh banana(4-7)": {
+      "min": 4,
+      "max": 7,
+      "midpoint": 5.5
+    },
+    "Semi Fresh Bittermelon ( 3-5)": {
+      "min": 3,
+      "max": 5,
+      "midpoint": 4.0
+    },
+    "Semi Fresh Cucumber(6-12)": {
+      "min": 6,
+      "max": 12,
+      "midpoint": 9.0
+    },
+    "Semi fresh Orange(9-20)": {
+      "min": 9,
+      "max": 20,
+      "midpoint": 14.5
+    },
+    "Semi Fresh Papaya(4-7)": {
+      "min": 4,
+      "max": 7,
+      "midpoint": 5.5
+    },
+    "Semi fresh Pineapple (15-25)": {
+      "min": 15,
+      "max": 25,
+      "midpoint": 20.0
+    },
+    "Semi fresh Tomato(10-24)": {
+      "min": 10,
+      "max": 24,
+      "midpoint": 17.0
+    },
+    "Semi_Fresh eggplant(4-8)": {
+      "min": 4,
+      "max": 8,
+      "midpoint": 6.0
+    }
+  },
+  "class_balance": {
+    "smallest_class": "Fresh Banana(1-4)",
+    "largest_class": "Fresh Banana(1-4)",
+    "smallest_class_count": 590,
+    "largest_class_count": 590,
+    "mean_images_per_class": 590,
+    "median_images_per_class": 590.0,
+    "std_dev": 0.0,
+    "imbalance_ratio": 1.0
+  },
+  "quality": {
+    "bad_images": 0,
+    "empty_folders": 0,
+    "unexpected_files": 0,
+    "duplicate_hash_clusters": 36,
+    "duplicate_file_instances": 40
+  }
+}
