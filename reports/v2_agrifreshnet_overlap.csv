@@ -1,0 +1,7 @@
+metric,count,percentage,description
+total_v2_classes,24,100.0,Total production Food Recognition V2 classes
+available_in_agrifreshnet,7,29.2,V2 classes present in AgriFreshNET
+not_in_agrifreshnet,17,70.8,V2 classes missing from AgriFreshNET
+exact_name_matches,4,16.7,Classes matching exact naming/casing
+name_variant_matches,3,12.5,Classes matching with casing or syntax variations
+agrifreshnet_unmatched_classes,1,N/A,"AgriFreshNET food not in V2: Bittermelon (1,770 images)"

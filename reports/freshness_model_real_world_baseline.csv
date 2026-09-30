@@ -1,0 +1,11 @@
+image,predicted_class,fresh_probability,slightly_spoiled_probability,rotten_probability,predicted_confidence,model_version
+green_chilli.jpg,Slightly Spoiled,31.29,58.31,10.4,58.31,nathansekar/food-freshness-detector (V1)
+rotten_tomato.jpg,Fresh,56.95,15.45,27.6,56.95,nathansekar/food-freshness-detector (V1)
+rotten_orange.jpg,Rotten,7.81,9.55,82.64,82.64,nathansekar/food-freshness-detector (V1)
+potato.jpg,Fresh,81.7,13.44,4.86,81.7,nathansekar/food-freshness-detector (V1)
+bell_pepper.jpg,Fresh,74.79,12.89,12.32,74.79,nathansekar/food-freshness-detector (V1)
+apple.jpg,Fresh,56.35,31.01,12.64,56.35,nathansekar/food-freshness-detector (V1)
+pomegranate.jpg,Fresh,50.98,37.68,11.35,50.98,nathansekar/food-freshness-detector (V1)
+banana.jpg,Slightly Spoiled,0.92,93.23,5.86,93.23,nathansekar/food-freshness-detector (V1)
+tomato.jpg,Slightly Spoiled,1.06,77.41,21.53,77.41,nathansekar/food-freshness-detector (V1)
+bread.jpg,Rotten,0.08,2.21,97.7,97.7,nathansekar/food-freshness-detector (V1)

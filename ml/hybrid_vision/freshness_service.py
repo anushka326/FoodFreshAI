@@ -138,7 +138,7 @@ class FreshnessService:
             logger.error(f"Failed to load Freshness model: {e}")
             self.is_loaded = False
 
-    def predict(self, image: Image.Image) -> FreshnessResult:
+    def predict(self, image: Image.Image, detected_food: Optional[str] = None) -> FreshnessResult:
         """
         Estimate visible freshness state of a food image.
         Returns FreshnessResult with calibrated label, confidence score, and distribution.
@@ -181,7 +181,34 @@ class FreshnessService:
             sorted_scores = sorted(scores_list, reverse=True)
             margin = (sorted_scores[0] - sorted_scores[1]) * 100.0 if len(sorted_scores) > 1 else 100.0
 
-            if top_score < 50.0 or margin < 10.0:
+            food_norm = str(detected_food or "").lower().strip()
+
+            # Domain Safeguard 1: Beetroot is naturally deep purple/dark and outside
+            # AgriFreshNET produce classes. Prevent false "Rotten" classifications due to lack of model coverage.
+            if food_norm in ("beetroot", "beet", "beets") and top_label == "Rotten":
+                final_status = "uncertain"
+                final_label = "Freshness Uncertain (Limited model coverage for beetroot)"
+            # Domain Safeguard 1b: Chickoo/sapodilla has naturally brown/tan skin.
+            # AgriFreshNET model was trained without it, so high "Rotten" confidence is unreliable.
+            elif food_norm in ("chickoo", "chiku", "sapota", "sapodilla", "chikoo") and top_label == "Rotten":
+                if top_score < 90.0:
+                    final_status = "uncertain"
+                    final_label = "Freshness Uncertain (Chickoo has naturally brown skin — visual freshness may be misleading)"
+                else:
+                    final_status = "success"
+                    final_label = top_label
+            # Domain Safeguard 2: Bakery is not labelled "Rotten" (per synthetic dataset policy: Fresh, Stale, Moldy)
+            elif food_norm in ("bread", "bun", "buns", "toast", "roti", "cake", "cakes", "muffin"):
+                if top_label == "Rotten":
+                    final_status = "uncertain"
+                    final_label = "Stale / Mold Suspected"
+                elif top_label == "Slightly Spoiled":
+                    final_status = "success"
+                    final_label = "Stale (Moderate Confidence)"
+                else:
+                    final_status = "success"
+                    final_label = "Fresh"
+            elif top_score < 50.0 or margin < 10.0:
                 final_status = "uncertain"
                 final_label = "Freshness Uncertain"
             elif top_score < 65.0:

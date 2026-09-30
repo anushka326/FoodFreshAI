@@ -8,7 +8,18 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
-VALID_FORMS = frozenset({"fresh", "dried", "powdered", "cooked", "processed", "unknown"})
+VALID_FORMS = frozenset({
+    "fresh",
+    "whole",
+    "cut",
+    "sliced",
+    "diced",
+    "dried",
+    "powdered",
+    "cooked",
+    "processed",
+    "unknown",
+})
 
 
 def normalize_food_form(value: Optional[str]) -> str:
@@ -42,6 +53,14 @@ def infer_food_form(
         return "cooked"
     if any(k in name for k in ("canned", "pickled", "preserved", "jarred")):
         return "processed"
+
+    # Cut produce cues
+    if any(k in name for k in ("cut ", "sliced ", "diced ", "chopped ", "-cut", "halved")):
+        if "diced" in name:
+            return "diced"
+        if "sliced" in name:
+            return "sliced"
+        return "cut"
 
     # Fresh produce cues — only when not explicitly dried/powder
     if re.search(r"\b(fresh|raw|green)\b", text_blob) and "dried" not in name:

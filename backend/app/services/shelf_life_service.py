@@ -14,6 +14,11 @@ from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger("foodfresh.shelf_life")
 
+try:
+    from backend.app.services.synthetic_data_service import get_synthetic_data_service
+except ImportError:
+    get_synthetic_data_service = None
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 FOODKEEPER_PATH = PROJECT_ROOT / "data" / "raw" / "foodkeeper" / "FoodKeeper.json"
 
@@ -43,6 +48,13 @@ CANONICAL_PRODUCE_MAPPING: Dict[str, Dict[str, Any]] = {
     "chili pepper": {"id": 548.0, "canonical_name": "Hot peppers", "category": "Vegetables"},
     "hot pepper": {"id": 548.0, "canonical_name": "Hot peppers", "category": "Vegetables"},
     "jalapeno": {"id": 548.0, "canonical_name": "Hot peppers", "category": "Vegetables"},
+
+    # Chickoo / Sapodilla -> ID 265.0 (Tropical Fruits group, closest match)
+    # Chickoo (chiku, sapota, sapodilla) is a tropical fruit with 3-5 day countertop life
+    "chickoo": {"id": 265.0, "canonical_name": "Papaya, mango, feijoa, passionfruit, casaha melon", "category": "Fruit"},
+    "chiku": {"id": 265.0, "canonical_name": "Papaya, mango, feijoa, passionfruit, casaha melon", "category": "Fruit"},
+    "sapota": {"id": 265.0, "canonical_name": "Papaya, mango, feijoa, passionfruit, casaha melon", "category": "Fruit"},
+    "sapodilla": {"id": 265.0, "canonical_name": "Papaya, mango, feijoa, passionfruit, casaha melon", "category": "Fruit"},
 
     # Sweet / Bell Peppers -> ID 296.0 ("Peppers")
     "bell pepper": {"id": 296.0, "canonical_name": "Peppers", "category": "Vegetables"},
@@ -80,6 +92,68 @@ CANONICAL_PRODUCE_MAPPING: Dict[str, Dict[str, Any]] = {
     "grapefruit": {"id": 256.0, "canonical_name": "Citrus fruit", "category": "Fruit"},
     "citrus": {"id": 256.0, "canonical_name": "Citrus fruit", "category": "Fruit"},
 
+    # Grapes -> ID 261.0 ("Grapes") (Distinct from citrus/grapefruit)
+    "grape": {"id": 261.0, "canonical_name": "Grapes", "category": "Fruit"},
+    "grapes": {"id": 261.0, "canonical_name": "Grapes", "category": "Fruit"},
+
+    # Cherries -> ID 483.0 ("Cherries") (Distinct from cherry tomatoes)
+    "cherry": {"id": 483.0, "canonical_name": "Cherries", "category": "Fruit"},
+    "cherries": {"id": 483.0, "canonical_name": "Cherries", "category": "Fruit"},
+
+    # Avocados -> ID 250.0 ("Avocados") (Distinct from shelf-stable Avocado Oil)
+    "avocado": {"id": 250.0, "canonical_name": "Avocados", "category": "Fruit"},
+    "avocados": {"id": 250.0, "canonical_name": "Avocados", "category": "Fruit"},
+
+    # Carrots -> ID 279.0 ("Carrots, parsnips") (Distinct from carrot juice)
+    "carrot": {"id": 279.0, "canonical_name": "Carrots, parsnips", "category": "Vegetables"},
+    "carrots": {"id": 279.0, "canonical_name": "Carrots, parsnips", "category": "Vegetables"},
+
+    # Onions -> ID 294.0 ("Onions") (Distinct from onion powder)
+    "onion": {"id": 294.0, "canonical_name": "Onions", "category": "Vegetables"},
+    "onions": {"id": 294.0, "canonical_name": "Onions", "category": "Vegetables"},
+
+    # Garlic -> ID 285.0 ("Garlic" in Produce)
+    "garlic": {"id": 285.0, "canonical_name": "Garlic", "category": "Vegetables"},
+
+    # Stone fruits & Pears -> ID 266.0
+    "pear": {"id": 266.0, "canonical_name": "Peaches, nectarines, plums, pears, sapote", "category": "Fruit"},
+    "pears": {"id": 266.0, "canonical_name": "Peaches, nectarines, plums, pears, sapote", "category": "Fruit"},
+    "peach": {"id": 266.0, "canonical_name": "Peaches, nectarines, plums, pears, sapote", "category": "Fruit"},
+    "peaches": {"id": 266.0, "canonical_name": "Peaches, nectarines, plums, pears, sapote", "category": "Fruit"},
+    "plum": {"id": 266.0, "canonical_name": "Peaches, nectarines, plums, pears, sapote", "category": "Fruit"},
+    "plums": {"id": 266.0, "canonical_name": "Peaches, nectarines, plums, pears, sapote", "category": "Fruit"},
+
+    # Beets / Beetroot -> ID 274.0 ("Beets")
+    "beetroot": {"id": 274.0, "canonical_name": "Beets", "category": "Vegetables"},
+    "beet": {"id": 274.0, "canonical_name": "Beets", "category": "Vegetables"},
+    "beets": {"id": 274.0, "canonical_name": "Beets", "category": "Vegetables"},
+
+    # Corn -> ID 282.0 ("Corn on the cob")
+    "corn": {"id": 282.0, "canonical_name": "Corn on the cob", "category": "Vegetables"},
+    "sweet corn": {"id": 282.0, "canonical_name": "Corn on the cob", "category": "Vegetables"},
+
+    # Radish -> ID 299.0 ("Radishes")
+    "radish": {"id": 299.0, "canonical_name": "Radishes", "category": "Vegetables"},
+    "radishes": {"id": 299.0, "canonical_name": "Radishes", "category": "Vegetables"},
+
+    # Brassicas & Greens
+    "cabbage": {"id": 278.0, "canonical_name": "Cabbage", "category": "Vegetables"},
+    "cauliflower": {"id": 280.0, "canonical_name": "Cauliflower", "category": "Vegetables"},
+    "broccoli": {"id": 276.0, "canonical_name": "Broccoli and broccoli raab (rapini)", "category": "Vegetables"},
+    "spinach": {"id": 287.0, "canonical_name": "Greens", "category": "Vegetables"},
+    "lettuce": {"id": 290.0, "canonical_name": "Lettuce", "category": "Vegetables"},
+    "green bean": {"id": 273.0, "canonical_name": "Beans and peas", "category": "Vegetables"},
+    "green beans": {"id": 273.0, "canonical_name": "Beans and peas", "category": "Vegetables"},
+
+    # Ginger & Guava
+    "ginger": {"id": 286.0, "canonical_name": "Ginger root", "category": "Vegetables"},
+    "guava": {"id": 262.0, "canonical_name": "Guava", "category": "Fruit"},
+
+    # Melons
+    "cantaloupe": {"id": 264.0, "canonical_name": "Melons", "category": "Fruit"},
+    "melon": {"id": 264.0, "canonical_name": "Melons", "category": "Fruit"},
+    "watermelon": {"id": 495.0, "canonical_name": "Watermelon", "category": "Fruit"},
+
     # Pomegranate -> ID 269.0 ("Pomegranate")
     "pomegranate": {"id": 269.0, "canonical_name": "Pomegranate", "category": "Fruit"},
     "pomegranates": {"id": 269.0, "canonical_name": "Pomegranate", "category": "Fruit"},
@@ -107,7 +181,38 @@ CANONICAL_PRODUCE_MAPPING: Dict[str, Dict[str, Any]] = {
     "loaf": {"id": 195.0, "canonical_name": "Commercial bread products", "category": "Bakery"},
     "white bread": {"id": 195.0, "canonical_name": "Commercial bread products", "category": "Bakery"},
     "whole wheat bread": {"id": 460.0, "canonical_name": "Whole wheat bread", "category": "Bakery"},
+    "bun": {"id": 195.0, "canonical_name": "Commercial bread products", "category": "Bakery"},
+    "buns": {"id": 195.0, "canonical_name": "Commercial bread products", "category": "Bakery"},
+    "toast": {"id": 195.0, "canonical_name": "Commercial bread products", "category": "Bakery"},
+    "roti": {"id": 195.0, "canonical_name": "Commercial bread products", "category": "Bakery"},
+    "cake": {"id": 197.0, "canonical_name": "Commercial cakes and muffins", "category": "Bakery"},
+    "cakes": {"id": 197.0, "canonical_name": "Commercial cakes and muffins", "category": "Bakery"},
 }
+
+
+def _normalize_freshness_label(label: Optional[str]) -> str:
+    """
+    Extract the core freshness class from a potentially decorated label.
+    Handles suffixes like '(Moderate Confidence)', 'Freshness Uncertain (...)', etc.
+    Returns canonical lowercase string: 'rotten', 'slightly_spoiled', 'fresh', or 'uncertain'.
+    """
+    if not label:
+        return "fresh"
+    raw = str(label).lower().strip()
+    # Strip parenthetical qualifiers like '(moderate confidence)', '(limited model coverage for beetroot)'
+    raw = re.sub(r"\s*\([^)]*\)", "", raw).strip()
+    # Map decorated labels to canonical freshness classes
+    if "rotten" in raw:
+        return "rotten"
+    if "slightly" in raw or "spoiled" in raw:
+        return "slightly_spoiled"
+    if "stale" in raw or "mold" in raw:
+        return "slightly_spoiled"
+    if "uncertain" in raw or "unavailable" in raw:
+        return "uncertain"
+    if "fresh" in raw:
+        return "fresh"
+    return raw
 
 
 class FoodKeeperService:
@@ -207,7 +312,7 @@ class FoodKeeperService:
 
         # Check multi-word tokens against canonical table (e.g. "fresh green chilli" -> "green chilli")
         for k, target in CANONICAL_PRODUCE_MAPPING.items():
-            if k in norm or norm in k:
+            if k in norm:
                 pid = target["id"]
                 if pid in self.products_by_id:
                     return self.products_by_id[pid], target["canonical_name"], "canonical_alias", 0.95
@@ -305,7 +410,59 @@ class FoodKeeperService:
             }
 
         canonical_res = self.find_canonical_entry(food_name)
+        freshness_norm = _normalize_freshness_label(freshness_label)
+
         if not canonical_res:
+            # Fallback to auxiliary Synthetic Prototype Reference if available
+            synth_scenario = None
+            if get_synthetic_data_service and form_norm not in ("dried", "powdered", "processed", "cooked") and food_name.lower().strip() != "strawberry":
+                try:
+                    synth_svc = get_synthetic_data_service()
+                    synth_scenario = synth_svc.lookup_prototype_scenario(
+                        food_name=food_name,
+                        food_form=form_norm,
+                        storage_type=storage_type,
+                        freshness_stage=freshness_label or "Fresh"
+                    )
+                except Exception as ex:
+                    logger.warning(f"Synthetic prototype lookup failed: {ex}")
+
+            if synth_scenario:
+                days_past = max(0, int(days_stored))
+                ref_max = float(synth_scenario["reference_max_days"])
+                ref_min = 1.0 if ref_max > 1.0 else ref_max
+                raw_rem = max(0.0, float(synth_scenario["remaining_shelf_life_days"]) - days_past)
+                if freshness_norm == "fresh" and days_past == 0:
+                    raw_rem = max(1.0, raw_rem)
+
+                int_rem_min = int(round(raw_rem * 0.7))
+                int_rem_max = int(round(raw_rem))
+
+                return {
+                    "status": "available",
+                    "food": food_name,
+                    "canonicalFood": synth_scenario["food_name"],
+                    "category": synth_scenario["food_domain"].title(),
+                    "matchType": "synthetic_reference",
+                    "matchConfidence": 0.85,
+                    "storageType": storage_type,
+                    "daysStored": days_past,
+                    "referenceDuration": {
+                        "minDays": int(round(ref_min)),
+                        "maxDays": int(round(ref_max))
+                    },
+                    "remaining": {
+                        "minDays": int_rem_min,
+                        "maxDays": int_rem_max
+                    },
+                    "unit": "days",
+                    "source": "FoodFresh AI Synthetic Prototype Reference",
+                    "tips": "Prototype scenario estimate from synthetic reference (auxiliary development data).",
+                    "isEstimate": True,
+                    "heuristicAdjustment": "Reference derived from synthetic prototype scenarios; not USDA laboratory measurement.",
+                    "zeroDayReason": "Estimated remaining quality has reached 0 days." if int_rem_max <= 0 else None
+                }
+
             return {
                 "status": "unavailable",
                 "food": food_name,
@@ -365,13 +522,72 @@ class FoodKeeperService:
         if ref_min > ref_max:
             ref_min, ref_max = ref_max, ref_min
 
+        # -------------------------------------------------------------
+        # Form-Aware Capping (prevents unrealistic cut apple = 19 days)
+        # -------------------------------------------------------------
+        form_note = None
+        source_label_form = None
+        if form_norm in ("cut", "sliced", "diced"):
+            if is_crisper:
+                # Refrigerated cut produce: quality window is constrained to 3–5 days
+                ref_min = min(ref_min, 3.0)
+                ref_max = min(ref_max, 5.0)
+                form_note = "Form-adjusted estimate: cut/sliced refrigerated produce has an accelerated 3–5 day window."
+            else:
+                # Ambient countertop cut produce: quality window is constrained to 1–2 days
+                ref_min = min(ref_min, 1.0)
+                ref_max = min(ref_max, 2.0)
+                form_note = "Form-adjusted estimate: ambient fresh-cut produce must be used rapidly (1–2 day window)."
+            source_label_form = "USDA FoodKeeper (form-adjusted)"
+
+        # -------------------------------------------------------------
+        # FoodFresh AI Prototype Constraints
+        # - Produce countertop prototype policy window: up to ~7 days
+        # - Produce refrigerated prototype policy window: up to ~15 days
+        # -------------------------------------------------------------
+        prototype_note = None
+        if form_norm not in ("cut", "sliced", "diced"):
+            if not is_crisper and ref_max > 7.0:
+                ref_max = 7.0
+                ref_min = min(ref_min, 7.0)
+                prototype_note = "Constrained by FoodFresh AI countertop prototype policy (up to 7 days ambient window)."
+            elif is_crisper and ref_max > 15.0:
+                ref_max = 15.0
+                ref_min = min(ref_min, 15.0)
+                prototype_note = "Constrained by FoodFresh AI refrigerated prototype policy (up to 15 days crisper window)."
+
+        # -------------------------------------------------------------
+        # Synthetic Dataset Floor Corrections
+        # Some FoodKeeper entries use DOP (Date of Purchase) which gives
+        # very conservative countertop numbers. Apply a minimum floor for
+        # foods where this is known to be too low, sourced from the
+        # FoodFreshAI Synthetic Dataset (auxiliary reference).
+        # -------------------------------------------------------------
+        SYNTHETIC_FLOOR_CORRECTIONS = {
+            "grape": {"countertop_min": 2.0, "countertop_max": 3.0, "fridge_min": 5.0, "fridge_max": 7.0},
+            "grapes": {"countertop_min": 2.0, "countertop_max": 3.0, "fridge_min": 5.0, "fridge_max": 7.0},
+            "chickoo": {"countertop_min": 3.0, "countertop_max": 5.0, "fridge_min": 7.0, "fridge_max": 10.0},
+            "chiku": {"countertop_min": 3.0, "countertop_max": 5.0, "fridge_min": 7.0, "fridge_max": 10.0},
+            "sapota": {"countertop_min": 3.0, "countertop_max": 5.0, "fridge_min": 7.0, "fridge_max": 10.0},
+            "sapodilla": {"countertop_min": 3.0, "countertop_max": 5.0, "fridge_min": 7.0, "fridge_max": 10.0},
+        }
+        food_norm_for_floor = self.normalize_food_name(food_name)
+        if food_norm_for_floor in SYNTHETIC_FLOOR_CORRECTIONS and form_norm not in ("cut", "sliced", "diced"):
+            floors = SYNTHETIC_FLOOR_CORRECTIONS[food_norm_for_floor]
+            floor_min = floors["countertop_min"] if not is_crisper else floors["fridge_min"]
+            floor_max = floors["countertop_max"] if not is_crisper else floors["fridge_max"]
+            if ref_max < floor_min:
+                ref_min = floor_min
+                ref_max = floor_max
+                note = "Reference window adjusted with FoodFreshAI Synthetic Dataset floor (FoodKeeper DOP estimate too conservative)."
+                prototype_note = (prototype_note + " " + note) if prototype_note else note
+
         # Phase 10 & 11: Calculate remaining duration and handle zero/negative days
         days_past = max(0, int(days_stored))
         raw_rem_min = ref_min - days_past
         raw_rem_max = ref_max - days_past
 
         # Apply conservative visible freshness signal
-        freshness_norm = str(freshness_label).lower().strip() if freshness_label else "fresh"
         adjustment_applied = False
         heuristic_note = None
 
@@ -389,6 +605,14 @@ class FoodKeeperService:
         else:
             rem_min = max(0.0, raw_rem_min)
             rem_max = max(0.0, raw_rem_max)
+
+        # Zero-day Protection for Fresh Produce (e.g. freshly purchased whole watermelon)
+        if freshness_norm == "fresh":
+            if days_past == 0:
+                rem_min = max(1.0, rem_min)
+                rem_max = max(1.0, rem_max)
+            elif days_past < ref_max:
+                rem_max = max(1.0, rem_max)
 
         int_rem_min = int(round(rem_min))
         int_rem_max = int(round(rem_max))
@@ -408,7 +632,13 @@ class FoodKeeperService:
             else:
                 zero_day_reason = "Estimated remaining quality has reached 0 days."
 
-        source_label = "USDA FoodKeeper + freshness observation" if adjustment_applied else "USDA FoodKeeper"
+        # Compile explanatory notes
+        notes_list = [n for n in (heuristic_note, form_note, prototype_note) if n]
+        final_heuristic_note = " ".join(notes_list) if notes_list else None
+
+        source_label = source_label_form or (
+            "USDA FoodKeeper + freshness observation" if adjustment_applied else "USDA FoodKeeper"
+        )
 
         return {
             "status": "available",
@@ -431,7 +661,7 @@ class FoodKeeperService:
             "source": source_label,
             "tips": tips,
             "isEstimate": True,
-            "heuristicAdjustment": heuristic_note,
+            "heuristicAdjustment": final_heuristic_note,
             "zeroDayReason": zero_day_reason
         }
 

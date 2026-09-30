@@ -137,7 +137,7 @@ class HybridVisionPipeline:
         # ----------------------------------------------------
         # Step 6: Visible Freshness Estimation
         # ----------------------------------------------------
-        freshness_res = self.freshness_service.predict(analysis_image)
+        freshness_res = self.freshness_service.predict(analysis_image, detected_food=final_food)
         latencies["freshness_ms"] = freshness_res.latency_ms
 
         # ----------------------------------------------------

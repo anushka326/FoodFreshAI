@@ -6,9 +6,34 @@ visible freshness state, storage conditions, and storage duration.
 
 from enum import Enum
 import logging
+import re
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("foodfresh.eat_first")
+
+
+def _normalize_freshness_label(label: Optional[str]) -> str:
+    """
+    Extract the core freshness class from a potentially decorated label.
+    Handles suffixes like '(Moderate Confidence)', 'Freshness Uncertain (...)', etc.
+    Returns canonical lowercase string: 'rotten', 'slightly_spoiled', 'fresh', or 'uncertain'.
+    """
+    if not label:
+        return "fresh"
+    raw = str(label).lower().strip()
+    # Strip parenthetical qualifiers e.g. '(moderate confidence)', '(limited model coverage for beetroot)'
+    raw = re.sub(r"\s*\([^)]*\)", "", raw).strip()
+    if "rotten" in raw:
+        return "rotten"
+    if "slightly" in raw or "spoiled" in raw:
+        return "slightly_spoiled"
+    if "stale" in raw or "mold" in raw:
+        return "slightly_spoiled"
+    if "uncertain" in raw or "unavailable" in raw:
+        return "uncertain"
+    if "fresh" in raw:
+        return "fresh"
+    return raw
 
 
 class PriorityTier(str, Enum):
@@ -95,7 +120,7 @@ class EatFirstService:
         effective_max = rem_max if rem_max is not None else rem_min
         effective_rem = (effective_min + effective_max) / 2.0
 
-        freshness_norm = str(freshness_label).lower().strip() if freshness_label else "fresh"
+        freshness_norm = _normalize_freshness_label(freshness_label)
 
         # Deterministic Rule Hierarchy
         # 1. VERY_HIGH

@@ -6,15 +6,15 @@ Model:
 EfficientNet-B0
 
 Checkpoint:
-`models/trained/food_classifier.pth`
+models/trained/food_classifier.pth
 
 Pretrained initialization:
-Official TorchVision EfficientNet-B0 (`EfficientNet_B0_Weights.DEFAULT`)
+Official TorchVision EfficientNet-B0
 
 ## 2. Test Dataset
 
 Manifest:
-`D:\VIT TY SEM5\ML Project\FOODFRESHAI\data\processed\fruits360\fruits360_test_manifest.csv` (Untouched test split, strictly unseen during training)
+D:\VIT TY SEM5\ML Project\FOODFRESHAI\data\processed\fruits360\fruits360_test_manifest.csv
 
 Number of classes:
 12
@@ -22,7 +22,21 @@ Number of classes:
 Number of test images:
 22,996
 
-## 3. Hardware
+## 3. Test Integrity
+
+Training overlap:
+NO
+
+Validation overlap:
+NO
+
+Duplicate paths:
+NO
+
+Missing images:
+0
+
+## 4. Hardware
 
 Device:
 cuda
@@ -30,7 +44,7 @@ cuda
 GPU:
 NVIDIA GeForce RTX 4050 Laptop GPU
 
-## 4. Overall Metrics
+## 5. Overall Metrics
 
 Accuracy:
 99.5391%
@@ -53,7 +67,7 @@ Weighted Recall:
 Weighted F1:
 0.9954
 
-## 5. Top-K Accuracy
+## 6. Top-K Accuracy
 
 Top-1:
 99.5391%
@@ -64,7 +78,7 @@ Top-3:
 Top-5:
 100.0000%
 
-## 6. Per-Class Metrics
+## 7. Per-Class Metrics
 
 - **Apple**: Precision=0.9958, Recall=1.0000, F1=0.9979, Support=5506
 - **Banana**: Precision=1.0000, Recall=1.0000, F1=1.0000, Support=645
@@ -79,113 +93,153 @@ Top-5:
 - **Pineapple**: Precision=1.0000, Recall=1.0000, F1=1.0000, Support=329
 - **Tomato**: Precision=1.0000, Recall=0.9883, F1=0.9941, Support=3413
 
+Detailed per-class metric tables are saved in:
+- `reports/food_recognition_per_class_metrics.csv`
+- `reports/food_recognition_per_class_metrics.md`
 
-Detailed metrics table saved in:
-`reports/food_recognition_per_class_metrics.csv` and `reports/food_recognition_per_class_metrics.md`
+## 8. Confusion Analysis
 
-## 7. Confusion Analysis
+Most frequent observed confusion pairs:
+- Tomato → Pepper: 40 test images
+- Cucumber → Peach: 23 test images
+- Pear → Apple: 23 test images
+- Eggplant → Cucumber: 20 test images
 
-Most frequent observed class confusions:
-- **Tomato → Pepper**: 40 test images
-- **Cucumber → Peach**: 23 test images
-- **Pear → Apple**: 23 test images
-- **Eggplant → Cucumber**: 20 test images
+Full confusion matrices:
+- `reports/food_recognition_confusion_matrix.png` (Counts)
+- `reports/food_recognition_confusion_matrix_normalized.png` (Normalized)
 
+## 9. Confidence Analysis
 
-Full confusion matrices saved in:
-`reports/food_recognition_confusion_matrix.png` (Counts)
-`reports/food_recognition_confusion_matrix_normalized.png` (Proportions)
-
-## 8. Confidence Analysis
+Average confidence:
+0.9972
 
 Correct prediction confidence:
-- Mean: 0.9980
-- Median: 1.0000
-- Min: 0.5014
-- Max: 1.0000
+0.9980
 
 Incorrect prediction confidence:
-- Mean: 0.8249
-- Median: 0.8864
-- Min: 0.4601
-- Max: 0.9996
+0.8249
 
-Median confidence (overall):
+Median confidence:
 1.0000
 
-Visualization saved in:
-`reports/food_recognition_confidence_distribution.png`
+Confidence distribution plot:
+- `reports/food_recognition_confidence_distribution.png`
 
-> **Notice:** Model confidence reflects softmax output probability across food categories and does NOT represent food safety, quality, or shelf-life certainty.
+## 10. Error Analysis
 
-## 9. Model Size
+Correct predictions:
+22,890
 
-Parameters:
-4,022,920 total parameters (4,022,920 trainable parameters)
+Incorrect predictions:
+106
+
+Misclassification count:
+106
+
+Observable patterns:
+- Misclassifications predominantly occur between visually similar botanical cultivars that share color, spherical form factor, and smooth skin texture (e.g. specific Pepper and Peach cross-angles, or lighter-toned Eggplants).
+- The model exhibits well-calibrated confidence: average confidence for incorrect predictions (0.8249) is substantially lower than for correct predictions (0.9980).
+- Complete misclassifications table saved in `reports/food_recognition_misclassifications.csv`
+- Visual misclassification examples saved in `reports/food_recognition_misclassified_examples.png`
+
+## 11. Out-of-Dataset Qualitative Testing
+
+Images tested:
+7
+
+Results:
+Image: `aug_0_IMG_20251104_131910090_HDR_AE~2.jpg`
+Expected food: Banana
+Predicted food: Banana
+Match: YES
+Confidence: 96.16%
+Top 3:
+- 1. Banana — 96.16%
+- 2. Cucumber — 3.77%
+- 3. Pepper — 0.07%
+
+Image: `aug_0_IMG_20251025_121754.jpg`
+Expected food: Cucumber
+Predicted food: Cucumber
+Match: YES
+Confidence: 100.00%
+Top 3:
+- 1. Cucumber — 100.00%
+- 2. Papaya — 0.00%
+- 3. Pear — 0.00%
+
+Image: `aug_0_IMG_20251107_113920647_HDR_AE.jpg`
+Expected food: Orange
+Predicted food: Cucumber
+Match: NO
+Confidence: 97.59%
+Top 3:
+- 1. Cucumber — 97.59%
+- 2. Pear — 1.82%
+- 3. Papaya — 0.53%
+
+Image: `IMG_20251102_075331551_HDR_AE.jpg`
+Expected food: Tomato
+Predicted food: Cucumber
+Match: NO
+Confidence: 84.31%
+Top 3:
+- 1. Cucumber — 84.31%
+- 2. Tomato — 12.30%
+- 3. Apple — 2.36%
+
+Image: `aug_0_IMG_20251118_164757182_HDR.jpg`
+Expected food: Eggplant
+Predicted food: Apple
+Match: NO
+Confidence: 99.41%
+Top 3:
+- 1. Apple — 99.41%
+- 2. Tomato — 0.45%
+- 3. Papaya — 0.05%
+
+Image: `aug_0_IMG-20251127-WA0019.jpg`
+Expected food: Pineapple
+Predicted food: Cucumber
+Match: NO
+Confidence: 92.38%
+Top 3:
+- 1. Cucumber — 92.38%
+- 2. Banana — 4.18%
+- 3. Eggplant — 2.20%
+
+Image: `aug_0_IMG_20251025_122121.jpg`
+Expected food: Papaya
+Predicted food: Cucumber
+Match: NO
+Confidence: 83.00%
+Top 3:
+- 1. Cucumber — 83.00%
+- 2. Pear — 16.66%
+- 3. Peach — 0.20%
+
+
+> **Notice:** These out-of-dataset qualitative results illustrate domain-shift effects when moving from isolated white-background conditions to real-world environments. They are NOT incorporated into the official test metrics.
+
+## 12. Model Size
+
+Total parameters:
+4,022,920
+
+Trainable parameters:
+4,022,920
 
 Checkpoint size:
 39.89 MB
 
-## 10. Error Analysis
+## 13. Limitations
 
-Number of incorrect predictions:
-106 (0.46%)
-
-Number of correct predictions:
-22,890 (99.54%)
-
-Observable patterns in misclassifications:
-- Most misclassifications occur among visually similar botanical varieties sharing analogous skin textures, colors, or spherical profiles (such as Eggplant varieties with lighter coloration, or specific pepper and peach angles).
-- For incorrect classifications, the average model confidence (82.49%) is noticeably lower than for correct classifications (99.80%), indicating appropriate uncertainty calibration.
-
-Visual examples saved in:
-`reports/food_recognition_misclassified_examples.png`
-Complete log of all misclassifications saved in:
-`reports/food_recognition_misclassifications.csv`
-
-## 11. Important Limitation
-
-This evaluation measures image classification performance on the Fruits-360 test set.
-
-It does NOT prove:
-
+This model predicts food category from an image under Fruits-360 test conditions.
+High test accuracy on Fruits-360 does NOT guarantee identical performance on real-world phone photos, complex kitchen lighting, partial occlusions, or cluttered backgrounds.
+Furthermore, this model does NOT determine:
 - food safety
-- freshness detection
-- shelf-life prediction
-- performance on arbitrary real-world kitchen images
+- freshness
+- remaining shelf-life
 
-Real-world performance must be tested separately.
-
----
-
-## 12. Out-of-Dataset Qualitative Inference
-
-The following qualitative test was conducted on external food images outside Fruits-360 (from AgriFreshNET) to observe behavior under non-studio environmental conditions:
-
-
-Image: `aug_0_IMG-20251127-WA0019.jpg`
-Expected category: Apple
-Prediction: Cucumber
-Confidence: 92.38%
-Top 3 predictions: Cucumber (92.4%), Banana (4.2%), Eggplant (2.2%)
-
-Image: `aug_0_IMG_20251104_131910090_HDR_AE~2.jpg`
-Expected category: Banana
-Prediction: Banana
-Confidence: 96.16%
-Top 3 predictions: Banana (96.2%), Cucumber (3.8%), Pepper (0.1%)
-
-Image: `aug_0_IMG_20251025_121754.jpg`
-Expected category: Cucumber
-Prediction: Cucumber
-Confidence: 100.00%
-Top 3 predictions: Cucumber (100.0%), Papaya (0.0%), Pear (0.0%)
-
-Image: `IMG_20251102_075331551_HDR_AE.jpg`
-Expected category: Tomato
-Prediction: Cucumber
-Confidence: 84.31%
-Top 3 predictions: Cucumber (84.3%), Tomato (12.3%), Apple (2.4%)
-
-
-> **Notice:** These qualitative results illustrate domain-shift effects when moving from studio-isolated white backgrounds to real-world environments. They are NOT incorporated into the formal test metrics above.
+Those are separate FoodFresh AI components.

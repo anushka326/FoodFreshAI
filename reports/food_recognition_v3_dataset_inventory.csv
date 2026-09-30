@@ -1,0 +1,25 @@
+food_name,fruits360_count,agrifreshnet_count,real_world_count,fresh_count,semi_fresh_count,rotten_count,domain_coverage,recommended_action
+Apple,22077,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Avocado,4077,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Banana,2562,1770,0,590,590,590,Multi-Domain (Fruits-360 + AgriFreshNET),Combine Fruits-360 with AgriFreshNET; supplement with 20-50 real-world kitchen photos.
+Cherry,12230,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Corn,1216,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Cucumber,8290,1770,0,590,590,590,Multi-Domain (Fruits-360 + AgriFreshNET),Combine Fruits-360 with AgriFreshNET; supplement with 20-50 real-world kitchen photos.
+Eggplant,944,1770,0,590,590,590,Multi-Domain (Fruits-360 + AgriFreshNET),Combine Fruits-360 with AgriFreshNET; supplement with 20-50 real-world kitchen photos.
+Grape,6137,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Guava,656,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Lemon,1312,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Mango,1626,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Onion,4173,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Orange,4427,1770,0,590,590,590,Multi-Domain (Fruits-360 + AgriFreshNET),Combine Fruits-360 with AgriFreshNET; supplement with 20-50 real-world kitchen photos.
+Papaya,1621,1770,0,590,590,590,Multi-Domain (Fruits-360 + AgriFreshNET),Combine Fruits-360 with AgriFreshNET; supplement with 20-50 real-world kitchen photos.
+Peach,6400,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Pear,16368,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Pepper,8316,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Pineapple,1312,1770,0,590,590,590,Multi-Domain (Fruits-360 + AgriFreshNET),Combine Fruits-360 with AgriFreshNET; supplement with 20-50 real-world kitchen photos.
+Plum,4196,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Pomegranate,656,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Potato,2404,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Strawberry,2906,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.
+Tomato,13672,1770,0,590,590,590,Multi-Domain (Fruits-360 + AgriFreshNET),Combine Fruits-360 with AgriFreshNET; supplement with 20-50 real-world kitchen photos.
+Watermelon,632,0,0,0,0,0,Single-Domain (Fruits-360 Laboratory Discs Only),High Priority: Target 50-100 real-world consumer photos to bridge white-backdrop domain gap.

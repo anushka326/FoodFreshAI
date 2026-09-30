@@ -38,3 +38,9 @@ MODEL_CONFIG: Dict[str, Dict[str, Any]] = {
         "message": "FoodKeeper baseline is active; no trained shelf-life model is integrated."
     }
 }
+
+try:
+    from backend.app.dataset_registry import DATASET_REGISTRY
+except ImportError:
+    DATASET_REGISTRY = {}
+

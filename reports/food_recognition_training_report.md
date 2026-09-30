@@ -6,20 +6,19 @@ Dataset:
 Fruits-360
 
 Training manifest:
-`D:\VIT TY SEM5\ML Project\FOODFRESHAI\data\processed\fruits360\fruits360_train_split.csv`
+D:\VIT TY SEM5\ML Project\FOODFRESHAI\data\processed\fruits360\fruits360_train_split.csv
 
 Validation:
-`D:\VIT TY SEM5\ML Project\FOODFRESHAI\data\processed\fruits360\fruits360_val_split.csv` (Stratified 10% split of training manifest, random_seed=42)
+D:\VIT TY SEM5\ML Project\FOODFRESHAI\data\processed\fruits360\fruits360_val_split.csv (Stratified 10% split of training manifest, random_seed=42)
 
 Test manifest:
-`D:\VIT TY SEM5\ML Project\FOODFRESHAI\data\processed\fruits360\fruits360_test_manifest.csv` (Untouched test set)
+D:\VIT TY SEM5\ML Project\FOODFRESHAI\data\processed\fruits360\fruits360_test_manifest.csv
 
 ## Classes
 
 Number of classes:
 12
 
-Classes:
 Apple, Banana, Cucumber, Eggplant, Grape, Orange, Papaya, Peach, Pear, Pepper, Pineapple, Tomato
 
 ## Dataset Counts
@@ -41,7 +40,7 @@ Pretrained:
 YES
 
 Weight source:
-Official TorchVision (`torchvision.models.efficientnet_b0`)
+Official TorchVision
 
 Weight enum:
 EfficientNet_B0_Weights.DEFAULT
@@ -49,18 +48,16 @@ EfficientNet_B0_Weights.DEFAULT
 ## Training Strategy
 
 Stage 1:
-- Backbone frozen (`features.requires_grad = False`)
-- Classifier head trained (`classifier[1] = Linear(1280, 12)`)
+- Backbone feature extractor frozen (features.requires_grad = False)
+- FoodFresh classification head trained (Linear(in_features=1280, out_features=12))
+- Optimizer: AdamW (learning_rate=0.001, weight_decay=0.0001)
 - Epochs: 3
-- Learning rate: 0.001
-- Optimizer: AdamW (weight_decay=0.0001)
 
 Stage 2:
-- Upper MBConv blocks unfrozen (`features[6:]`)
+- Upper MBConv blocks unfrozen (features[6:])
 - Fine-tuned with reduced learning rate
+- Optimizer: AdamW (fine_tune_learning_rate=0.0001, weight_decay=0.0001)
 - Epochs: 2
-- Fine-tuning learning rate: 0.0001
-- Optimizer: AdamW (weight_decay=0.0001)
 
 ## Hyperparameters
 
@@ -78,7 +75,6 @@ Scheduler: ReduceLROnPlateau (factor=0.5, patience=1)
 
 Device: cuda
 GPU: NVIDIA GeForce RTX 4050 Laptop GPU
-CPU: Available
 CUDA: YES
 
 ## Training Results
@@ -95,33 +91,23 @@ Final training accuracy:
 Final validation accuracy:
 99.99%
 
-## Test Results
-
-Test accuracy:
-99.54%
-
-Macro precision:
-0.9961
-
-Macro recall:
-0.9906
-
-Macro F1:
-0.9932
-
-Weighted F1:
-0.9954
-
 ## Checkpoint
 
-`models/trained/food_classifier.pth`
+models/trained/food_classifier.pth
 
 Checkpoint created:
 YES
 
+## Basic Inference Verification
+
+Test image: D:\VIT TY SEM5\ML Project\FOODFRESHAI\data\raw\fruits-360-100x100-main\Test\Apple 10\r0_103_100.jpg
+True class: Apple
+Predicted class: Apple
+Confidence: 100.00%
+
 ## Important Limitation
 
-This model predicts the food category from an image.
+This model predicts food category from an image.
 
 It does NOT determine:
 

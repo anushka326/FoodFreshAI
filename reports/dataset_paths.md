@@ -19,3 +19,15 @@ Inspection Date: 2026-09-18 00:27:07
   - File Path: `data/raw/foodkeeper/FoodKeeper.json`
   - File Size: `631,800 bytes`
   - Exists: `True`
+
+- **FoodFreshAI Synthetic Dataset (Auxiliary Reference):**
+  - Base Directory: `data/raw/Synthetic data`
+  - CSV File: `data/raw/Synthetic data/FoodFreshAI_Synthetic_Freshness_ShelfLife_Dataset.csv`
+  - Schema File: `data/raw/Synthetic data/FoodFreshAI_Synthetic_Dataset_Schema.json`
+  - README File: `data/raw/Synthetic data/FoodFreshAI_Synthetic_Dataset_README.md`
+  - File Size: `11,107,116 bytes`
+  - Rows: `41,280`
+  - Classes: `43`
+  - Exists: `True`
+  - Status: `Auxiliary synthetic reference; not used for model training`
+

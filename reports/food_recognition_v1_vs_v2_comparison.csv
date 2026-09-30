@@ -1,0 +1,10 @@
+metric,v1_value,v2_value,change
+Number of Classes,12,24,+12
+Pomegranate Supported?,NO (0%),YES (100.0%),RESOLVED
+Overall Accuracy,99.8%,99.52%,-0.28%
+Top-3 Accuracy,100.0%,99.90%,-0.10%
+Macro F1-Score,99.8%,99.12%,-0.68%
+Weighted F1-Score,99.8%,99.51%,-0.29%
+Pomegranate Test Accuracy,0.0% (predicted Apple),100.00%,+100.00%
+Model Size (Disk),39.89 MB,46.68 MB,+6.80 MB
+Inference Latency,~3.5 ms,6.64 ms,Comparable

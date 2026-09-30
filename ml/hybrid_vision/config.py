@@ -39,7 +39,8 @@ FOOD_VOCABULARY_PATH = HYBRID_VISION_DIR / "food_vocabulary.json"
 GROUNDING_DINO_TEXT_PROMPT = (
     "table. countertop. plate. bowl. spoon. fork. knife. glass. cup. tray. container. "
     "basket. cutting board. bag. apple. banana. pomegranate. tomato. orange. mango. "
-    "carrot. potato. onion. cucumber. pepper. bread. food."
+    "carrot. potato. onion. cucumber. pepper. bread. food. grape. chickoo. sapodilla. "
+    "papaya. pineapple. watermelon. guava. lemon. avocado. kiwi. strawberry. peach."
 )
 GROUNDING_DINO_BOX_THRESHOLD = 0.22
 GROUNDING_DINO_TEXT_THRESHOLD = 0.22
