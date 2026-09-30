@@ -353,73 +353,61 @@ def run_training(config: Optional[FoodRecognitionConfig] = None) -> Dict:
     plot_training_curves(history_df, reports_dir / "food_recognition_training_curves.png")
 
     # -------------------------------------------------------------
-    # FINAL EVALUATION ON UNTOUCHED TEST SET
+    # POST-TRAINING: VERIFY CHECKPOINT LOAD & BASIC INFERENCE
+    # (Per STEP 7 Section 24: Test set evaluation is reserved for STEP 8)
     # -------------------------------------------------------------
     print("\n" + "=" * 60)
-    print("FINAL EVALUATION ON UNTOUCHED TEST SET")
+    print("CHECKPOINT RELOAD VERIFICATION & SINGLE TEST INFERENCE")
     print("=" * 60)
-    print(f"Loading best checkpoint from: {config.checkpoint_path}")
+    print(f"Verifying checkpoint reload from: {config.checkpoint_path}")
     checkpoint = torch.load(config.checkpoint_path, map_location=device, weights_only=False)
-    model.load_state_dict(checkpoint["model_state_dict"])
-    model.eval()
+    assert "model_state_dict" in checkpoint, "Missing model_state_dict in checkpoint"
+    assert "training_config" in checkpoint, "Missing training_config in checkpoint"
 
-    all_preds = []
-    all_targets = []
+    # Instantiate fresh model to verify reload
+    eval_model = create_food_recognition_model(num_classes=config.num_classes, pretrained=False).to(device)
+    eval_model.load_state_dict(checkpoint["model_state_dict"])
+    eval_model.eval()
+    print("Checkpoint reloaded successfully in fresh model instance. (PASS)")
 
-    with torch.no_grad():
-        for images, labels in test_loader:
-            images = images.to(device, non_blocking=True)
-            outputs = model(images)
-            _, preds = torch.max(outputs, 1)
-            all_preds.extend(preds.cpu().numpy())
-            all_targets.extend(labels.numpy())
+    # Run one real inference check from the test dataset (Section 27)
+    test_df = pd.read_csv(config.test_manifest_path)
+    sample_row = test_df.iloc[0]
+    sample_img_path = sample_row["image_path"]
+    true_class = sample_row["normalized_food"]
 
-    all_preds = np.array(all_preds)
-    all_targets = np.array(all_targets)
+    from ml.food_recognition.predict import predict_food
+    pred_result = predict_food(sample_img_path, checkpoint_path=config.checkpoint_path, top_k=3)
 
-    test_acc = (all_preds == all_targets).mean() * 100.0
-    macro_p, macro_r, macro_f1, _ = precision_recall_fscore_support(all_targets, all_preds, average="macro", zero_division=0)
-    weighted_p, weighted_r, weighted_f1, _ = precision_recall_fscore_support(all_targets, all_preds, average="weighted", zero_division=0)
+    print("\nBasic Inference Verification (Single Test Image):")
+    print(f"Test image:      {sample_img_path}")
+    print(f"True class:      {true_class}")
+    print(f"Predicted class: {pred_result.get('food')}")
+    print(f"Confidence:      {pred_result.get('percentage')}")
 
-    class_names = [config.id_to_food.get(str(i), f"Class {i}") for i in range(config.num_classes)]
-    cls_report_str = classification_report(all_targets, all_preds, target_names=class_names, digits=4, zero_division=0)
-    cls_report_dict = classification_report(all_targets, all_preds, target_names=class_names, output_dict=True, zero_division=0)
-
-    print(f"Test Accuracy:    {test_acc:.2f}%")
-    print(f"Macro Precision:  {macro_p:.4f}")
-    print(f"Macro Recall:     {macro_r:.4f}")
-    print(f"Macro F1-Score:   {macro_f1:.4f}")
-    print(f"Weighted F1-Score:{weighted_f1:.4f}")
-    print("\nClassification Report:\n", cls_report_str)
-
-    # Save classification report CSV & MD
-    save_classification_reports(cls_report_dict, class_names, reports_dir)
-
-    # Generate Confusion Matrix
-    conf_matrix = confusion_matrix(all_targets, all_preds)
-    plot_confusion_matrix(conf_matrix, class_names, reports_dir / "food_recognition_confusion_matrix.png")
-
-    # Generate Training Report MD
+    # Generate Training Report MD matching STEP 7 Section 32
     save_training_report(
         config=config,
         best_val_acc=best_val_acc,
         best_epoch=best_epoch,
-        test_acc=test_acc,
-        macro_p=macro_p,
-        macro_r=macro_r,
-        macro_f1=macro_f1,
-        weighted_f1=weighted_f1,
         history_df=history_df,
-        reports_dir=reports_dir
+        reports_dir=reports_dir,
+        test_sample_info={
+            "image_path": sample_img_path,
+            "true_class": true_class,
+            "predicted_class": pred_result.get("food"),
+            "confidence": pred_result.get("percentage")
+        }
     )
 
     return {
         "best_val_accuracy": best_val_acc,
         "best_epoch": best_epoch,
-        "test_accuracy": test_acc,
-        "macro_f1": macro_f1,
-        "weighted_f1": weighted_f1,
-        "checkpoint_path": str(config.checkpoint_path)
+        "final_train_accuracy": history_df["train_accuracy"].iloc[-1],
+        "final_val_accuracy": history_df["val_accuracy"].iloc[-1],
+        "checkpoint_path": str(config.checkpoint_path),
+        "test_sample_pred": pred_result.get("food"),
+        "test_sample_conf": pred_result.get("percentage")
     }
 
 
@@ -527,21 +515,19 @@ def save_training_report(
     config: FoodRecognitionConfig,
     best_val_acc: float,
     best_epoch: int,
-    test_acc: float,
-    macro_p: float,
-    macro_r: float,
-    macro_f1: float,
-    weighted_f1: float,
     history_df: pd.DataFrame,
-    reports_dir: Path
+    reports_dir: Path,
+    test_sample_info: dict
 ):
-    """Save comprehensive training report."""
+    """Save comprehensive training report conforming to STEP 7 requirements."""
     train_df = pd.read_csv(config.train_split_path) if config.train_split_path.exists() else pd.read_csv(config.train_manifest_path)
     val_df = pd.read_csv(config.val_split_path) if config.val_split_path.exists() else pd.DataFrame()
     test_df = pd.read_csv(config.test_manifest_path)
 
     final_train_acc = history_df["train_accuracy"].iloc[-1]
     final_val_acc = history_df["val_accuracy"].iloc[-1]
+
+    classes_list = ", ".join(config.selected_foods)
 
     report = f"""# FoodFresh AI Food Recognition Training Report
 
@@ -551,21 +537,20 @@ Dataset:
 Fruits-360
 
 Training manifest:
-`{config.train_split_path}`
+{config.train_split_path}
 
 Validation:
-`{config.val_split_path}` (Stratified 10% split of training manifest, random_seed=42)
+{config.val_split_path} (Stratified 10% split of training manifest, random_seed=42)
 
 Test manifest:
-`{config.test_manifest_path}` (Untouched test set)
+{config.test_manifest_path}
 
 ## Classes
 
 Number of classes:
 {config.num_classes}
 
-Classes:
-{', '.join(config.selected_foods)}
+{classes_list}
 
 ## Dataset Counts
 
@@ -586,7 +571,7 @@ Pretrained:
 YES
 
 Weight source:
-Official TorchVision (`torchvision.models.efficientnet_b0`)
+Official TorchVision
 
 Weight enum:
 EfficientNet_B0_Weights.DEFAULT
@@ -594,14 +579,14 @@ EfficientNet_B0_Weights.DEFAULT
 ## Training Strategy
 
 Stage 1:
-- Backbone frozen (`features.requires_grad = False`)
-- Classifier head trained (`classifier[1] = Linear(1280, {config.num_classes})`)
+- Backbone frozen (features.requires_grad = False)
+- Classifier head trained (Linear(1280, {config.num_classes}))
 - Epochs: {config.stage_1_epochs}
 - Learning rate: {config.learning_rate}
 - Optimizer: AdamW (weight_decay={config.weight_decay})
 
 Stage 2:
-- Upper MBConv blocks unfrozen (`features[6:]`)
+- Upper MBConv blocks unfrozen (features[6:])
 - Fine-tuned with reduced learning rate
 - Epochs: {config.stage_2_epochs}
 - Fine-tuning learning rate: {config.fine_tune_learning_rate}
@@ -613,7 +598,7 @@ Batch size: {config.batch_size}
 Learning rate: {config.learning_rate}
 Fine-tuning learning rate: {config.fine_tune_learning_rate}
 Weight decay: {config.weight_decay}
-Epochs: {config.stage_1_epochs + config.stage_2_epochs} ({config.stage_1_epochs} Stage 1 + {config.stage_2_epochs} Stage 2)
+Epochs: {len(history_df)} ({config.stage_1_epochs} Stage 1 + {config.stage_2_epochs} Stage 2)
 Random seed: {config.random_seed}
 Optimizer: AdamW
 Loss: CrossEntropyLoss (Class-Weighted balanced for class distribution)
@@ -623,7 +608,6 @@ Scheduler: ReduceLROnPlateau (factor=0.5, patience=1)
 
 Device: {config.device}
 GPU: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'N/A'}
-CPU: Available
 CUDA: {'YES' if torch.cuda.is_available() else 'NO'}
 
 ## Training Results
@@ -640,33 +624,23 @@ Final training accuracy:
 Final validation accuracy:
 {final_val_acc:.2f}%
 
-## Test Results
-
-Test accuracy:
-{test_acc:.2f}%
-
-Macro precision:
-{macro_p:.4f}
-
-Macro recall:
-{macro_r:.4f}
-
-Macro F1:
-{macro_f1:.4f}
-
-Weighted F1:
-{weighted_f1:.4f}
-
 ## Checkpoint
 
-`models/trained/food_classifier.pth`
+models/trained/food_classifier.pth
 
 Checkpoint created:
 YES
 
+## Basic Inference Verification
+
+Test image: {test_sample_info.get('image_path', 'N/A')}
+True class: {test_sample_info.get('true_class', 'N/A')}
+Predicted class: {test_sample_info.get('predicted_class', 'N/A')}
+Confidence: {test_sample_info.get('confidence', 'N/A')}
+
 ## Important Limitation
 
-This model predicts the food category from an image.
+This model predicts food category from an image.
 
 It does NOT determine:
 

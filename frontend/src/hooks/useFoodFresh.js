@@ -9,10 +9,8 @@ export function useFoodFresh() {
 
   const loadData = async () => {
     setLoading(true);
-    const [histData, roadData] = await Promise.all([
-      historyService.getHistoryItems(),
-      roadmapService.getRoadmap(),
-    ]);
+    const histData = await historyService.getHistoryItems();
+    const roadData = await roadmapService.rebuildFromPantryHistory(histData);
     setHistory(histData);
     setRoadmap(roadData);
     setLoading(false);

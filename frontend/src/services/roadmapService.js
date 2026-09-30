@@ -50,6 +50,55 @@ function getFoodEmoji(name = '') {
 
 export const roadmapService = {
   /**
+   * Rebuild active roadmap cards from backend pantry (current remaining days).
+   */
+  async rebuildFromPantryHistory(pantryItems = []) {
+    const data = getStoredRoadmap();
+    const completedIds = new Set(data.completed.map((c) => c.historyId || c.id));
+    const active = [];
+
+    for (const item of pantryItems) {
+      if (!item?.id || completedIds.has(item.id)) continue;
+      let priorityRank = 3;
+      let priorityTag = '🟢 Can Wait';
+      let badgeType = 'fresh';
+      const rem = item.remainingDays;
+      const period = item.qualityPeriod || '';
+      if (rem === 0 || (item.pantryStatus || '').includes('EXPIRED')) {
+        priorityRank = 1;
+        priorityTag = '🥇 Eat First';
+        badgeType = 'urgent';
+      } else if (rem != null && rem <= 3) {
+        priorityRank = 1;
+        priorityTag = '🥇 Eat First';
+        badgeType = 'urgent';
+      } else if (rem != null && rem <= 7) {
+        priorityRank = 2;
+        priorityTag = '🥈 Eat Next';
+        badgeType = 'warning';
+      }
+      active.push({
+        id: 'rd_' + item.id,
+        historyId: item.id,
+        name: item.foodName,
+        priorityRank,
+        priorityTag,
+        badgeType,
+        qualityWindow: period,
+        urgencyText: period,
+        status: item.status || 'Active Produce',
+        description: item.guidance || 'Store in optimal pantry conditions.',
+        imageSrc: item.imageSrc || '',
+        fallbackEmoji: getFoodEmoji(item.foodName),
+      });
+    }
+    active.sort((a, b) => a.priorityRank - b.priorityRank);
+    data.active = active;
+    saveStoredRoadmap(data);
+    return this.getRoadmap();
+  },
+
+  /**
    * Get active and completed roadmap items for current user
    */
   async getRoadmap() {

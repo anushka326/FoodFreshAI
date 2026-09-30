@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BRANDING_ASSETS } from '../../assets/branding/index.js';
 import { FOOD_ASSETS } from '../../assets/food/index.js';
 import { LandingMascotAnimation } from '../../components/mascot/LandingMascotAnimation.jsx';
+import { authService } from '../../services/authService.js';
 
 export function LandingPage({ navigate }) {
   const [showIntro, setShowIntro] = useState(false);
@@ -21,6 +22,15 @@ export function LandingPage({ navigate }) {
 
   const replayIntro = () => {
     setShowIntro(true);
+  };
+
+  const handleProtectedNav = (path) => {
+    if (authService.isAuthenticated()) {
+      navigate(path);
+    } else {
+      sessionStorage.setItem('foodfresh_redirect_after_login', path);
+      navigate('/login');
+    }
   };
 
   return (
@@ -102,7 +112,7 @@ export function LandingPage({ navigate }) {
           <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mb-12">
             <button
               type="button"
-              onClick={() => navigate('/analyze')}
+              onClick={() => handleProtectedNav('/analyze')}
               className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-primary hover:bg-primary-container text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-98"
             >
               <span className="material-symbols-outlined text-[18px]">search_insights</span>
@@ -111,7 +121,7 @@ export function LandingPage({ navigate }) {
 
             <button
               type="button"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => handleProtectedNav('/dashboard')}
               className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-white border border-surface-container-high hover:bg-surface-container-low text-primary font-bold text-sm shadow-2xs transition-all flex items-center justify-center gap-2 active:scale-98"
             >
               <span>Explore Dashboard</span>
@@ -512,7 +522,7 @@ export function LandingPage({ navigate }) {
             </p>
             <button
               type="button"
-              onClick={() => navigate('/analyze')}
+              onClick={() => handleProtectedNav('/analyze')}
               className="px-8 py-3.5 rounded-full bg-primary hover:bg-primary-container text-white text-sm font-bold shadow-md hover:shadow-lg transition-all"
             >
               Analyze Your Food
@@ -534,10 +544,10 @@ export function LandingPage({ navigate }) {
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-semibold text-primary mb-6">
             <button type="button" onClick={() => navigate('/')} className="hover:underline">Home</button>
-            <button type="button" onClick={() => navigate('/dashboard')} className="hover:underline">Dashboard</button>
-            <button type="button" onClick={() => navigate('/analyze')} className="hover:underline">Analyze</button>
-            <button type="button" onClick={() => navigate('/history')} className="hover:underline">History</button>
-            <button type="button" onClick={() => navigate('/fresho-buddy')} className="hover:underline">FreshoBuddy AI</button>
+            <button type="button" onClick={() => handleProtectedNav('/dashboard')} className="hover:underline">Dashboard</button>
+            <button type="button" onClick={() => handleProtectedNav('/analyze')} className="hover:underline">Analyze</button>
+            <button type="button" onClick={() => handleProtectedNav('/history')} className="hover:underline">History</button>
+            <button type="button" onClick={() => handleProtectedNav('/fresho-buddy')} className="hover:underline">FreshoBuddy AI</button>
             <button type="button" onClick={() => navigate('/login')} className="hover:underline">Login</button>
           </div>
 

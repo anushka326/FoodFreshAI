@@ -1,194 +1,252 @@
 /**
- * Food Analysis Service (Client-Side State Engine)
- * 
- * Prepares frontend components for future FastAPI & ML pipeline integration.
+ * Food Analysis Service (FoodFresh AI Inference & Result Interface)
+ *
+ * Connects the Analyze Food frontend to the real trained EfficientNet-B0
+ * Food Recognition model endpoint (POST /api/food-recognition/predict).
+ *
+ * Conforms to the FoodFresh AI pipeline architecture:
+ * - Real food recognition from trained checkpoint (source: 'ml', model: 'EfficientNet-B0').
+ * - Freshness, Shelf-Life, and Priority remain in explicit neutral pending states ('not analyzed yet').
+ * - No fake or hardcoded mock scores.
  */
 
-import { FOOD_ASSETS } from '../assets/food/index.js';
+import { ENDPOINTS } from '../config/api.js';
+
+/**
+ * Converts a data URL, object URL, or file reference to a File object for multipart upload.
+ * @param {string|File|Blob} imageSource
+ * @param {string} [filename='food_image.jpg']
+ * @returns {Promise<File>}
+ */
+async function toUploadFile(imageSource, filename = 'food_image.jpg') {
+  if (imageSource instanceof File) {
+    return imageSource;
+  }
+  if (imageSource instanceof Blob) {
+    return new File([imageSource], filename, { type: imageSource.type || 'image/jpeg' });
+  }
+  if (typeof imageSource === 'string') {
+    // Handle Data URL or Blob URL or relative asset URL
+    try {
+      const response = await fetch(imageSource);
+      const blob = await response.blob();
+      const mime = blob.type || 'image/jpeg';
+      const ext = mime.includes('png') ? 'png' : 'jpg';
+      return new File([blob], `food_image.${ext}`, { type: mime });
+    } catch (err) {
+      throw new Error('Could not process the selected image for upload.');
+    }
+  }
+  throw new Error('Please select a valid food image.');
+}
 
 export const analysisService = {
   /**
-   * Analyze a single uploaded food photo
-   * @param {File|string} imageSource - File object or image data URI
-   * @param {object} pantryContext - { storage: 'countertop'|'fridge', daysInPantry: number, sampleHint: string }
-   * @returns {Promise<object>} Analysis result structure
+   * Create an initial blank FoodAnalysisResult structure
+   * @returns {object}
    */
-  async analyzeSingleFood(imageSource, pantryContext = {}) {
-    // Simulated processing delay
-    await new Promise((res) => setTimeout(res, 800));
-
-    const sample = (pantryContext.sampleHint || '').toLowerCase();
-    const isFridge = pantryContext.storage === 'fridge';
-    const days = Number(pantryContext.daysInPantry) || 0;
-
-    if (sample === 'tomato' || (typeof imageSource === 'string' && imageSource.includes('tomato'))) {
-      return {
-        id: 'anls_' + Date.now(),
-        foodName: 'Ripe Vine Tomato',
-        cultivar: 'Cluster Vine • Solanum lycopersicum',
-        scientificName: 'Solanum lycopersicum',
-        confidence: 0.95,
-        qualityScore: Math.max(40, 75 - days * 5),
-        status: days > 3 ? 'Needs Attention' : 'Semi-Fresh (Softening)',
-        statusCategory: days > 3 ? 'attention' : 'semi',
-        qualityPeriod: days > 3 ? 'Consume within 24h' : '1–2 days left',
-        storageSuggestion: isFridge ? 'Crisper Chill (may diminish aroma)' : 'Ambient Countertop (~21°C)',
-        refrigeratedExtension: 'Can blend into sauce and freeze for 3 months',
-        priorityRank: 'Priority 1 (Eat First)',
-        visualObservation: 'Skin softening observed near stem shoulder. Slight epidermal yielding with high juiciness.',
-        culinaryGuidance: {
-          snacking: 'Best roasted or reduced into fresh pasta marinara before skin splits.',
-          storageProtocol: 'Store stem-side down at room temperature to reduce moisture loss and delay fungal entry.',
-          recipeIdea: 'Fresh Rustic Pomodoro with Basil',
-        },
-        ecoImpact: {
-          potentialWasteAvoidanceDollar: 1.80,
-          co2eSavingsKg: 0.4,
-        },
-        imageSrc: imageSource || FOOD_ASSETS.vineTomatoes,
-        analyzedAt: new Date().toISOString(),
-      };
-    }
-
-    if (sample === 'banana' || (typeof imageSource === 'string' && imageSource.includes('banana'))) {
-      return {
-        id: 'anls_' + Date.now(),
-        foodName: 'Cavendish Banana',
-        cultivar: 'Tropical • Musa acuminata',
-        scientificName: 'Musa acuminata',
-        confidence: 0.97,
-        qualityScore: Math.max(35, 60 - days * 6),
-        status: 'Needs Attention (High Sugar)',
-        statusCategory: 'attention',
-        qualityPeriod: 'Consume within 24h',
-        storageSuggestion: 'Countertop Ambient (isolate from other fruit)',
-        refrigeratedExtension: 'Peel and freeze in airtight container for up to 6 months',
-        priorityRank: 'Priority 1 (Eat First)',
-        visualObservation: 'Sugar spots actively expanding across peel crest. Flesh softening, starches transitioning rapidly to fructose.',
-        culinaryGuidance: {
-          snacking: 'Peak sweetness reached. Ideal for morning smoothies, oat bowls, or banana bread baking.',
-          storageProtocol: 'Keep separated from citrus and apples to prevent ethylene compounding.',
-          recipeIdea: 'Oat Skillet Banana Pancake',
-        },
-        ecoImpact: {
-          potentialWasteAvoidanceDollar: 0.90,
-          co2eSavingsKg: 0.25,
-        },
-        imageSrc: imageSource || FOOD_ASSETS.cavendishBananas,
-        analyzedAt: new Date().toISOString(),
-      };
-    }
-
-    if (sample === 'bowl' || sample === 'avocado' || (typeof imageSource === 'string' && imageSource.includes('avocado'))) {
-      return {
-        id: 'anls_' + Date.now(),
-        foodName: 'Hass Avocado',
-        cultivar: 'Peak Creaminess • Persea americana',
-        scientificName: 'Persea americana',
-        confidence: 0.93,
-        qualityScore: Math.max(50, 88 - days * 4),
-        status: 'Fresh (Peak Ripeness)',
-        statusCategory: 'fresh',
-        qualityPeriod: '2–3 days left',
-        storageSuggestion: isFridge ? 'Crisper Drawer Chill (~4°C)' : 'Ambient Countertop',
-        refrigeratedExtension: 'Chilling can preserve peak texture for an additional 4–5 days',
-        priorityRank: 'Priority 2 (Can Wait)',
-        visualObservation: 'Yields slightly to gentle thumb pressure. Clean stem cap with vibrant green under-button.',
-        culinaryGuidance: {
-          snacking: 'Buttery texture makes it ideal for slicing over warm sourdough, mashing for guacamole, or dicing into grain bowls.',
-          storageProtocol: 'If cut in half, keep the pit in place and brush surface with lemon juice or olive oil to slow enzymatic browning.',
-          recipeIdea: 'Artisan Avocado Toast with Flaky Salt',
-        },
-        ecoImpact: {
-          potentialWasteAvoidanceDollar: 2.20,
-          co2eSavingsKg: 0.5,
-        },
-        imageSrc: imageSource || FOOD_ASSETS.countertopBowl,
-        analyzedAt: new Date().toISOString(),
-      };
-    }
-
-    // Default: Honeycrisp Apple or Custom Uploaded Produce
+  createInitialResult() {
     return {
-      id: 'anls_' + Date.now(),
-      foodName: sample === 'apple' ? 'Honeycrisp Apple' : 'Fresh Kitchen Produce',
-      cultivar: sample === 'apple' ? 'Orchard Fresh • Malus domestica' : 'Countertop Fresh Harvest',
-      scientificName: 'Malus domestica',
-      confidence: 0.96,
-      qualityScore: Math.max(55, 92 - days * 3),
-      status: 'Fresh (Grade A)',
-      statusCategory: 'fresh',
-      qualityPeriod: `${Math.max(2, 5 - days)} days left`,
-      storageSuggestion: isFridge ? 'Crisper Chill (~4°C / 39°F)' : 'Ambient Countertop (~21°C / 70°F)',
-      refrigeratedExtension: 'Can extend to 2+ weeks if refrigerated in a perforated bag',
-      priorityRank: 'Priority 3 (Can Wait)',
-      visualObservation: 'Tight cellular firmness, clean skin pigmentation, and intact epidermal tension.',
-      culinaryGuidance: {
-        snacking: 'Crisp cell structure makes it ideal for raw snacking with almond butter, slicing into fresh salads, or packing into lunchboxes.',
-        storageProtocol: 'Keep separated from delicate greens. Apples naturally emit ethylene gas which can hasten aging in adjacent leafy greens.',
-        recipeIdea: 'Cinnamon Spiced Baked Apple Slices',
+      id: '',
+      detectedFood: null,
+      recognitionConfidence: null,
+      topPredictions: null,
+      freshness: {
+        label: null,
+        confidence: null,
       },
-      ecoImpact: {
-        potentialWasteAvoidanceDollar: 1.40,
-        co2eSavingsKg: 0.3,
+      shelfLife: {
+        minDays: null,
+        maxDays: null,
       },
-      imageSrc: imageSource || FOOD_ASSETS.honeycrispAppleCut,
-      analyzedAt: new Date().toISOString(),
+      eatFirstPriority: null,
+      analysisStatus: 'not_analyzed',
+      source: 'none',
+      model: 'EfficientNet-B0',
+      modelVersion: 'v2',
+      storageContext: null,
+      imageSrc: null,
+      analyzedAt: '',
+      message: '',
     };
   },
 
   /**
-   * Analyze multiple food items for comparison and Eat First prioritization
-   * @param {Array<File|string>} items 
-   * @returns {Promise<Array<object>>} Ranked list of foods
+   * Analyze a single food photo using the trained Food Recognition model
+   * @param {File|string} imageSource - User-uploaded image data URI or File
+   * @param {object} pantryContext - { storage: 'countertop'|'fridge', daysInPantry: number }
+   * @returns {Promise<object>} FoodAnalysisResult
+   */
+  async analyzeSingleFood(imageSource, pantryContext = {}) {
+    if (!imageSource) {
+      throw new Error('Please upload or capture a food image first.');
+    }
+
+    // Convert source to File
+    const file = await toUploadFile(imageSource);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('storage_type', pantryContext.storage || 'countertop');
+    formData.append('days_stored', String(pantryContext.daysInPantry != null ? pantryContext.daysInPantry : 0));
+
+    let response;
+    try {
+      response = await fetch(ENDPOINTS.FOOD_RECOGNITION, {
+        method: 'POST',
+        body: formData,
+      });
+    } catch (networkErr) {
+      throw new Error('Food analysis service is currently unavailable. Please try again.');
+    }
+
+    // Handle HTTP non-200 responses
+    if (!response.ok) {
+      let errPayload = null;
+      try {
+        errPayload = await response.json();
+      } catch {
+        // Ignored
+      }
+
+      if (response.status === 503 || errPayload?.status === 'model_unavailable') {
+        throw new Error('Food recognition model is currently unavailable.');
+      } else if (response.status === 400 || errPayload?.status === 'invalid_image') {
+        throw new Error(errPayload?.message || 'Please select a valid food image.');
+      } else {
+        throw new Error(errPayload?.detail || errPayload?.message || 'Food analysis could not be completed.');
+      }
+    }
+
+    const data = await response.json();
+
+    if (!data.success && data.status !== 'low_confidence') {
+      throw new Error(data.message || 'Food recognition could not be completed.');
+    }
+
+    // Normalize confidence values to 0.0 - 1.0 internally
+    const rawConfPercent = typeof data.recognitionConfidence === 'number' ? data.recognitionConfidence : null;
+    const normalizedConf = rawConfPercent != null ? rawConfPercent / 100.0 : null;
+
+    const topPredictions = (data.topPredictions || []).map((pred) => ({
+      food: pred.food,
+      confidence: typeof pred.confidence === 'number' ? pred.confidence / 100.0 : 0.0,
+      percentage: typeof pred.confidence === 'number' ? `${pred.confidence.toFixed(1)}%` : '0.0%',
+      rawConfidence: pred.confidence,
+    }));
+
+    // When model is not configured / disconnected
+    if (data.status === 'model_not_configured') {
+      return {
+        id: 'anls_' + Date.now(),
+        detectedFood: null,
+        recognitionConfidence: null,
+        rawConfidencePercent: null,
+        topPredictions: [],
+        freshness: {
+          label: null,
+          confidence: null,
+          status: 'unavailable',
+          source: 'nathansekar/food-freshness-detector',
+        },
+        shelfLife: {
+          status: 'unavailable',
+          minDays: null,
+          maxDays: null,
+          source: 'USDA FoodKeeper',
+        },
+        eatFirstPriority: {
+          status: 'unavailable',
+          priority: null,
+          score: null,
+          reason: 'Eat First requires an available shelf-life estimate.',
+        },
+        analysisStatus: 'disconnected',
+        source: 'none',
+        model: null,
+        modelVersion: null,
+        status: 'model_not_configured',
+        storageContext: {
+          storage: pantryContext.storage || 'countertop',
+          daysInPantry: Number(pantryContext.daysInPantry) || 0,
+        },
+        imageSrc: imageSource,
+        analyzedAt: new Date().toISOString(),
+        message: data.message || 'Food recognition model is disconnected. Awaiting integration of new pretrained model.',
+      };
+    }
+
+    return {
+      id: 'anls_' + Date.now(),
+      detectedFood: data.detectedFood || null,
+      recognitionConfidence: normalizedConf,
+      rawConfidencePercent: rawConfPercent,
+      topPredictions: topPredictions,
+      detectedObjects: (data.detectedObjects || []).map((obj) => ({
+        label: obj.label,
+        confidence: typeof obj.confidence === 'number' ? obj.confidence : null,
+        box: obj.box || null,
+      })),
+      foodRecognition: data.foodRecognition || {},
+      freshness: {
+        label: data.freshness?.label || null,
+        confidence: data.freshness?.confidence != null
+          ? data.freshness.confidence / 100.0
+          : data.freshness?.score != null ? data.freshness.score / 100.0 : null,
+        score: data.freshness?.score != null ? data.freshness.score : null,
+        status: data.freshness?.status || (data.freshness?.label ? 'success' : 'unavailable'),
+        source: data.freshness?.source || data.freshness?.modelVersion || 'nathansekar/food-freshness-detector',
+        modelVersion: data.freshness?.modelVersion || 'nathansekar/food-freshness-detector',
+      },
+      shelfLife: {
+        status: data.shelfLife?.status || 'unavailable',
+        food: data.shelfLife?.food || null,
+        storageType: data.shelfLife?.storageType || pantryContext.storage || 'countertop',
+        daysStored: data.shelfLife?.daysStored != null ? data.shelfLife.daysStored : Number(pantryContext.daysInPantry) || 0,
+        referenceDuration: data.shelfLife?.referenceDuration || null,
+        remaining: data.shelfLife?.remaining || null,
+        minDays: data.shelfLife?.remaining?.minDays != null ? data.shelfLife.remaining.minDays : null,
+        maxDays: data.shelfLife?.remaining?.maxDays != null ? data.shelfLife.remaining.maxDays : null,
+        unit: data.shelfLife?.unit || 'days',
+        source: data.shelfLife?.source || 'USDA FoodKeeper',
+        isEstimate: data.shelfLife?.isEstimate ?? true,
+        heuristicApplied: data.shelfLife?.heuristicApplied ?? false,
+        reason: data.shelfLife?.reason || null,
+        tips: data.shelfLife?.tips || null,
+        message: data.shelfLife?.reason || null,
+      },
+      eatFirstPriority: {
+        status: data.eatFirstPriority?.status || 'unavailable',
+        priority: data.eatFirstPriority?.priority || null,
+        score: data.eatFirstPriority?.score != null ? data.eatFirstPriority.score : null,
+        urgencyLabel: data.eatFirstPriority?.urgencyLabel || null,
+        reason: data.eatFirstPriority?.reason || null,
+      },
+      analysisStatus: data.analysisStatus || (data.status === 'low_confidence' ? 'partial' : 'complete'),
+      source: data.source || 'ml',
+      model: data.model || 'Master Hybrid Vision',
+      modelVersion: data.modelVersion || 'Hybrid Pretrained V1',
+      modelVersions: data.modelVersions || {},
+      status: data.analysisStatus || data.status,
+      storageContext: {
+        storage: pantryContext.storage || 'countertop',
+        daysInPantry: Number(pantryContext.daysInPantry) || 0,
+      },
+      imageSrc: imageSource,
+      analyzedAt: new Date().toISOString(),
+      message: data.message || (data.detectedFood ? `Recognized as ${data.detectedFood} with ${rawConfPercent}% confidence.` : 'Analysis complete.'),
+    };
+
+  },
+
+  /**
+   * Multi-item comparison stub for future stages
+   * @param {Array<File|string>} items
+   * @returns {Promise<Array<object>>}
    */
   async compareMultipleFoods(items = []) {
-    await new Promise((res) => setTimeout(res, 900));
-
-    return [
-      {
-        rank: 1,
-        priorityLabel: 'Eat First',
-        badgeColor: 'tertiary',
-        name: 'Ripe Vine Tomato',
-        cultivar: 'Cluster Vine • Solanum lycopersicum',
-        estimatedWindow: '1–2 days',
-        status: 'Semi-Fresh (Softening)',
-        statusCategory: 'semi',
-        qualityScore: 68,
-        observation: 'Skin softening observed near stem shoulder. Highly vulnerable to skin splitting.',
-        recommendation: 'Best for roasting, quick pasta sauce, or fresh salad today.',
-        imageSrc: FOOD_ASSETS.vineTomatoes,
-      },
-      {
-        rank: 2,
-        priorityLabel: 'Next in Line',
-        badgeColor: 'warning',
-        name: 'Cavendish Banana',
-        cultivar: 'Tropical • High Sugar Spotting',
-        estimatedWindow: 'Consume within 24h',
-        status: 'Needs Attention',
-        statusCategory: 'attention',
-        qualityScore: 50,
-        observation: 'Sugar spotting starting on crest. Excellent sweetness, near peak flavor.',
-        recommendation: 'Ideal for banana bread, morning smoothies, or oat skillet bake.',
-        imageSrc: FOOD_ASSETS.cavendishBananas,
-      },
-      {
-        rank: 3,
-        priorityLabel: 'Can Wait',
-        badgeColor: 'success',
-        name: 'Honeycrisp Apple',
-        cultivar: 'Orchard Fresh • Malus domestica',
-        estimatedWindow: '4–5 days left',
-        status: 'Fresh',
-        statusCategory: 'fresh',
-        qualityScore: 92,
-        observation: 'Dense cellular crunch intact. Safe for prolonged countertop or crisper storage.',
-        recommendation: 'Can wait. Keep away from ethylene-emitting bananas.',
-        imageSrc: FOOD_ASSETS.honeycrispAppleCut,
-      },
-    ];
+    await new Promise((res) => setTimeout(res, 400));
+    return [];
   },
 };
 

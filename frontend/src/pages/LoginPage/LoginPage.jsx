@@ -19,7 +19,9 @@ export function LoginPage({ navigate }) {
     try {
       await authService.login(email, password);
       sessionStorage.removeItem('foodfresh_dashboard_welcome_seen');
-      navigate('/dashboard');
+      const redirect = sessionStorage.getItem('foodfresh_redirect_after_login') || '/dashboard';
+      sessionStorage.removeItem('foodfresh_redirect_after_login');
+      navigate(redirect);
     } catch (err) {
       setErrorMessage(err.message || 'Invalid credentials. Please verify and try again.');
     } finally {
@@ -240,6 +242,7 @@ export function LoginPage({ navigate }) {
                   </>
                 )}
               </button>
+
             </form>
 
             {/* Link to Register */}

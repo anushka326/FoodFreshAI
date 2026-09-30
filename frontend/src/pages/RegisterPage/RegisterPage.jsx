@@ -8,7 +8,6 @@ export function RegisterPage({ navigate }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [householdType, setHouseholdType] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -45,10 +44,11 @@ export function RegisterPage({ navigate }) {
         fullName: fullName.trim(),
         email: email.trim(),
         password,
-        householdType,
       });
       sessionStorage.removeItem('foodfresh_dashboard_welcome_seen');
-      navigate('/dashboard');
+      const redirect = sessionStorage.getItem('foodfresh_redirect_after_login') || '/dashboard';
+      sessionStorage.removeItem('foodfresh_redirect_after_login');
+      navigate(redirect);
     } catch (err) {
       setErrorMessage(err.message || 'Registration encountered an issue.');
     } finally {
@@ -234,48 +234,6 @@ export function RegisterPage({ navigate }) {
                     placeholder="Confirm your password"
                     className="w-full px-4 py-2.5 bg-surface-container-low/60 border border-surface-container-high rounded-2xl text-xs sm:text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:bg-white transition-all placeholder:text-outline"
                   />
-                </div>
-              </div>
-
-              {/* Household Scope (Starts unselected) */}
-              <div>
-                <label className="block text-xs font-bold text-on-surface mb-1.5">
-                  Household Pantry Scope
-                </label>
-                <div className="grid grid-cols-3 gap-2 text-xs">
-                  <button
-                    type="button"
-                    onClick={() => setHouseholdType('solo')}
-                    className={`py-2 px-3 rounded-xl border text-center font-semibold transition-all cursor-pointer ${
-                      householdType === 'solo'
-                        ? 'bg-secondary-container text-on-secondary-container border-secondary shadow-2xs'
-                        : 'bg-surface-container-low border-surface-container-high text-on-surface-variant hover:border-secondary/50'
-                    }`}
-                  >
-                    🌱 Solo Chef
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setHouseholdType('couple')}
-                    className={`py-2 px-3 rounded-xl border text-center font-semibold transition-all cursor-pointer ${
-                      householdType === 'couple'
-                        ? 'bg-secondary-container text-on-secondary-container border-secondary shadow-2xs'
-                        : 'bg-surface-container-low border-surface-container-high text-on-surface-variant hover:border-secondary/50'
-                    }`}
-                  >
-                    🌿 Couple
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setHouseholdType('family')}
-                    className={`py-2 px-3 rounded-xl border text-center font-semibold transition-all cursor-pointer ${
-                      householdType === 'family'
-                        ? 'bg-secondary-container text-on-secondary-container border-secondary shadow-2xs'
-                        : 'bg-surface-container-low border-surface-container-high text-on-surface-variant hover:border-secondary/50'
-                    }`}
-                  >
-                    🍃 Family
-                  </button>
                 </div>
               </div>
 

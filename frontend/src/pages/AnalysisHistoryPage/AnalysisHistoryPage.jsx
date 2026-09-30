@@ -150,21 +150,40 @@ export function AnalysisHistoryPage({ navigate }) {
       {/* Produce Items Grid / List */}
       {filteredItems.length === 0 ? (
         <div className="p-12 rounded-3xl bg-surface-container-low text-center border border-dashed border-surface-container-high">
-          <span className="text-3xl block mb-2">🔍</span>
-          <h3 className="text-base font-bold text-primary">No matching produce found</h3>
-          <p className="text-xs text-on-surface-variant mt-1">
-            Try adjusting your search query or filter tags above.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              setSearchTerm('');
-              setActiveFilter('all');
-            }}
-            className="mt-4 px-4 py-2 rounded-full bg-primary text-white text-xs font-bold"
-          >
-            Clear Filters
-          </button>
+          {history.length === 0 ? (
+            <>
+              <span className="text-3xl block mb-2">🥗</span>
+              <h3 className="text-base font-bold text-primary">Your pantry is empty</h3>
+              <p className="text-xs text-on-surface-variant mt-1 max-w-md mx-auto">
+                Analyze and save your first food to start tracking estimated quality and remaining days automatically.
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate('/analyze')}
+                className="mt-4 px-4 py-2 rounded-full bg-primary text-white text-xs font-bold cursor-pointer"
+              >
+                Analyze Food
+              </button>
+            </>
+          ) : (
+            <>
+              <span className="text-3xl block mb-2">🔍</span>
+              <h3 className="text-base font-bold text-primary">No matching produce found</h3>
+              <p className="text-xs text-on-surface-variant mt-1">
+                Try adjusting your search query or filter tags above.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm('');
+                  setActiveFilter('all');
+                }}
+                className="mt-4 px-4 py-2 rounded-full bg-primary text-white text-xs font-bold cursor-pointer"
+              >
+                Clear Filters
+              </button>
+            </>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -189,18 +208,33 @@ export function AnalysisHistoryPage({ navigate }) {
                   </div>
                 </div>
 
-                {/* Title & Status */}
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-bold text-sm text-primary">{item.foodName}</h3>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    item.statusCategory === 'fresh'
-                      ? 'bg-secondary-container text-on-secondary-container'
-                      : item.statusCategory === 'semi'
-                      ? 'bg-tertiary-fixed text-on-tertiary-fixed'
-                      : 'bg-error-container text-on-error-container'
-                  }`}>
-                    {item.status}
-                  </span>
+                {/* Title, Priority & Status */}
+                <div className="flex items-center justify-between mb-1 gap-2">
+                  <h3 className="font-bold text-sm text-primary truncate">{item.foodName}</h3>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {item.eatFirstPriority && item.eatFirstPriority !== 'NORMAL' && (
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
+                        item.eatFirstPriority === 'VERY_HIGH'
+                          ? 'bg-red-100 text-red-700 border border-red-200'
+                          : item.eatFirstPriority === 'HIGH'
+                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                          : item.eatFirstPriority === 'MEDIUM'
+                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                          : 'bg-slate-100 text-slate-700'
+                      }`}>
+                        {item.eatFirstPriority.replace('_', ' ')}
+                      </span>
+                    )}
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      item.statusCategory === 'fresh'
+                        ? 'bg-secondary-container text-on-secondary-container'
+                        : item.statusCategory === 'semi'
+                        ? 'bg-tertiary-fixed text-on-tertiary-fixed'
+                        : 'bg-error-container text-on-error-container'
+                    }`}>
+                      {item.status}
+                    </span>
+                  </div>
                 </div>
 
                 <p className="text-[11px] text-on-surface-variant font-medium mb-3">
@@ -214,9 +248,16 @@ export function AnalysisHistoryPage({ navigate }) {
 
               {/* Card Footer Actions */}
               <div className="pt-3 border-t border-surface-container-low flex items-center justify-between">
-                <span className="text-xs font-bold text-primary">
-                  ⏳ {item.qualityPeriod}
-                </span>
+                <div>
+                  <span className="text-xs font-bold text-primary block">
+                    ⏳ {item.qualityPeriod || (item.remainingDays != null ? `${item.remainingDays} days remaining` : 'Pending estimate')}
+                  </span>
+                  {item.storageEnvironment && (
+                    <span className="text-[10px] text-on-surface-variant font-medium block">
+                      📍 {item.storageEnvironment}
+                    </span>
+                  )}
+                </div>
 
                 <div className="flex items-center gap-1.5">
                   <button

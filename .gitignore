@@ -23,12 +23,21 @@ __pycache__/
 # Datasets
 data/raw/
 data/processed/
+data/feedback/images/
 
 # Models
 models/pretrained/
 models/trained/
+models/archive_old/
+*.bin
+*.pth
+*.safetensors
 
 # Application storage & database
 uploads/
 database/*.db
 *.sqlite3
+**/*.db
+data.zip
+data/raw.zip
+scratch/

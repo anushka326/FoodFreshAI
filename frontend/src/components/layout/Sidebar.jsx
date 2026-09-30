@@ -1,6 +1,7 @@
 import React from 'react';
 import { BRANDING_ASSETS } from '../../assets/branding/index.js';
 import { MASCOT_ASSETS } from '../../assets/mascot/index.js';
+import { authService } from '../../services/authService.js';
 
 export function Sidebar({ currentRoute, navigate, isOpen, onClose }) {
   const navItems = [
@@ -41,6 +42,12 @@ export function Sidebar({ currentRoute, navigate, isOpen, onClose }) {
   const handleNavClick = (path) => {
     navigate(path);
     if (onClose) onClose();
+  };
+
+  const handleLogout = async () => {
+    await authService.logout();
+    if (onClose) onClose();
+    navigate('/login');
   };
 
   return (
@@ -158,7 +165,7 @@ export function Sidebar({ currentRoute, navigate, isOpen, onClose }) {
           {/* Logout Trigger */}
           <button
             type="button"
-            onClick={() => handleNavClick('/login')}
+            onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-on-surface-variant hover:text-red-700 hover:bg-red-50/70 transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[20px]">logout</span>

@@ -149,7 +149,7 @@ if __name__ == "__main__":
         print(f"Confidence:     {result['percentage']}")
         print("\nTop predictions:")
         for idx, pred in enumerate(result["top_predictions"], 1):
-            print(f"{idx}. {pred['food']} - {pred['percentage']}")
+            print(f"{idx}. {pred['food']} — {pred['percentage']}")
     else:
         print(f"Error: {result.get('message')}")
         sys.exit(1)

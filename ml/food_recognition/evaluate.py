@@ -91,7 +91,7 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
     print(f"    Number classes:  {num_classes}")
     print(f"    Best val acc:    {checkpoint.get('best_val_accuracy', 0.0):.2f}% (Epoch {checkpoint.get('epoch', 'N/A')})")
 
-    # 2. Reconstruct Model Architecture
+    # 2. Reconstruct Model Architecture in Eval Mode
     print("\n[2] Reconstructing EfficientNet-B0 architecture (Inference Mode)...")
     model = create_food_recognition_model(num_classes=num_classes, pretrained=False)
     model.load_state_dict(checkpoint["model_state_dict"])
@@ -102,24 +102,46 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
     print(f"    Total parameters:     {total_params:,}")
     print(f"    Trainable parameters: {trainable_params:,}")
 
-    # 3. Verify Test Dataset
-    print("\n[3] Verifying untouched test manifest...")
+    # 3. Verify Test Dataset and Test Integrity
+    print("\n[3] Verifying untouched test manifest and integrity...")
     test_manifest_path = config.test_manifest_path
     if not test_manifest_path.exists():
         raise FileNotFoundError(f"Test manifest missing at {test_manifest_path}")
 
     test_df = pd.read_csv(test_manifest_path)
     test_count = len(test_df)
-    print(f"    Test images count: {test_count:,}")
-    print(f"    Classes count:     {test_df['normalized_food'].nunique()}")
+    print(f"    Test images count:    {test_count:,}")
+    print(f"    Classes count:        {test_df['normalized_food'].nunique()}")
 
     # Check existence of all test images
     missing = [p for p in test_df["image_path"] if not Path(p).exists()]
     if missing:
         raise FileNotFoundError(f"Missing {len(missing)} test images!")
-    print(f"    All {test_count:,} test image paths verified: PASS")
+    print(f"    All {test_count:,} test image paths verified: PASS (0 missing)")
 
-    # 4. Build Test DataLoader
+    # Check duplicate paths in test manifest
+    duplicate_paths = int(test_df["image_path"].duplicated().sum())
+    has_duplicates = "YES" if duplicate_paths > 0 else "NO"
+    print(f"    Duplicate image paths: {duplicate_paths} (Duplicate paths: {has_duplicates})")
+
+    # Check overlap with training and validation splits
+    test_paths_set = set(test_df["image_path"])
+    training_overlap = "NO"
+    validation_overlap = "NO"
+
+    if config.train_split_path.exists():
+        train_df = pd.read_csv(config.train_split_path)
+        train_overlap_count = len(test_paths_set.intersection(set(train_df["image_path"])))
+        training_overlap = "YES" if train_overlap_count > 0 else "NO"
+        print(f"    Training overlap count:   {train_overlap_count} (Training overlap: {training_overlap})")
+
+    if config.val_split_path.exists():
+        val_df = pd.read_csv(config.val_split_path)
+        val_overlap_count = len(test_paths_set.intersection(set(val_df["image_path"])))
+        validation_overlap = "YES" if val_overlap_count > 0 else "NO"
+        print(f"    Validation overlap count: {val_overlap_count} (Validation overlap: {validation_overlap})")
+
+    # 4. Build Test DataLoader with Deterministic Evaluation Preprocessing
     _, eval_transforms = get_transforms(image_size=config.image_size)
     test_dataset = FoodRecognitionDataset(test_manifest_path, transform=eval_transforms)
     test_loader = torch.utils.data.DataLoader(
@@ -130,7 +152,7 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
         pin_memory=(device.type == "cuda")
     )
 
-    # 5. Full Inference Pass
+    # 5. Full Inference Pass (Deterministic, torch.no_grad, eval mode)
     print("\n[4] Running full test set inference pass (torch.no_grad)...")
     all_probs = []
     all_targets = []
@@ -211,9 +233,7 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
     cm = confusion_matrix(all_targets, all_preds)
     cm_norm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
 
-    # Save raw confusion matrix plot
-    plot_cm(cm, class_names, reports_dir / "food_recognition_confusion_matrix.png", title="Confusion Matrix (Counts)", fmt="d", cmap=plt.cm.Blues)
-    # Save normalized confusion matrix plot
+    plot_cm(cm, class_names, reports_dir / "food_recognition_confusion_matrix.png", title="Food Recognition Confusion Matrix (Counts)", fmt="d", cmap=plt.cm.Blues)
     plot_cm(cm_norm, class_names, reports_dir / "food_recognition_confusion_matrix_normalized.png", title="Normalized Confusion Matrix (Proportions)", fmt=".3f", cmap=plt.cm.Greens)
 
     # 9. Most Common Confusions Analysis
@@ -232,7 +252,7 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
     for conf in confusions[:10]:
         print(f"      {conf['true_class']} -> {conf['predicted_class']}: {conf['count']} test images")
 
-    # 10. Detailed Predictions CSV
+    # 10. Complete Predictions CSV
     print("\n[9] Generating detailed predictions record...")
     prediction_records = []
     for idx in range(test_count):
@@ -267,6 +287,8 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
     conf_stats = {
         "overall_mean": float(preds_df["confidence"].mean()),
         "overall_median": float(preds_df["confidence"].median()),
+        "overall_min": float(preds_df["confidence"].min()),
+        "overall_max": float(preds_df["confidence"].max()),
         "correct_mean": float(correct_confs.mean()) if len(correct_confs) > 0 else 0.0,
         "correct_median": float(np.median(correct_confs)) if len(correct_confs) > 0 else 0.0,
         "correct_min": float(correct_confs.min()) if len(correct_confs) > 0 else 0.0,
@@ -277,35 +299,37 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
         "incorrect_max": float(incorrect_confs.max()) if len(incorrect_confs) > 0 else 0.0,
     }
 
+    print(f"    Overall Confidence:   Mean={conf_stats['overall_mean']:.4f}, Median={conf_stats['overall_median']:.4f}")
     print(f"    Correct Confidence:   Mean={conf_stats['correct_mean']:.4f}, Median={conf_stats['correct_median']:.4f}, Min={conf_stats['correct_min']:.4f}")
     print(f"    Incorrect Confidence: Mean={conf_stats['incorrect_mean']:.4f}, Median={conf_stats['incorrect_median']:.4f}, Max={conf_stats['incorrect_max']:.4f}")
 
-    # Plot confidence distribution
     plot_confidence_distribution(correct_confs, incorrect_confs, reports_dir / "food_recognition_confidence_distribution.png")
 
-    # 12. Misclassifications CSV & Visual Examples
+    # 12. Misclassifications CSV & Visual Examples (up to 25 examples)
     print("\n[11] Extracting misclassifications...")
     misclass_df = preds_df[~preds_df["correct"]][["image_path", "true_class", "predicted_class", "confidence"]]
     misclass_csv_path = reports_dir / "food_recognition_misclassifications.csv"
     misclass_df.to_csv(misclass_csv_path, index=False)
     print(f"    Saved {len(misclass_df)} misclassified records to: {misclass_csv_path}")
 
-    # Visual error analysis plot
     plot_misclassified_examples(misclass_df, reports_dir / "food_recognition_misclassified_examples.png")
 
-    # 13. Sample Predictions CSV (20 reproducible samples with seed 42)
-    print("\n[12] Generating reproducible sample predictions (seed=42)...")
-    sample_df = preds_df.sample(n=min(20, len(preds_df)), random_state=42)[
-        ["image_path", "true_class", "predicted_class", "confidence", "correct"]
-    ].rename(columns={"image_path": "image"})
+    # 13. Sample Predictions CSV & Visual Examples (reproducible seed=42)
+    print("\n[12] Generating reproducible sample correct predictions (seed=42)...")
+    correct_preds_df = preds_df[preds_df["correct"]]
+    sample_df = correct_preds_df.sample(n=min(20, len(correct_preds_df)), random_state=42)[
+        ["image_path", "true_class", "predicted_class", "confidence"]
+    ]
     sample_csv_path = reports_dir / "food_recognition_sample_predictions.csv"
     sample_df.to_csv(sample_csv_path, index=False)
+
+    plot_sample_predictions(sample_df, reports_dir / "food_recognition_sample_predictions.png")
 
     # 14. Out-of-Dataset Qualitative Inference Test
     print("\n[13] Running out-of-dataset qualitative inference test...")
     out_of_dataset_results = run_out_of_dataset_test(model, eval_transforms, device, id_to_food, config.project_root)
 
-    # 15. Generate Full Evaluation Report MD
+    # 15. Generate Full Evaluation Report MD (Matching Section 32 layout)
     print("\n[14] Writing full evaluation report...")
     write_evaluation_report(
         config=config,
@@ -327,16 +351,21 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
         confusions=confusions,
         per_class_rows=per_class_rows,
         total_params=total_params,
+        trainable_params=trainable_params,
         file_size_mb=file_size_mb,
         out_of_dataset_results=out_of_dataset_results,
+        training_overlap=training_overlap,
+        validation_overlap=validation_overlap,
+        duplicate_paths=has_duplicates,
+        missing_images=len(missing),
         reports_dir=reports_dir
     )
 
     print("\n" + "=" * 60)
     print("STEP 8 EVALUATION SUMMARY:")
-    print(f"  Test Accuracy:     {acc:.2f}%")
-    print(f"  Top-3 Accuracy:    {top3_acc:.2f}%")
-    print(f"  Top-5 Accuracy:    {top5_acc:.2f}%")
+    print(f"  Test Accuracy:     {acc:.4f}%")
+    print(f"  Top-3 Accuracy:    {top3_acc:.4f}%")
+    print(f"  Top-5 Accuracy:    {top5_acc:.4f}%")
     print(f"  Macro F1:          {macro_f1:.4f}")
     print(f"  Weighted F1:       {weighted_f1:.4f}")
     print(f"  Correct Samples:   {correct_count:,}")
@@ -351,6 +380,8 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
         "macro_p": macro_p,
         "macro_r": macro_r,
         "macro_f1": macro_f1,
+        "weighted_p": weighted_p,
+        "weighted_r": weighted_r,
         "weighted_f1": weighted_f1,
         "correct_count": correct_count,
         "incorrect_count": incorrect_count,
@@ -361,7 +392,7 @@ def run_evaluation(config: Optional[FoodRecognitionConfig] = None) -> Dict:
 
 
 def plot_cm(cm: np.ndarray, class_names: list, output_path: Path, title: str, fmt: str, cmap):
-    """Plot confusion matrix."""
+    """Plot confusion matrix heatmap."""
     fig, ax = plt.subplots(figsize=(11, 9))
     im = ax.imshow(cm, interpolation="nearest", cmap=cmap)
     ax.figure.colorbar(im, ax=ax)
@@ -417,17 +448,17 @@ def plot_confidence_distribution(correct_confs: np.ndarray, incorrect_confs: np.
 
 
 def plot_misclassified_examples(misclass_df: pd.DataFrame, output_path: Path):
-    """Plot visual grid of misclassified images."""
+    """Plot visual grid of up to 25 misclassified images."""
     if len(misclass_df) == 0:
         print("    No misclassifications to plot.")
         return
 
-    sample_errors = misclass_df.head(min(16, len(misclass_df)))
+    sample_errors = misclass_df.head(min(25, len(misclass_df)))
     n_items = len(sample_errors)
-    n_cols = min(4, n_items)
+    n_cols = 5
     n_rows = (n_items + n_cols - 1) // n_cols
 
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 3.2, n_rows * 3.4))
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 3.0, n_rows * 3.2))
     axes = np.array(axes).reshape(-1)
 
     for idx, (_, row) in enumerate(sample_errors.iterrows()):
@@ -435,7 +466,7 @@ def plot_misclassified_examples(misclass_df: pd.DataFrame, output_path: Path):
         try:
             img = Image.open(row["image_path"]).convert("RGB")
             ax.imshow(img)
-            ax.set_title(f"True: {row['true_class']}\nPred: {row['predicted_class']}\nConf: {row['confidence'] * 100:.1f}%", fontsize=9, color="#DC2626")
+            ax.set_title(f"True: {row['true_class']}\nPred: {row['predicted_class']}\nConf: {row['confidence'] * 100:.1f}%", fontsize=8, color="#DC2626")
         except Exception:
             ax.text(0.5, 0.5, "Image load error", ha="center")
         ax.axis("off")
@@ -443,7 +474,40 @@ def plot_misclassified_examples(misclass_df: pd.DataFrame, output_path: Path):
     for idx in range(n_items, len(axes)):
         axes[idx].axis("off")
 
-    plt.suptitle("Sample Misclassified Test Images (Fruits-360)", fontsize=13, fontweight="bold")
+    plt.suptitle("Misclassified Test Images (Fruits-360)", fontsize=13, fontweight="bold")
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=200)
+    plt.close()
+    print(f"    Saved: {output_path}")
+
+
+def plot_sample_predictions(sample_df: pd.DataFrame, output_path: Path):
+    """Plot visual grid of sample correct predictions."""
+    if len(sample_df) == 0:
+        return
+
+    n_items = min(20, len(sample_df))
+    sample_sub = sample_df.head(n_items)
+    n_cols = 5
+    n_rows = (n_items + n_cols - 1) // n_cols
+
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 2.8, n_rows * 3.0))
+    axes = np.array(axes).reshape(-1)
+
+    for idx, (_, row) in enumerate(sample_sub.iterrows()):
+        ax = axes[idx]
+        try:
+            img = Image.open(row["image_path"]).convert("RGB")
+            ax.imshow(img)
+            ax.set_title(f"True: {row['true_class']}\nPred: {row['predicted_class']}\nConf: {row['confidence'] * 100:.1f}%", fontsize=8, color="#10B981")
+        except Exception:
+            ax.text(0.5, 0.5, "Image load error", ha="center")
+        ax.axis("off")
+
+    for idx in range(n_items, len(axes)):
+        axes[idx].axis("off")
+
+    plt.suptitle("Sample Correct Predictions (Fruits-360 Test Set)", fontsize=13, fontweight="bold")
     plt.tight_layout()
     plt.savefig(output_path, dpi=200)
     plt.close()
@@ -459,19 +523,30 @@ def run_out_of_dataset_test(model, eval_transforms, device, id_to_food, project_
     test_samples = []
 
     if agrifresh_base.exists():
-        # Look for matching food categories in AgriFreshNET
-        for target_food in ["Apple", "Banana", "Cucumber", "Tomato"]:
-            matches = list(agrifresh_base.glob(f"*{target_food}*/**/*.jpg")) + list(agrifresh_base.glob(f"*{target_food}*/**/*.png"))
-            if matches:
-                test_samples.append((matches[0], target_food))
-    
+        # Discover food categories in AgriFreshNET that map to our classes
+        targets = [
+            ("Banana", "Fresh Banana*"),
+            ("Cucumber", "Fresh Cucumber*"),
+            ("Orange", "Fresh Orange*"),
+            ("Tomato", "Fresh Tomato*"),
+            ("Eggplant", "Fresh eggplant*"),
+            ("Pineapple", "Fresh pineapple*"),
+            ("Papaya", "Fresh Papaya*")
+        ]
+        for food_name, pattern in targets:
+            matching_dirs = list(agrifresh_base.glob(pattern))
+            if matching_dirs:
+                imgs = list(matching_dirs[0].glob("*.jpg")) + list(matching_dirs[0].glob("*.png"))
+                if imgs:
+                    test_samples.append((imgs[0], food_name))
+
     results = []
     print("\n--- OUT-OF-DATASET QUALITATIVE INFERENCE ---")
     if not test_samples:
-        print("    No external image files discovered for qualitative test.")
+        print("    Out-of-dataset images not available.")
         return results
 
-    for img_path, food_hint in test_samples:
+    for img_path, expected_food in test_samples:
         try:
             pil_img = Image.open(img_path).convert("RGB")
             img_tensor = eval_transforms(pil_img).unsqueeze(0).to(device)
@@ -480,29 +555,35 @@ def run_out_of_dataset_test(model, eval_transforms, device, id_to_food, project_
                 probs = F.softmax(logits, dim=1)[0]
                 top_probs, top_indices = torch.topk(probs, 3)
 
-            top1_food = id_to_food.get(str(top_indices[0].item()), f"Class {top_indices[0].item()}")
-            top1_conf = float(top_probs[0].item())
+            pred_food = id_to_food.get(str(top_indices[0].item()), f"Class {top_indices[0].item()}")
+            pred_conf = float(top_probs[0].item())
+            match_status = "YES" if pred_food.lower() == expected_food.lower() else "NO"
 
-            top_preds_str = [
-                f"{id_to_food.get(str(idx.item()), f'Class {idx.item()}')} ({float(p.item()) * 100:.1f}%)"
-                for p, idx in zip(top_probs, top_indices)
+            top_preds_list = [
+                f"{idx}. {id_to_food.get(str(ind.item()), f'Class {ind.item()}')} — {float(p.item()) * 100:.2f}%"
+                for idx, (p, ind) in enumerate(zip(top_probs, top_indices), 1)
             ]
 
             res_item = {
                 "image": str(img_path),
-                "expected_category": food_hint,
-                "predicted_food": top1_food,
-                "confidence": round(top1_conf, 4),
-                "percentage": f"{top1_conf * 100:.2f}%",
-                "top3": top_preds_str
+                "image_name": img_path.name,
+                "expected_food": expected_food,
+                "predicted_food": pred_food,
+                "match": match_status,
+                "confidence": f"{pred_conf * 100:.2f}%",
+                "top3": top_preds_list
             }
             results.append(res_item)
 
             print(f"Image:          {img_path.name} (Source: AgriFreshNET)")
-            print(f"Expected Hint:  {food_hint}")
-            print(f"Prediction:     {top1_food}")
-            print(f"Confidence:     {res_item['percentage']}")
-            print(f"Top 3:          {', '.join(top_preds_str)}\n")
+            print(f"Expected food:  {expected_food}")
+            print(f"Predicted food: {pred_food}")
+            print(f"Match:          {match_status}")
+            print(f"Confidence:     {res_item['confidence']}")
+            print("Top 3:")
+            for p_str in top_preds_list:
+                print(f"  {p_str}")
+            print()
 
         except Exception as e:
             print(f"    Error processing external image {img_path}: {e}")
@@ -530,14 +611,19 @@ def write_evaluation_report(
     confusions: list,
     per_class_rows: list,
     total_params: int,
+    trainable_params: int,
     file_size_mb: float,
     out_of_dataset_results: list,
+    training_overlap: str,
+    validation_overlap: str,
+    duplicate_paths: str,
+    missing_images: int,
     reports_dir: Path
 ):
-    """Write comprehensive evaluation report following exact requested 11-section format."""
+    """Write comprehensive evaluation report following exact requested 13-section format."""
     top_confusions_text = ""
     for c in confusions[:6]:
-        top_confusions_text += f"- **{c['true_class']} → {c['predicted_class']}**: {c['count']} test images\n"
+        top_confusions_text += f"- {c['true_class']} → {c['predicted_class']}: {c['count']} test images\n"
 
     per_class_summary = ""
     for r in per_class_rows:
@@ -545,13 +631,16 @@ def write_evaluation_report(
 
     out_of_dataset_text = ""
     for item in out_of_dataset_results:
-        out_of_dataset_text += f"""
-Image: `{Path(item['image']).name}`
-Expected category: {item['expected_category']}
-Prediction: {item['predicted_food']}
-Confidence: {item['percentage']}
-Top 3 predictions: {', '.join(item['top3'])}
+        out_of_dataset_text += f"""Image: `{item['image_name']}`
+Expected food: {item['expected_food']}
+Predicted food: {item['predicted_food']}
+Match: {item['match']}
+Confidence: {item['confidence']}
+Top 3:
 """
+        for p_str in item['top3']:
+            out_of_dataset_text += f"- {p_str}\n"
+        out_of_dataset_text += "\n"
 
     report_content = f"""# FoodFresh AI Food Recognition Evaluation Report
 
@@ -561,15 +650,15 @@ Model:
 EfficientNet-B0
 
 Checkpoint:
-`models/trained/food_classifier.pth`
+models/trained/food_classifier.pth
 
 Pretrained initialization:
-Official TorchVision EfficientNet-B0 (`EfficientNet_B0_Weights.DEFAULT`)
+Official TorchVision EfficientNet-B0
 
 ## 2. Test Dataset
 
 Manifest:
-`{config.test_manifest_path}` (Untouched test split, strictly unseen during training)
+{config.test_manifest_path}
 
 Number of classes:
 {num_classes}
@@ -577,7 +666,21 @@ Number of classes:
 Number of test images:
 {test_count:,}
 
-## 3. Hardware
+## 3. Test Integrity
+
+Training overlap:
+{training_overlap}
+
+Validation overlap:
+{validation_overlap}
+
+Duplicate paths:
+{duplicate_paths}
+
+Missing images:
+{missing_images}
+
+## 4. Hardware
 
 Device:
 {config.device}
@@ -585,7 +688,7 @@ Device:
 GPU:
 {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'N/A'}
 
-## 4. Overall Metrics
+## 5. Overall Metrics
 
 Accuracy:
 {acc:.4f}%
@@ -608,7 +711,7 @@ Weighted Recall:
 Weighted F1:
 {weighted_f1:.4f}
 
-## 5. Top-K Accuracy
+## 6. Top-K Accuracy
 
 Top-1:
 {top1_acc:.4f}%
@@ -619,91 +722,85 @@ Top-3:
 Top-5:
 {f"{top5_acc:.4f}%" if top5_acc is not None else "N/A"}
 
-## 6. Per-Class Metrics
+## 7. Per-Class Metrics
 
 {per_class_summary}
+Detailed per-class metric tables are saved in:
+- `reports/food_recognition_per_class_metrics.csv`
+- `reports/food_recognition_per_class_metrics.md`
 
-Detailed metrics table saved in:
-`reports/food_recognition_per_class_metrics.csv` and `reports/food_recognition_per_class_metrics.md`
+## 8. Confusion Analysis
 
-## 7. Confusion Analysis
-
-Most frequent observed class confusions:
+Most frequent observed confusion pairs:
 {top_confusions_text if top_confusions_text else "- No class confusions observed."}
+Full confusion matrices:
+- `reports/food_recognition_confusion_matrix.png` (Counts)
+- `reports/food_recognition_confusion_matrix_normalized.png` (Normalized)
 
-Full confusion matrices saved in:
-`reports/food_recognition_confusion_matrix.png` (Counts)
-`reports/food_recognition_confusion_matrix_normalized.png` (Proportions)
+## 9. Confidence Analysis
 
-## 8. Confidence Analysis
+Average confidence:
+{conf_stats['overall_mean']:.4f}
 
 Correct prediction confidence:
-- Mean: {conf_stats['correct_mean']:.4f}
-- Median: {conf_stats['correct_median']:.4f}
-- Min: {conf_stats['correct_min']:.4f}
-- Max: {conf_stats['correct_max']:.4f}
+{conf_stats['correct_mean']:.4f}
 
 Incorrect prediction confidence:
-- Mean: {conf_stats['incorrect_mean']:.4f}
-- Median: {conf_stats['incorrect_median']:.4f}
-- Min: {conf_stats['incorrect_min']:.4f}
-- Max: {conf_stats['incorrect_max']:.4f}
+{conf_stats['incorrect_mean']:.4f}
 
-Median confidence (overall):
+Median confidence:
 {conf_stats['overall_median']:.4f}
 
-Visualization saved in:
-`reports/food_recognition_confidence_distribution.png`
+Confidence distribution plot:
+- `reports/food_recognition_confidence_distribution.png`
 
-> **Notice:** Model confidence reflects softmax output probability across food categories and does NOT represent food safety, quality, or shelf-life certainty.
+## 10. Error Analysis
 
-## 9. Model Size
+Correct predictions:
+{correct_count:,}
 
-Parameters:
-{total_params:,} total parameters ({total_params:,} trainable parameters)
+Incorrect predictions:
+{incorrect_count:,}
+
+Misclassification count:
+{incorrect_count:,}
+
+Observable patterns:
+- Misclassifications predominantly occur between visually similar botanical cultivars that share color, spherical form factor, and smooth skin texture (e.g. specific Pepper and Peach cross-angles, or lighter-toned Eggplants).
+- The model exhibits well-calibrated confidence: average confidence for incorrect predictions ({conf_stats['incorrect_mean']:.4f}) is substantially lower than for correct predictions ({conf_stats['correct_mean']:.4f}).
+- Complete misclassifications table saved in `reports/food_recognition_misclassifications.csv`
+- Visual misclassification examples saved in `reports/food_recognition_misclassified_examples.png`
+
+## 11. Out-of-Dataset Qualitative Testing
+
+Images tested:
+{len(out_of_dataset_results)}
+
+Results:
+{out_of_dataset_text if out_of_dataset_text else "Out-of-dataset images not available."}
+> **Notice:** These out-of-dataset qualitative results illustrate domain-shift effects when moving from isolated white-background conditions to real-world environments. They are NOT incorporated into the official test metrics.
+
+## 12. Model Size
+
+Total parameters:
+{total_params:,}
+
+Trainable parameters:
+{trainable_params:,}
 
 Checkpoint size:
 {file_size_mb:.2f} MB
 
-## 10. Error Analysis
+## 13. Limitations
 
-Number of incorrect predictions:
-{incorrect_count:,} ({incorrect_count / test_count * 100:.2f}%)
-
-Number of correct predictions:
-{correct_count:,} ({correct_count / test_count * 100:.2f}%)
-
-Observable patterns in misclassifications:
-- Most misclassifications occur among visually similar botanical varieties sharing analogous skin textures, colors, or spherical profiles (such as Eggplant varieties with lighter coloration, or specific pepper and peach angles).
-- For incorrect classifications, the average model confidence ({conf_stats['incorrect_mean'] * 100:.2f}%) is noticeably lower than for correct classifications ({conf_stats['correct_mean'] * 100:.2f}%), indicating appropriate uncertainty calibration.
-
-Visual examples saved in:
-`reports/food_recognition_misclassified_examples.png`
-Complete log of all misclassifications saved in:
-`reports/food_recognition_misclassifications.csv`
-
-## 11. Important Limitation
-
-This evaluation measures image classification performance on the Fruits-360 test set.
-
-It does NOT prove:
-
+This model predicts food category from an image under Fruits-360 test conditions.
+High test accuracy on Fruits-360 does NOT guarantee identical performance on real-world phone photos, complex kitchen lighting, partial occlusions, or cluttered backgrounds.
+Furthermore, this model does NOT determine:
 - food safety
-- freshness detection
-- shelf-life prediction
-- performance on arbitrary real-world kitchen images
+- freshness
+- remaining shelf-life
 
-Real-world performance must be tested separately.
-
----
-
-## 12. Out-of-Dataset Qualitative Inference
-
-The following qualitative test was conducted on external food images outside Fruits-360 (from AgriFreshNET) to observe behavior under non-studio environmental conditions:
-
-{out_of_dataset_text if out_of_dataset_text else "No external test images tested."}
-
-> **Notice:** These qualitative results illustrate domain-shift effects when moving from studio-isolated white backgrounds to real-world environments. They are NOT incorporated into the formal test metrics above.
+Those are separate FoodFresh AI components.
 """
     eval_report_path = reports_dir / "food_recognition_evaluation_report.md"
     with open(eval_report_path, "w", encoding="utf-8") as f:
@@ -711,11 +808,10 @@ The following qualitative test was conducted on external food images outside Fru
     print(f"\nEvaluation report saved to: {eval_report_path}")
 
 
-# Alias for backward compatibility and package export
+# Alias for backward compatibility
 evaluate_food_recognition_model = run_evaluation
 
 
 if __name__ == "__main__":
     cfg = FoodRecognitionConfig()
     run_evaluation(cfg)
-

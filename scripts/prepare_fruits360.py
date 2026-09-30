@@ -537,7 +537,7 @@ def run_preparation(fruits_root: Path, reports_dir: Path, processed_dir: Path):
 - **Total Original Training Images:** **{total_train_images_all:,}**
 - **Total Original Test Images:** **{total_test_images_all:,}**
 - **Total Original Images:** **{total_train_images_all + total_test_images_all:,}**
-- Complete class inventory saved to [`reports/fruits360_original_classes.csv`](file:///d:/VIT%20TY%20SEM5/ML%20Project/FOODFRESHAI/reports/fruits360_original_classes.csv).
+- Complete class inventory saved to `reports/fruits360_original_classes.csv`.
 
 ---
 
@@ -545,7 +545,7 @@ def run_preparation(fruits_root: Path, reports_dir: Path, processed_dir: Path):
 The fine-grained botanical and variety classes in Fruits-360 (e.g. `Apple Braeburn 1`, `Apple Crimson Snow 1`, `Apple Golden 1-3`, `Apple Granny Smith 1`, `Apple Pink Lady 1`, `Apple Red 1-3`, etc.) were systematically grouped into broad produce categories using deterministic botanical noun extraction and known multi-word rules:
 - **Total Derived Food Categories:** **81** high-level food groups.
 - No semantic guessing was performed; distinct produce items (such as Apple vs Pear or Grapefruit vs Grape) remain separate.
-- Full mapping inventory saved to [`reports/fruits360_food_mapping.csv`](file:///d:/VIT%20TY%20SEM5/ML%20Project/FOODFRESHAI/reports/fruits360_food_mapping.csv) and [`data/processed/fruits360/original_to_food.json`](file:///d:/VIT%20TY%20SEM5/ML%20Project/FOODFRESHAI/data/processed/fruits360/original_to_food.json).
+- Full mapping inventory saved to `reports/fruits360_food_mapping.csv` and `data/processed/fruits360/original_to_food.json`.
 
 ---
 
@@ -596,14 +596,14 @@ Deterministic alphabetical indexing was established for the 12 classes:
 }}
 ```
 
-The mapping is saved in [`data/processed/fruits360/label_map.json`](file:///d:/VIT%20TY%20SEM5/ML%20Project/FOODFRESHAI/data/processed/fruits360/label_map.json) with bidirectional lookup (`id_to_food` and `food_to_id`).
+The mapping is saved in `data/processed/fruits360/label_map.json` with bidirectional lookup (`id_to_food` and `food_to_id`).
 
 ---
 
 ## 8. Manifest Structure
 Two CSV manifest files were generated referencing the original raw image paths without copying any files:
-- **Training Manifest:** [`data/processed/fruits360/fruits360_train_manifest.csv`](file:///d:/VIT%20TY%20SEM5/ML%20Project/FOODFRESHAI/data/processed/fruits360/fruits360_train_manifest.csv) ({tot_train_selected:,} rows)
-- **Test Manifest:** [`data/processed/fruits360/fruits360_test_manifest.csv`](file:///d:/VIT%20TY%20SEM5/ML%20Project/FOODFRESHAI/data/processed/fruits360/fruits360_test_manifest.csv) ({tot_test_selected:,} rows)
+- **Training Manifest:** `data/processed/fruits360/fruits360_train_manifest.csv` ({tot_train_selected:,} rows)
+- **Test Manifest:** `data/processed/fruits360/fruits360_test_manifest.csv` ({tot_test_selected:,} rows)
 - **Manifest Columns:**
   `image_path, original_class, normalized_food, split, label_id`
 
@@ -618,7 +618,7 @@ Full automated validation was executed across every manifest record:
 - **Train / Test Overlap (Data Leakage):** {train_test_overlap} (0 overlapping files)
 - **Invalid Labels:** {invalid_labels}
 - **Validation Status:** `train_manifest_valid = True`, `test_manifest_valid = True`
-- Detailed validation output saved in [`reports/fruits360_manifest_validation.json`](file:///d:/VIT%20TY%20SEM5/ML%20Project/FOODFRESHAI/reports/fruits360_manifest_validation.json).
+- Detailed validation output saved in `reports/fruits360_manifest_validation.json`.
 
 ---
 
