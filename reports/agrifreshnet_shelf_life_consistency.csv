@@ -1,0 +1,9 @@
+food,fresh_range,semi_fresh_range,rotten_range,overlap_or_gap_observed,notes
+Banana,1-4,4-7,7-13,Yes (Contiguous boundaries),Fresh max (4) equals Semi-Fresh min (4); Semi-Fresh max (7) equals Rotten min (7).
+Bittermelon,1-3,3-5,5-8,Yes (Contiguous boundaries),Fresh max (3) equals Semi-Fresh min (3); Semi-Fresh max (5) equals Rotten min (5).
+Cucumber,1-6,6-12,12-20,Yes (Contiguous boundaries),Fresh max (6) equals Semi-Fresh min (6); Semi-Fresh max (12) equals Rotten min (12).
+Eggplant,1-4,4-8,8-15,Yes (Contiguous boundaries),Fresh max (4) equals Semi-Fresh min (4); Semi-Fresh max (8) equals Rotten min (8).
+Orange,1-9,9-20,20-35,Yes (Contiguous boundaries),Fresh max (9) equals Semi-Fresh min (9); Semi-Fresh max (20) equals Rotten min (20).
+Papaya,1-4,4-7,7-12,Yes (Contiguous boundaries),Fresh max (4) equals Semi-Fresh min (4); Semi-Fresh max (7) equals Rotten min (7).
+Pineapple,1-15,15-25,25-35,Yes (Contiguous boundaries),Fresh max (15) equals Semi-Fresh min (15); Semi-Fresh max (25) equals Rotten min (25).
+Tomato,1-10,10-24,24-35,Yes (Contiguous boundaries),Fresh max (10) equals Semi-Fresh min (10); Semi-Fresh max (24) equals Rotten min (24).

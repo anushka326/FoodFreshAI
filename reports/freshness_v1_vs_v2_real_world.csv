@@ -1,0 +1,11 @@
+image,description,ground_truth,old_prediction,old_confidence,new_prediction,new_confidence,calibrated_status,calibrated_display
+green_chilli.jpg,Fresh Green Chilli,Fresh,Slightly Spoiled,61.55,Fresh,93.76,high_confidence,Fresh
+rotten_tomato.jpg,Rotten Tomato,Rotten,Rotten,55.47,Rotten,100.0,high_confidence,Rotten
+rotten_orange.jpg,Moldy/Rotten Orange,Rotten,Rotten,67.05,Rotten,100.0,high_confidence,Rotten
+potato.jpg,Fresh Potato,Fresh,Fresh,79.42,Rotten,66.95,high_confidence,Rotten
+bell_pepper.jpg,Fresh Bell Pepper,Fresh,Fresh,65.87,Fresh,59.07,moderate_confidence,Fresh (Moderate Confidence)
+apple.jpg,Fresh Apple,Fresh,Slightly Spoiled,47.81,Rotten,85.67,high_confidence,Rotten
+pomegranate.jpg,Fresh Pomegranate,Fresh,Slightly Spoiled,76.55,Rotten,99.78,high_confidence,Rotten
+banana.jpg,Fresh Banana,Fresh,Slightly Spoiled,85.62,Fresh,99.94,high_confidence,Fresh
+tomato.jpg,Fresh Tomato,Fresh,Slightly Spoiled,80.49,Fresh,99.97,high_confidence,Fresh
+bread.jpg,Bread,Fresh,Rotten,74.72,Rotten,100.0,high_confidence,Rotten

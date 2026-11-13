@@ -1,0 +1,12 @@
+{
+  "random_seed": 42,
+  "train_image_count": 76961,
+  "val_image_count": 19233,
+  "test_image_count": 32016,
+  "total_images": 128210,
+  "leak_train_val_count": 0,
+  "leak_train_test_count": 0,
+  "leak_val_test_count": 0,
+  "leakage_detected": false,
+  "all_paths_unique": true
+}

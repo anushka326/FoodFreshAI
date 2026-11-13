@@ -1,0 +1,13 @@
+normalized_food,fruits360_original_class_count,fruits360_training_images,fruits360_test_images,agrifreshnet_class_count,agrifreshnet_images,has_fresh,has_semi_fresh,has_rotten,selection_reason
+Apple,30,16571,5506,0,0,False,False,False,High-volume supermarket staple produce in Fruits-360 aligned with FoodKeeper storage categories.
+Banana,5,1917,645,3,1770,True,True,True,Direct overlap with AgriFreshNET; full 3-stage freshness coverage available; high Fruits-360 image count.
+Cucumber,12,6225,2065,3,1770,True,True,True,Direct overlap with AgriFreshNET; full 3-stage freshness coverage available; high Fruits-360 image count.
+Eggplant,2,708,236,3,1770,True,True,True,Direct overlap with AgriFreshNET; full 3-stage freshness coverage available; high Fruits-360 image count.
+Grape,8,4599,1538,0,0,False,False,False,High-volume supermarket staple produce in Fruits-360 aligned with FoodKeeper storage categories.
+Orange,5,3325,1102,3,1770,True,True,True,Direct overlap with AgriFreshNET; full 3-stage freshness coverage available; high Fruits-360 image count.
+Papaya,2,1217,404,3,1770,True,True,True,Direct overlap with AgriFreshNET; full 3-stage freshness coverage available; high Fruits-360 image count.
+Peach,7,4803,1597,0,0,False,False,False,High-volume supermarket staple produce in Fruits-360 aligned with FoodKeeper storage categories.
+Pear,20,12281,4087,0,0,False,False,False,High-volume supermarket staple produce in Fruits-360 aligned with FoodKeeper storage categories.
+Pepper,11,6242,2074,0,0,False,False,False,High-volume supermarket staple produce in Fruits-360 aligned with FoodKeeper storage categories.
+Pineapple,2,983,329,3,1770,True,True,True,Direct overlap with AgriFreshNET; full 3-stage freshness coverage available; high Fruits-360 image count.
+Tomato,19,10259,3413,3,1770,True,True,True,Direct overlap with AgriFreshNET; full 3-stage freshness coverage available; high Fruits-360 image count.

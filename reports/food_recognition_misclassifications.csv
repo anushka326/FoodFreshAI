@@ -1,0 +1,107 @@
+image_path,true_class,predicted_class,confidence
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_162_100.jpg,Cucumber,Peach,0.5093
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_163_100.jpg,Cucumber,Peach,0.9047
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_164_100.jpg,Cucumber,Peach,0.76
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_165_100.jpg,Cucumber,Peach,0.8773
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_166_100.jpg,Cucumber,Peach,0.9281
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_167_100.jpg,Cucumber,Peach,0.9478
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_168_100.jpg,Cucumber,Peach,0.8871
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_169_100.jpg,Cucumber,Peach,0.965
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_170_100.jpg,Cucumber,Peach,0.6087
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_171_100.jpg,Cucumber,Peach,0.9646
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_172_100.jpg,Cucumber,Peach,0.9895
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_173_100.jpg,Cucumber,Peach,0.996
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_174_100.jpg,Cucumber,Peach,0.9996
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_175_100.jpg,Cucumber,Peach,0.9984
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_176_100.jpg,Cucumber,Peach,0.9993
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_177_100.jpg,Cucumber,Peach,0.9935
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_178_100.jpg,Cucumber,Peach,0.9651
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_179_100.jpg,Cucumber,Peach,0.9943
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_180_100.jpg,Cucumber,Peach,0.9878
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_181_100.jpg,Cucumber,Peach,0.982
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_182_100.jpg,Cucumber,Peach,0.8916
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_185_100.jpg,Cucumber,Peach,0.6099
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Cucumber 13/r_186_100.jpg,Cucumber,Peach,0.5699
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_235_100.jpg,Eggplant,Cucumber,0.5798
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_236_100.jpg,Eggplant,Cucumber,0.7397
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_237_100.jpg,Eggplant,Cucumber,0.9488
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_238_100.jpg,Eggplant,Cucumber,0.8632
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_239_100.jpg,Eggplant,Cucumber,0.8068
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_240_100.jpg,Eggplant,Cucumber,0.8781
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_241_100.jpg,Eggplant,Cucumber,0.7755
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_242_100.jpg,Eggplant,Cucumber,0.8857
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_243_100.jpg,Eggplant,Cucumber,0.9895
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_244_100.jpg,Eggplant,Cucumber,0.9061
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_245_100.jpg,Eggplant,Cucumber,0.9414
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_246_100.jpg,Eggplant,Cucumber,0.8961
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_247_100.jpg,Eggplant,Cucumber,0.9456
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_248_100.jpg,Eggplant,Cucumber,0.9337
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_249_100.jpg,Eggplant,Cucumber,0.8327
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_250_100.jpg,Eggplant,Cucumber,0.9549
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_251_100.jpg,Eggplant,Cucumber,0.7804
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_252_100.jpg,Eggplant,Cucumber,0.4601
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_256_100.jpg,Eggplant,Cucumber,0.7565
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Eggplant 1/r_257_100.jpg,Eggplant,Cucumber,0.5083
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_54_100.jpg,Pear,Apple,0.474
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_56_100.jpg,Pear,Apple,0.6776
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_58_100.jpg,Pear,Apple,0.904
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_59_100.jpg,Pear,Apple,0.8272
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_61_100.jpg,Pear,Apple,0.7599
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_65_100.jpg,Pear,Apple,0.6284
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_69_100.jpg,Pear,Apple,0.9233
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_70_100.jpg,Pear,Apple,0.5042
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_71_100.jpg,Pear,Apple,0.9041
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_72_100.jpg,Pear,Apple,0.5317
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_73_100.jpg,Pear,Apple,0.9111
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_74_100.jpg,Pear,Apple,0.8925
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_75_100.jpg,Pear,Apple,0.9148
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_76_100.jpg,Pear,Apple,0.9584
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_78_100.jpg,Pear,Apple,0.5285
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_79_100.jpg,Pear,Apple,0.8352
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_80_100.jpg,Pear,Apple,0.7111
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_81_100.jpg,Pear,Apple,0.8934
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_82_100.jpg,Pear,Apple,0.5624
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 1/r_83_100.jpg,Pear,Apple,0.4976
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 2/r_89_100.jpg,Pear,Apple,0.5323
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 2/r_91_100.jpg,Pear,Apple,0.617
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Pear 2/r_94_100.jpg,Pear,Apple,0.6581
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_271_100.jpg,Tomato,Pepper,0.7716
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_272_100.jpg,Tomato,Pepper,0.8094
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_273_100.jpg,Tomato,Pepper,0.9831
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_274_100.jpg,Tomato,Pepper,0.9842
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_275_100.jpg,Tomato,Pepper,0.99
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_276_100.jpg,Tomato,Pepper,0.9888
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_277_100.jpg,Tomato,Pepper,0.9685
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_278_100.jpg,Tomato,Pepper,0.9932
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_279_100.jpg,Tomato,Pepper,0.9939
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_280_100.jpg,Tomato,Pepper,0.9684
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_281_100.jpg,Tomato,Pepper,0.976
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_282_100.jpg,Tomato,Pepper,0.9658
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_283_100.jpg,Tomato,Pepper,0.9546
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_284_100.jpg,Tomato,Pepper,0.9701
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_285_100.jpg,Tomato,Pepper,0.878
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_286_100.jpg,Tomato,Pepper,0.851
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_287_100.jpg,Tomato,Pepper,0.5752
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r2_288_100.jpg,Tomato,Pepper,0.6248
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_100_100.jpg,Tomato,Pepper,0.9684
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_101_100.jpg,Tomato,Pepper,0.6328
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_103_100.jpg,Tomato,Pepper,0.59
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_104_100.jpg,Tomato,Pepper,0.9643
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_105_100.jpg,Tomato,Pepper,0.9884
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_106_100.jpg,Tomato,Pepper,0.9909
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_107_100.jpg,Tomato,Pepper,0.9774
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_108_100.jpg,Tomato,Pepper,0.7559
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_109_100.jpg,Tomato,Pepper,0.8832
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_110_100.jpg,Tomato,Pepper,0.7732
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_111_100.jpg,Tomato,Pepper,0.9246
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_112_100.jpg,Tomato,Pepper,0.9584
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_113_100.jpg,Tomato,Pepper,0.7545
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_114_100.jpg,Tomato,Pepper,0.9787
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_115_100.jpg,Tomato,Pepper,0.861
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_116_100.jpg,Tomato,Pepper,0.7587
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_118_100.jpg,Tomato,Pepper,0.5813
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_119_100.jpg,Tomato,Pepper,0.7457
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_120_100.jpg,Tomato,Pepper,0.6098
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_122_100.jpg,Tomato,Pepper,0.6643
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_95_100.jpg,Tomato,Pepper,0.7876
+D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test/Tomato Heart 1/r_98_100.jpg,Tomato,Pepper,0.6889

@@ -1,0 +1,4 @@
+freshness_stage,image_count,class_count,percentage_of_images
+Fresh,4720,8,33.33%
+Rotten,4720,8,33.33%
+Semi-Fresh,4720,8,33.33%

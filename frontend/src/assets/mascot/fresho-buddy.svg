@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="buddyLeafGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#4ade80" />
+      <stop offset="45%" stop-color="#22c55e" />
+      <stop offset="100%" stop-color="#15803d" />
+    </linearGradient>
+    <linearGradient id="buddyBodyGrad" x1="30%" y1="10%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#bbf7d0" />
+      <stop offset="50%" stop-color="#86efac" />
+      <stop offset="100%" stop-color="#4ade80" />
+    </linearGradient>
+    <linearGradient id="buddyBlushGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fca5a5" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#f87171" stop-opacity="0.45" />
+    </linearGradient>
+    <filter id="buddySoftGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#15803d" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <!-- Background aura circle -->
+  <circle cx="120" cy="120" r="108" fill="#e1fbdc" fill-opacity="0.55" />
+
+  <!-- Organic Sprout / Body -->
+  <g filter="url(#buddySoftGlow)">
+    <!-- Main friendly plump pear/seedling body -->
+    <path d="M120 44 C84 44, 52 82, 54 132 C56 174, 82 202, 120 202 C158 202, 184 174, 186 132 C188 82, 156 44, 120 44 Z" fill="url(#buddyBodyGrad)" />
+    
+    <!-- Botanical head sprout / crown leaf -->
+    <path d="M120 48 C116 26, 134 14, 146 12 C148 24, 138 42, 120 48 Z" fill="url(#buddyLeafGrad)" />
+    <path d="M118 48 C110 32, 96 24, 84 26 C84 38, 98 48, 118 48 Z" fill="#16a34a" />
+    <path d="M120 48 Q122 32 120 18" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Cute Eyes -->
+    <!-- Left Eye -->
+    <g class="buddy-eye">
+      <ellipse cx="96" cy="122" rx="7.5" ry="9.5" fill="#14381b" />
+      <!-- Pupil highlight -->
+      <circle cx="93.5" cy="118.5" r="3" fill="#ffffff" />
+      <circle cx="98.5" cy="124" r="1.2" fill="#ffffff" />
+    </g>
+
+    <!-- Right Eye -->
+    <g class="buddy-eye">
+      <ellipse cx="144" cy="122" rx="7.5" ry="9.5" fill="#14381b" />
+      <!-- Pupil highlight -->
+      <circle cx="141.5" cy="118.5" r="3" fill="#ffffff" />
+      <circle cx="146.5" cy="124" r="1.2" fill="#ffffff" />
+    </g>
+
+    <!-- Rosy Cheeks -->
+    <ellipse cx="80" cy="134" rx="8" ry="4.5" fill="url(#buddyBlushGrad)" />
+    <ellipse cx="160" cy="134" rx="8" ry="4.5" fill="url(#buddyBlushGrad)" />
+
+    <!-- Sweet gentle smile -->
+    <path d="M110 136 Q120 146 130 136" stroke="#14381b" stroke-width="3" stroke-linecap="round" fill="none" />
+
+    <!-- Little organic sprout tummy belly shine -->
+    <path d="M96 162 Q120 174 144 162 Q120 182 96 162 Z" fill="#ffffff" fill-opacity="0.32" />
+
+    <!-- Tiny friendly leaf hands/paws -->
+    <path d="M56 138 C44 142, 42 154, 52 158 C58 160, 64 150, 62 142 Z" fill="#22c55e" />
+    <path d="M184 138 C196 142, 198 154, 188 158 C182 160, 176 150, 178 142 Z" fill="#22c55e" />
+  </g>
+</svg>

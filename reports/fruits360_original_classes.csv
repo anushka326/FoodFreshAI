@@ -1,0 +1,264 @@
+original_class_name,training_count,test_count,total_count
+Almonds 1,232,77,309
+Apple 10,699,231,930
+Apple 11,430,142,572
+Apple 12,466,154,620
+Apple 13,699,235,934
+Apple 14,466,154,620
+Apple 17,610,201,811
+Apple 18,724,240,964
+Apple 19,729,241,970
+Apple 20,702,234,936
+Apple 21,488,162,650
+Apple 22,696,231,927
+Apple 23,470,156,626
+Apple 5,440,146,586
+Apple 6,473,157,630
+Apple 7,694,229,923
+Apple 8,687,228,915
+Apple 9,694,231,925
+Apple Braeburn 1,492,164,656
+Apple Crimson Snow 1,444,148,592
+Apple Golden 1,480,160,640
+Apple Golden 2,492,164,656
+Apple Golden 3,481,161,642
+Apple Granny Smith 1,492,164,656
+Apple Pink Lady 1,456,152,608
+Apple Red 1,492,164,656
+Apple Red 2,492,164,656
+Apple Red 3,429,144,573
+Apple Red Delicious 1,490,166,656
+Apple Red Yellow 1,492,164,656
+Apple Red Yellow 2,672,219,891
+Apricot 1,492,164,656
+Avocado 1,427,143,570
+Avocado 2,491,166,657
+Avocado Black 1,702,231,933
+Avocado Black 2,738,246,984
+Avocado Green 1,702,231,933
+Banana 1,490,166,656
+Banana 3,233,77,310
+Banana 4,254,84,338
+Banana Lady Finger 1,450,152,602
+Banana Red 1,490,166,656
+Bean pod 1,233,77,310
+Beetroot 1,450,150,600
+BlackBerry 3,450,150,600
+BlackBerry 4,439,0,439
+Blackberry 1,450,150,600
+Blackberry 2,225,75,300
+Blackberry 4,0,145,145
+Blackberry 5,675,225,900
+Blueberry 1,462,154,616
+Cabbage red 1,149,49,198
+Cabbage white 1,144,47,191
+Cactus fruit 1,490,166,656
+Cactus fruit green 1,699,231,930
+Cactus fruit red 1,712,237,949
+Caju seed 1,226,75,301
+Cantaloupe 1,492,164,656
+Cantaloupe 2,492,164,656
+Cantaloupe 3,470,156,626
+Carambola 1,490,166,656
+Carambola 2,473,156,629
+Carambola 3,960,320,1280
+Carrot 1,151,50,201
+Cauliflower 1,702,234,936
+Celery 1,242,80,322
+Cherimoya 1,972,320,1292
+Cherry 1,492,164,656
+Cherry 2,738,246,984
+Cherry 3,699,231,930
+Cherry 4,699,231,930
+Cherry 5,693,228,921
+Cherry Rainier 1,738,246,984
+Cherry Rainier 2,696,231,927
+Cherry Rainier 3,686,228,914
+Cherry Sour 1,456,150,606
+Cherry Wax 1,675,225,900
+Cherry Wax 2,228,76,304
+Cherry Wax Black 1,492,164,656
+Cherry Wax Red 1,492,164,656
+Cherry Wax Red 2,452,150,602
+Cherry Wax Red 3,454,150,604
+Cherry Wax Yellow 1,492,164,656
+Chestnut 1,450,153,603
+Clementine 1,490,166,656
+Cocos 1,490,166,656
+Corn 1,450,150,600
+Corn Husk 1,462,154,616
+Cucumber 1,150,50,200
+Cucumber 10,720,240,960
+Cucumber 11,234,78,312
+Cucumber 12,392,130,522
+Cucumber 13,468,156,624
+Cucumber 3,474,157,631
+Cucumber 4,228,76,304
+Cucumber 5,708,234,942
+Cucumber 6,977,325,1302
+Cucumber 7,709,234,943
+Cucumber 8,697,231,928
+Cucumber 9,468,154,622
+Dates 1,490,166,656
+Dates 2,959,319,1278
+Eggplant 1,468,156,624
+Eggplant long 1,240,80,320
+Fig 1,702,234,936
+Ginger 2,436,144,580
+Ginger Root 1,297,99,396
+Gooseberry 1,466,154,620
+Granadilla 1,490,166,656
+Grape 1,469,155,624
+Grape Blue 1,984,328,1312
+Grape Pink 1,492,164,656
+Grape White 1,490,166,656
+Grape White 2,490,166,656
+Grape White 3,492,164,656
+Grape White 4,471,158,629
+Grape pink 2,711,237,948
+Grapefruit Pink 1,490,166,656
+Grapefruit White 1,492,164,656
+Guava 1,490,166,656
+Hazelnut 1,464,157,621
+Huckleberry 1,490,166,656
+Kaki 1,490,166,656
+Kiwi 1,466,156,622
+Kohlrabi 1,471,157,628
+Kumquats 1,490,166,656
+Lemon 1,492,164,656
+Lemon Meyer 1,490,166,656
+Limes 1,490,166,656
+Lychee 1,490,166,656
+Mandarine 1,490,166,656
+Mango 1,490,166,656
+Mango Red 1,426,142,568
+Mangostan 1,300,102,402
+Maracuja 1,490,166,656
+Melon Piel de Sapo 1,738,246,984
+Mulberry 1,492,164,656
+Mushroom champignon 1,711,237,948
+Mushroom champignon 2,710,235,945
+Nectarine 1,492,164,656
+Nectarine Flat 1,480,160,640
+Nectarine Flat 2,463,153,616
+Nut 1,241,80,321
+Nut 2,240,79,319
+Nut 3,240,79,319
+Nut 4,239,79,318
+Nut 5,243,80,323
+Nut Forest 1,654,218,872
+Nut Pecan 1,534,178,712
+Onion 2,765,255,1020
+Onion Red 1,450,150,600
+Onion Red 2,720,237,957
+Onion Red 3,445,155,600
+Onion White 1,438,146,584
+Onion White 2,310,102,412
+Orange 1,479,160,639
+Orange 2,702,231,933
+Orange 3,716,237,953
+Orange peeled 1,480,158,638
+Papaya 1,492,164,656
+Papaya 2,725,240,965
+Passion Fruit 1,490,166,656
+Peach 1,492,164,656
+Peach 2,738,246,984
+Peach 3,927,306,1233
+Peach 4,720,240,960
+Peach 5,720,240,960
+Peach 6,714,237,951
+Peach Flat 1,492,164,656
+Peanut shell 1x 1,159,52,211
+Pear 1,492,164,656
+Pear 10,701,231,932
+Pear 11,698,231,929
+Pear 12,469,156,625
+Pear 13,720,240,960
+Pear 14,690,228,918
+Pear 2,696,232,928
+Pear 3,215,72,287
+Pear 5,704,233,937
+Pear 6,708,233,941
+Pear 7,709,235,944
+Pear 8,702,231,933
+Pear 9,928,308,1236
+Pear Abate 1,490,166,656
+Pear Forelle 1,702,234,936
+Pear Kaiser 1,300,102,402
+Pear Monster 1,490,166,656
+Pear Red 1,666,222,888
+Pear Stone 1,711,237,948
+Pear Williams 1,490,166,656
+Pepino 1,490,166,656
+Pepper 1,686,228,914
+Pepper 2,480,158,638
+Pepper Green 1,444,148,592
+Pepper Orange 1,702,234,936
+Pepper Orange 2,707,235,942
+Pepper Red 1,666,222,888
+Pepper Red 2,233,77,310
+Pepper Red 3,472,156,628
+Pepper Red 4,477,158,635
+Pepper Red 5,709,236,945
+Pepper Yellow 1,666,222,888
+Physalis 1,492,164,656
+Physalis with Husk 1,492,164,656
+Pineapple 1,490,166,656
+Pineapple Mini 1,493,163,656
+Pistachio 1,699,231,930
+Pitahaya Red 1,490,166,656
+Plum 1,447,151,598
+Plum 2,420,142,562
+Plum 3,900,304,1204
+Plum 4,698,231,929
+Plum 5,678,225,903
+Pomegranate 1,492,164,656
+Pomelo Sweetie 1,450,153,603
+Potato Red 1,450,150,600
+Potato Red 2,453,151,604
+Potato Sweet 1,450,150,600
+Potato White 1,450,150,600
+Quince 1,490,166,656
+Quince 2,728,240,968
+Quince 3,731,242,973
+Quince 4,750,249,999
+Rambutan 1,492,164,656
+Raspberry 1,490,166,656
+Raspberry 2,437,145,582
+Raspberry 3,442,147,589
+Raspberry 4,453,150,603
+Raspberry 5,227,75,302
+Raspberry 6,450,150,600
+Redcurrant 1,492,164,656
+Salak 1,490,162,652
+Strawberry 1,492,164,656
+Strawberry 2,267,88,355
+Strawberry 3,684,227,911
+Strawberry Wedge 1,738,246,984
+Tamarillo 1,490,166,656
+Tangelo 1,490,166,656
+Tomato 1,738,246,984
+Tomato 10,691,228,919
+Tomato 11,474,158,632
+Tomato 2,672,225,897
+Tomato 3,738,246,984
+Tomato 4,479,160,639
+Tomato 5,669,222,891
+Tomato 7,700,231,931
+Tomato 8,722,239,961
+Tomato 9,720,239,959
+Tomato Cherry Maroon 1,302,100,402
+Tomato Cherry Orange 1,302,100,402
+Tomato Cherry Red 1,492,164,656
+Tomato Cherry Red 2,302,100,402
+Tomato Cherry Yellow 1,303,100,403
+Tomato Heart 1,684,228,912
+Tomato Maroon 1,367,127,494
+Tomato Maroon 2,445,147,592
+Tomato Yellow 1,459,153,612
+Walnut 1,735,249,984
+Watermelon 1,475,157,632
+Zucchini 1,240,80,320
+Zucchini Green 1,144,47,191
+Zucchini dark 1,383,127,510
+orange 4,948,316,1264

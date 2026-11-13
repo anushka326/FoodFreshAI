@@ -1,0 +1,33 @@
+export const FOOD_ASSETS = {
+  // Rustic countertop bowl with apples, greens, lemons, avocado
+  countertopBowl: 'https://lh3.googleusercontent.com/aida/AEtjO1Wfza-wmmTUAT2qhN-hxPicA7V86FNGED245_Vevcizmhcl-TDLoH5QDDecQmMoBDlP3wMIpIx8rjtSIKHv1Mrxg1GyuA3q3C9O2D2ipmg4EummvSSj5m7eZwtM76u3GBcWOkYtUe06oJ-wTgxaSlgU5hNhCAfLjZ5mgRIQRY1I3MTkWF0gtZhM2A5m6LxDE7r77eCcEnVHOAH4RQvsvlazpyfo6OG8oWcS9Rk6fwN74UlPrDWGeIxN1uo',
+  
+  // Cut Honeycrisp apple halves with fresh mint leaves
+  honeycrispAppleCut: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDXeyGh9tOunDXb4poERJh6dCUwY7M741RjtaW8m1o1K9VCxOl2R6zqo83Kap39Ss7LrZMQUDVB9-wOP9ALgJzokbjt27-xUPhIMFsojI-JCWKApN8RynMDuAlJVQKO1NDGzkM4bLf9a-Q05nwLeNLJA630CmdHgByQSSLI4kE7PPLmKkWADITO1gy_nxLoa1UydzqM2zgSIXolAW6zN9DRm7_LdwoClVlax4gZgKQRl6UfoxA7WifQ',
+  
+  // Alternative closeup of Honeycrisp apple cut halves
+  honeycrispAppleCutAlternate: 'https://lh3.googleusercontent.com/aida/AEtjO1XMdp6tt5PymQqUjJD4oEUg0qikJM70WnkQTrByfsZOYMKxmumpHCdy_dTBQcDKZHgSE-wY11hsBuGw85lN1T7Ho5-5fVSv505uwpXav7TQyLjF7qznT_x7DRkQMBMhg8WEazEvAkqIYG-vUyVDT7TRJ_C7hSdHaobAuYOKIvqF1QhH0HBZAbpeFYkkzfq8pIJ07lz5fVidkvopLlj6GiPKhzS3xnGEH9b6Lo8-PmV_ZLD1ZH1XmSDI6zI',
+  
+  // Cluster of vine-ripened tomatoes on linen
+  vineTomatoes: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDsPxxPAezNIT5oz-IL37ZAgZB6lPDxgSmTw13G4cCbNqjlajveyXdPb302kAsOj3ohgJ2JTF80iSla9KDNUVumgkrYMvxNDwlpMUooiKylJrp89u-IJtdZbSda7HzND6jyEaKx_-e21vgEZHLrSfsh6rhPOvLnJGqTCN13vtxzjyEIOMoI9juDc20Wzkj2lMH9s1WIN_TwypHsUwO-a8df8hOdJ1nTjvsiYLm8j7hxUXJ-QsNNsEus',
+  
+  // Ripe yellow Cavendish bananas with sugar spotting
+  cavendishBananas: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCdZEB1wEV74QuOKdTzCYSLlPSkOcOiaySoZbDWNrhSdfqTVnuO5rV-hjesoFMtdKS5m16Q9Rj9JHtwg4Kz1ULx_hpKHUNxevqi1_mC4eRFSWplzd_-W0vKz8I6x4aTx6nqIfYEDIA3f7Mz5JB1rLR5XK4DbvcYL0TOEwkD4FNtBpfUd9iKUkM6AsJlWI7vFjQZ0oAoa4WcP3AHElvpzCspUrMxNIi4MoFizD1KtHDOdz4grP3eRYCC',
+  
+  // Countertop cutting board with bread, sourdough, avocados, greens
+  cuttingBoardSourdough: 'https://lh3.googleusercontent.com/aida/AEtjO1XMjr8HFBjuctHfVh7CWEr_orfLLBp0FZ9ID-fWWTDQtO2RR0wFMjWlzu32iEE3pNAonmYpaWbOH4c1jMFWgyLpj0yprxrlYbCbjWX1kAiU4-dvPwiWWNoQGAfOJIiklsqIKsLBZ4qmpenoKgspuCFmh75SetxSqUrQSiY6apovIKD3xcctay1I63Gut7wrxyKftl5MRpbGuJgQ8_W1YfMJTvCeqs_zionAEB7-3-r_Xc_dL4UgZK4K7g',
+  
+  // Wholesome fresh produce background
+  pantryProduceHero: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDUvq6GH4ZgxzgA_q8wHt_mR0Iwn0QuiTeD3hncQEhHfeefOzHcvRKclCl0WV5vxu1vB23S0uHtlodanta4aKxcxMYsu5oJ9SWfoU1n6w8T8pePcABEmM6gaw564pb6-B3iTC1xJ6TB0v2SGc9Uki134rM05DRGP2RdrdlbFqpEB2o3OU1Y8veWLuBVXm6TzMlSm3K4QYQz5SIk0dWPO2bahSBYHnxiApm0miZYYLZkaaNvZi3tqdI8',
+  
+  // Landing page hero countertop bowl
+  landingHeroProduce: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBGPvuSrilo0smMhve8njLuW_pjKK8nbUK2eC0z1Z96Bep1tRhmug8O8mp_0d5kJeJpi3RElnKCcvDZ7DV5PrzmanP8N3vcvhLYZJEkWBXiAwuY2ASqZmRjCiiBO4s43RJbYcKU9DegH6Kn4Bv2IJ39Al990okujGO7zJ1GQqajU56YVjU9EReP_p7fPXC3SzyoS6pKUR-3fyFIIvVszIzrsEuwp_tTmUghe4d3n5JTZOWp27v8HOY2',
+  
+  // Multi-food analysis cluster view
+  multiFoodCluster: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBXLhaAieqtCmtA9fjoPOVRr8fIzCsbqLXCM7MoDSjwS-CXI67SU8ezLhQ3_109jjSuyei8ShYKxwNifxEopHGWJA3FNqoLT8iiASvFsSGOwqktTO67BwU5c0w4Hh7M_6qyfjlpbp-Be228HHXdrEl9cPK9vTenTvJK9MNt0BXLbvEE8chcjnaqRtokhVB7FGbickSA0aTrxehv2Pm7icoRVyJnKHZaElNkyr6oiY0MArhpSRft3h1q',
+  
+  // User profile picture (null by default for newly created accounts)
+  userAvatar: null,
+};
+
+export default FOOD_ASSETS;

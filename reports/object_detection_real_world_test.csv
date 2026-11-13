@@ -1,0 +1,9 @@
+image,detected_food,objects,object_confidences,number_of_objects,status
+pomegranate.jpg,Pomegranate,none,none,0,SUCCESS
+apple.jpg,Apple,none,none,0,SUCCESS
+orange.jpg,Uncertain / None,none,none,0,SUCCESS
+banana.jpg,Banana,none,none,0,SUCCESS
+tomato.jpg,Tomato,none,none,0,SUCCESS
+mango.jpg,Mango,none,none,0,SUCCESS
+bread.jpg,Bread,cutting board | knife | bowl | spoon | tray,58.3% | 57.0% | 51.7% | 44.0% | 26.3%,5,SUCCESS
+multi_apple_banana_tomato.jpg,Banana,none,none,0,SUCCESS
