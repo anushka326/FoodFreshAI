@@ -10,6 +10,16 @@ export function LoginPage({ navigate }) {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [authNotice, setAuthNotice] = useState(() => {
+    try {
+      const notice = sessionStorage.getItem('foodfresh_auth_notice');
+      if (notice) {
+        sessionStorage.removeItem('foodfresh_auth_notice');
+        return notice;
+      }
+    } catch {}
+    return '';
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +27,7 @@ export function LoginPage({ navigate }) {
     setErrorMessage('');
 
     try {
-      await authService.login(email, password);
+      await authService.login(email, password, rememberMe);
       sessionStorage.removeItem('foodfresh_dashboard_welcome_seen');
       const redirect = sessionStorage.getItem('foodfresh_redirect_after_login') || '/dashboard';
       sessionStorage.removeItem('foodfresh_redirect_after_login');
@@ -129,6 +139,24 @@ export function LoginPage({ navigate }) {
                 Sign in to manage your kitchen freshness logs and Eat First priorities.
               </p>
             </div>
+
+            {/* Security Action Requirement Banner */}
+            {authNotice && (
+              <div className="mb-6 p-4 rounded-2xl bg-secondary-container/70 text-on-secondary-container text-xs flex items-start gap-3 border border-secondary/30">
+                <span className="material-symbols-outlined text-[20px] text-secondary shrink-0">lock</span>
+                <div className="flex-1">
+                  <p className="font-bold">Credential Verification Required</p>
+                  <p className="mt-0.5">{authNotice}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setAuthNotice('')}
+                  className="text-secondary font-bold hover:opacity-80 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
 
             {/* Error Message banner */}
             {errorMessage && (
@@ -242,6 +270,11 @@ export function LoginPage({ navigate }) {
                   </>
                 )}
               </button>
+
+              <div className="flex items-center justify-center gap-1.5 pt-1 text-[11px] text-outline text-center">
+                <span className="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+                <span>Protected Access: Authentication occurs only after verifying credentials</span>
+              </div>
 
             </form>
 

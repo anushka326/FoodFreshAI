@@ -7,6 +7,7 @@ import { authService } from '../../services/authService.js';
 
 export function LandingPage({ navigate }) {
   const [showIntro, setShowIntro] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => authService.isAuthenticated());
 
   useEffect(() => {
     // Check if opening animation was already shown in this session
@@ -14,6 +15,15 @@ export function LandingPage({ navigate }) {
     if (!hasSeenIntro) {
       setShowIntro(true);
     }
+
+    const syncAuth = () => {
+      setIsAuthenticated(authService.isAuthenticated());
+    };
+
+    window.addEventListener('foodfresh_auth_state_changed', syncAuth);
+    return () => {
+      window.removeEventListener('foodfresh_auth_state_changed', syncAuth);
+    };
   }, []);
 
   const handleCompleteIntro = () => {
@@ -25,11 +35,22 @@ export function LandingPage({ navigate }) {
     setShowIntro(true);
   };
 
+  const handleSignOut = async () => {
+    await authService.logout();
+    setIsAuthenticated(false);
+  };
+
   const handleProtectedNav = (path) => {
     if (authService.isAuthenticated()) {
       navigate(path);
     } else {
       sessionStorage.setItem('foodfresh_redirect_after_login', path);
+      sessionStorage.setItem(
+        'foodfresh_auth_notice',
+        path === '/analyze'
+          ? 'Authentication required: Sign in with your credentials to start analyzing food.'
+          : 'Authentication required: Please enter your credentials to access kitchen features.'
+      );
       navigate('/login');
     }
   };
@@ -111,20 +132,42 @@ export function LandingPage({ navigate }) {
               <span className="text-xs">✨</span>
               <span>Replay Intro</span>
             </button>
-            <button
-              type="button"
-              onClick={() => navigate('/login')}
-              className="px-4 py-1.5 rounded-full text-xs font-bold text-primary hover:bg-surface-container-low transition-colors cursor-pointer"
-            >
-              Sign In
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/register')}
-              className="px-4 py-2 rounded-full bg-primary hover:bg-primary-container text-white text-xs font-bold shadow-sm hover:shadow transition-all cursor-pointer"
-            >
-              Get Started
-            </button>
+            {isAuthenticated ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => navigate('/dashboard')}
+                  className="px-4 py-1.5 rounded-full text-xs font-bold text-primary hover:bg-surface-container-low transition-colors cursor-pointer"
+                >
+                  Dashboard
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="px-3.5 py-1.5 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                >
+                  <span className="material-symbols-outlined text-[15px]">logout</span>
+                  <span>Sign Out</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => navigate('/login')}
+                  className="px-4 py-1.5 rounded-full text-xs font-bold text-primary hover:bg-surface-container-low transition-colors cursor-pointer"
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/register')}
+                  className="px-4 py-2 rounded-full bg-primary hover:bg-primary-container text-white text-xs font-bold shadow-sm hover:shadow transition-all cursor-pointer"
+                >
+                  Get Started
+                </button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -759,7 +802,11 @@ export function LandingPage({ navigate }) {
             <button type="button" onClick={() => handleProtectedNav('/recipes')} className="hover:underline cursor-pointer">Rescue Recipes</button>
             <button type="button" onClick={() => handleProtectedNav('/packaged-food')} className="hover:underline cursor-pointer">Packaged Food</button>
             <button type="button" onClick={() => handleProtectedNav('/history')} className="hover:underline cursor-pointer">Activity Logs</button>
-            <button type="button" onClick={() => navigate('/login')} className="hover:underline cursor-pointer">Sign In</button>
+            {isAuthenticated ? (
+              <button type="button" onClick={handleSignOut} className="hover:underline cursor-pointer text-error font-semibold">Sign Out</button>
+            ) : (
+              <button type="button" onClick={() => navigate('/login')} className="hover:underline cursor-pointer">Sign In</button>
+            )}
           </div>
 
           <p className="text-[11px] text-outline">

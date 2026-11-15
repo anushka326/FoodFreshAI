@@ -36,7 +36,7 @@ function apiErrorMessage(data, fallback) {
 }
 
 export const authService = {
-  async login(email, password) {
+  async login(email, password, rememberMe = false) {
     if (!email || !email.trim() || !password) {
       throw new Error('Please enter both your email address and password.');
     }
@@ -57,8 +57,17 @@ export const authService = {
       throw new Error(apiErrorMessage(data, 'Invalid email or password.'));
     }
 
-    setAuthToken(data.token);
-    setStoredSessionUser(data.user);
+    // Persist only if user explicitly selected rememberMe; otherwise keep session-scoped
+    setAuthToken(data.token, rememberMe);
+    setStoredSessionUser(data.user, rememberMe);
+
+    try {
+      window.dispatchEvent(
+        new CustomEvent('foodfresh_auth_state_changed', {
+          detail: { authenticated: true, user: data.user },
+        })
+      );
+    } catch {}
 
     return {
       success: true,
@@ -67,7 +76,7 @@ export const authService = {
     };
   },
 
-  async register({ fullName, email, password }) {
+  async register({ fullName, email, password, rememberMe = false }) {
     if (!fullName || !fullName.trim()) {
       throw new Error('Please enter your full name or kitchen title.');
     }
@@ -101,8 +110,16 @@ export const authService = {
       throw new Error(apiErrorMessage(data, 'Registration could not be completed. Please try again.'));
     }
 
-    setAuthToken(data.token);
-    setStoredSessionUser(data.user);
+    setAuthToken(data.token, rememberMe);
+    setStoredSessionUser(data.user, rememberMe);
+
+    try {
+      window.dispatchEvent(
+        new CustomEvent('foodfresh_auth_state_changed', {
+          detail: { authenticated: true, user: data.user },
+        })
+      );
+    } catch {}
 
     return {
       success: true,
@@ -115,6 +132,30 @@ export const authService = {
     const session = getStoredSessionUser();
     const token = getAuthToken();
     return !!(session && session.id && token);
+  },
+
+  async validateSessionAsync() {
+    const token = getAuthToken();
+    if (!token) {
+      clearAuthStorage();
+      return false;
+    }
+    try {
+      const res = await fetch(ENDPOINTS.AUTH_ME, { headers: getAuthHeaders() });
+      if (!res.ok) {
+        clearAuthStorage();
+        return false;
+      }
+      const data = await res.json();
+      if (data?.user) {
+        setStoredSessionUser(data.user);
+        return true;
+      }
+    } catch {
+      // In offline conditions, rely on valid local session timestamp
+      return this.isAuthenticated();
+    }
+    return false;
   },
 
   getCurrentUserSync() {

@@ -37,6 +37,12 @@ export function App() {
   const navigate = (path) => {
     if (PROTECTED_ROUTES.includes(path) && !authService.isAuthenticated()) {
       sessionStorage.setItem('foodfresh_redirect_after_login', path);
+      sessionStorage.setItem(
+        'foodfresh_auth_notice',
+        path === '/analyze'
+          ? 'Authentication required: Sign in with your credentials to start analyzing food.'
+          : 'Authentication required: Please sign in with your credentials to access kitchen features.'
+      );
       setCurrentRoute('/login');
       window.location.hash = '/login';
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -48,19 +54,48 @@ export function App() {
   };
 
   useEffect(() => {
+    // Validate session with backend on initial load
+    authService.validateSessionAsync().then((isValid) => {
+      if (!isValid && PROTECTED_ROUTES.includes(currentRoute)) {
+        sessionStorage.setItem('foodfresh_redirect_after_login', currentRoute);
+        sessionStorage.setItem(
+          'foodfresh_auth_notice',
+          'Your kitchen session has expired or requires authentication. Please sign in.'
+        );
+        setCurrentRoute('/login');
+        window.location.hash = '/login';
+      }
+    });
+
+    const handleAuthStateChange = (e) => {
+      if (!e.detail?.authenticated && PROTECTED_ROUTES.includes(currentRoute)) {
+        setCurrentRoute('/login');
+        window.location.hash = '/login';
+      }
+    };
+
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '') || '/';
       if (PROTECTED_ROUTES.includes(hash) && !authService.isAuthenticated()) {
         sessionStorage.setItem('foodfresh_redirect_after_login', hash);
+        sessionStorage.setItem(
+          'foodfresh_auth_notice',
+          'Please sign in with your credentials to access kitchen features.'
+        );
         setCurrentRoute('/login');
         window.location.hash = '/login';
         return;
       }
       setCurrentRoute(hash);
     };
+
     window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+    window.addEventListener('foodfresh_auth_state_changed', handleAuthStateChange);
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('foodfresh_auth_state_changed', handleAuthStateChange);
+    };
+  }, [currentRoute]);
 
   // Determine view rendering
   const renderView = () => {
