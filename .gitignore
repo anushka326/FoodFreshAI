@@ -6,6 +6,10 @@ coverage/
 .DS_Store
 *.log
 
+# IDE & Editor files
+.idea/
+.vscode/
+
 # Environment variables
 .env
 .env.*

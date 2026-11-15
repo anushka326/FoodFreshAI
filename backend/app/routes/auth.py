@@ -19,7 +19,8 @@ router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 
 class RegisterRequest(BaseModel):
-    fullName: str = Field(..., min_length=1)
+    fullName: Optional[str] = Field(default=None, description="Full name (camelCase)")
+    full_name: Optional[str] = Field(default=None, description="Full name (snake_case)")
     email: str = Field(..., min_length=3)
     password: str = Field(..., min_length=6)
 
@@ -46,13 +47,22 @@ class AuthResponse(BaseModel):
 @router.post("/register")
 def register(req: RegisterRequest):
     try:
+        resolved_name = (req.fullName or req.full_name or "").strip()
+        if not resolved_name:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Please enter your full name.")
         result = auth_svc.register_user(
             email=req.email,
             password=req.password,
-            full_name=req.fullName,
+            full_name=resolved_name,
             household_type=None,
         )
-        return {"success": True, "token": result["token"], "user": result["user"]}
+        return {
+            "success": True,
+            "token": result["token"],
+            "access_token": result["token"],
+            "token_type": "bearer",
+            "user": result["user"],
+        }
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:
@@ -71,7 +81,13 @@ def register(req: RegisterRequest):
 def login(req: LoginRequest):
     try:
         result = auth_svc.login_user(email=req.email, password=req.password)
-        return {"success": True, "token": result["token"], "user": result["user"]}
+        return {
+            "success": True,
+            "token": result["token"],
+            "access_token": result["token"],
+            "token_type": "bearer",
+            "user": result["user"],
+        }
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
     except Exception as e:
@@ -81,7 +97,13 @@ def login(req: LoginRequest):
 
 @router.get("/me")
 def me(user: dict = Depends(get_current_user)):
-    return {"success": True, "user": user}
+    return {
+        "success": True,
+        "user": user,
+        "id": user.get("id"),
+        "email": user.get("email"),
+        "full_name": user.get("fullName") or user.get("full_name"),
+    }
 
 
 @router.post("/logout")

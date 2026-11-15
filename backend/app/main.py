@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from backend.app.routes.health import router as health_router
 from backend.app.routes.food_recognition import router as food_recognition_router
 from backend.app.routes.fresho_buddy import router as fresho_buddy_router
@@ -25,6 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Core & Feature Routes
 app.include_router(health_router)
 app.include_router(food_recognition_router)
 app.include_router(fresho_buddy_router)
@@ -42,4 +44,5 @@ def root():
     return {
         "message": "Welcome to FoodFresh AI Backend",
         "health_check": "/api/health",
+        "docs": "/docs",
     }
