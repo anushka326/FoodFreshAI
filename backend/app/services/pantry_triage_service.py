@@ -25,6 +25,7 @@ class PantryIntent:
     PRIORITY_LOW = "priority_low"
     STORAGE_OPTIMIZATION = "storage_optimization"
     SPECIFIC_FOOD_STORAGE = "specific_food_storage"
+    PANTRY_ITEM_LOOKUP = "pantry_item_lookup"
     GENERAL_EDUCATIONAL = "general_educational"
 
 
@@ -225,11 +226,25 @@ def build_deterministic_answer(intent: str, triage: Dict[str, Any], target_food:
     as the authoritative ground-truth template.
     Ensures important foods and decisions are formatted in **bold** with zero hallucination.
     """
-    if not triage["hasItems"]:
-        return (
-            "Your pantry history is currently empty, so I can't identify a specific food to prioritize yet. "
-            "Analyze and save a food first, and I'll track its freshness and prioritize it for you 🌱"
-        )
+    if not triage.get("hasItems"):
+        if intent in (
+            PantryIntent.EAT_FIRST,
+            PantryIntent.COOK_TODAY,
+            PantryIntent.EXPIRING_SOON,
+            PantryIntent.SHORTEST_SHELF_LIFE,
+            PantryIntent.LONGEST_SHELF_LIFE,
+            PantryIntent.PANTRY_INVENTORY,
+            PantryIntent.FRESHEST,
+            PantryIntent.LEAST_FRESH,
+            PantryIntent.PRIORITY_HIGH,
+            PantryIntent.PRIORITY_LOW,
+            PantryIntent.STORAGE_OPTIMIZATION,
+        ):
+            return (
+                "Your pantry history is currently empty, so I can't identify a specific food to prioritize yet. "
+                "Analyze and save a food first, and I'll track its freshness and prioritize it for you 🌱"
+            )
+        return ""
 
     top = triage["topUrgent"]
     is_tie = triage["isTie"]
