@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-11-15 19:44:19",
+  "dataset": "FoodFreshAI_Synthetic_Freshness_ShelfLife_Dataset.csv",
+  "total_samples": 41280,
+  "train_samples": 28896,
+  "val_samples": 6192,
+  "test_samples": 6192,
+  "best_model": "RandomForest",
+  "models_comparison": {
+    "XGBoost": {
+      "mae": 0.022761164766878453,
+      "rmse": 0.04931874551843228,
+      "r2": 0.9995625097025592,
+      "train_time_s": 0.59
+    },
+    "RandomForest": {
+      "mae": 0.0038308571019612697,
+      "rmse": 0.04068587384911703,
+      "r2": 0.9997022637736385,
+      "train_time_s": 0.52
+    },
+    "MLP": {
+      "mae": 0.013462007479738674,
+      "rmse": 0.018909975383743748,
+      "r2": 0.9999356829213231,
+      "train_time_s": 2.79
+    }
+  },
+  "category_mae": [
+    {
+      "food_domain": "bakery",
+      "mae": 0.00205025064590119,
+      "sample_count": 720
+    },
+    {
+      "food_domain": "produce",
+      "mae": 0.0040651474251270706,
+      "sample_count": 5472
+    }
+  ],
+  "storage_mae": [
+    {
+      "storage_type": "countertop",
+      "mae": 0.0021836885720132276,
+      "sample_count": 3096
+    },
+    {
+      "storage_type": "refrigerated",
+      "mae": 0.005478025631909314,
+      "sample_count": 3096
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+[
+  {
+    "test_case": "Apple",
+    "detected_food": "Apple",
+    "confidence": 66.44,
+    "freshness_label": "Freshness Uncertain (Visual freshness model has limited coverage for Apple)",
+    "freshness_score": 82.42,
+    "shelf_life_remaining": {
+      "minDays": 4,
+      "maxDays": 6
+    },
+    "ml_predicted_days": null,
+    "shelf_life_source": "FoodFresh AI Shelf-Life ML + USDA FoodKeeper Guardrail",
+    "shelf_life_model_version": null
+  },
+  {
+    "test_case": "Banana",
+    "detected_food": "Banana",
+    "confidence": 61.62,
+    "freshness_label": "Fresh",
+    "freshness_score": 99.96,
+    "shelf_life_remaining": {
+      "minDays": 2,
+      "maxDays": 3
+    },
+    "ml_predicted_days": null,
+    "shelf_life_source": "FoodFresh AI Shelf-Life ML + USDA FoodKeeper Guardrail",
+    "shelf_life_model_version": null
+  },
+  {
+    "test_case": "Tomato",
+    "detected_food": "Tomato",
+    "confidence": 68.63,
+    "freshness_label": "Fresh",
+    "freshness_score": 98.65,
+    "shelf_life_remaining": {
+      "minDays": 4,
+      "maxDays": 6
+    },
+    "ml_predicted_days": null,
+    "shelf_life_source": "FoodFresh AI Shelf-Life ML + USDA FoodKeeper Guardrail",
+    "shelf_life_model_version": null
+  },
+  {
+    "test_case": "Orange",
+    "detected_food": "Orange",
+    "confidence": 54.37,
+    "freshness_label": "Fresh",
+    "freshness_score": 96.52,
+    "shelf_life_remaining": {
+      "minDays": 4,
+      "maxDays": 5
+    },
+    "ml_predicted_days": null,
+    "shelf_life_source": "FoodFresh AI Shelf-Life ML + USDA FoodKeeper Guardrail",
+    "shelf_life_model_version": null
+  },
+  {
+    "test_case": "Pomegranate",
+    "detected_food": "Pomegranate",
+    "confidence": 98.45,
+    "freshness_label": "Freshness Uncertain (Visual freshness model has limited coverage for Pomegranate)",
+    "freshness_score": 99.58,
+    "shelf_life_remaining": {
+      "minDays": 2,
+      "maxDays": 2
+    },
+    "ml_predicted_days": null,
+    "shelf_life_source": "FoodFresh AI Shelf-Life ML + USDA FoodKeeper Guardrail",
+    "shelf_life_model_version": null
+  },
+  {
+    "test_case": "Bread",
+    "detected_food": "Bread",
+    "confidence": 81.35,
+    "freshness_label": "Stale / Mold Suspected",
+    "freshness_score": 100.0,
+    "shelf_life_remaining": {
+      "minDays": 2,
+      "maxDays": 4
+    },
+    "ml_predicted_days": null,
+    "shelf_life_source": "FoodFresh AI Shelf-Life ML + USDA FoodKeeper Guardrail",
+    "shelf_life_model_version": null
+  },
+  {
+    "test_case": "Rotten Tomato",
+    "detected_food": null,
+    "confidence": null,
+    "freshness_label": "Rotten",
+    "freshness_score": 99.99,
+    "shelf_life_remaining": null,
+    "ml_predicted_days": null,
+    "shelf_life_source": "USDA FoodKeeper",
+    "shelf_life_model_version": null
+  },
+  {
+    "test_case": "Rotten Orange",
+    "detected_food": "Potato",
+    "confidence": 52.31,
+    "freshness_label": "Freshness Uncertain (Visual freshness model has limited coverage for Potato)",
+    "freshness_score": 100.0,
+    "shelf_life_remaining": {
+      "minDays": 0,
+      "maxDays": 0
+    },
+    "ml_predicted_days": null,
+    "shelf_life_source": "FoodFresh AI Shelf-Life ML + USDA FoodKeeper Guardrail",
+    "shelf_life_model_version": null
+  }
+]

@@ -208,6 +208,20 @@ class FreshnessService:
                 else:
                     final_status = "success"
                     final_label = "Fresh"
+            # Domain Safeguard 3: Out-of-distribution produce commodities
+            # AgriFreshNET was strictly trained on 8 commodities (banana, bittermelon, cucumber, eggplant, orange, papaya, pineapple, tomato).
+            # Fruits with natural red, purple, or dark pigmentation (pomegranate, apple, plum, grape, cherry)
+            # cause the ResNet-18 model to trigger false "Rotten" predictions due to lack of training coverage.
+            elif food_norm and not any(c in food_norm for c in ("banana", "bittermelon", "bitter gourd", "karela", "cucumber", "eggplant", "aubergine", "brinjal", "orange", "citrus", "papaya", "pineapple", "tomato")):
+                if top_label == "Rotten":
+                    final_status = "uncertain"
+                    final_label = f"Freshness Uncertain (Visual freshness model has limited coverage for {detected_food})"
+                elif top_score < 65.0:
+                    final_status = "success"
+                    final_label = f"{top_label} (Moderate Confidence)"
+                else:
+                    final_status = "success"
+                    final_label = top_label
             elif top_score < 50.0 or margin < 10.0:
                 final_status = "uncertain"
                 final_label = "Freshness Uncertain"

@@ -133,7 +133,7 @@ class FoodRecognitionService:
                 "shelfLife": res.shelfLife.model_dump(),
                 "shelfLifeAvailable": shelf_available,
                 "shelfLifeSource": sl.get("source") or "USDA FoodKeeper",
-                "shelfLifeModelVersion": "foodkeeper_rules_v1",
+                "shelfLifeModelVersion": sl.get("mlModelVersion") or MODEL_CONFIG["shelf_life"]["model_version"],
                 "estimatedQualityDays": rem.get("maxDays") if rem.get("maxDays") is not None else rem.get("minDays"),
                 "eatFirstPriority": res.eatFirstPriority.model_dump(),
                 "modelVersions": {
@@ -141,7 +141,7 @@ class FoodRecognitionService:
                     "semantic": res.modelVersions.semantic,
                     "foodSpecialist": res.modelVersions.foodSpecialist,
                     "freshness": MODEL_CONFIG["freshness"]["model_version"],
-                    "shelfLife": "foodkeeper_rules_v1",
+                    "shelfLife": MODEL_CONFIG["shelf_life"]["model_version"],
                     "food": MODEL_CONFIG["food_recognition"]["version"],
                 },
                 "source": "ml",

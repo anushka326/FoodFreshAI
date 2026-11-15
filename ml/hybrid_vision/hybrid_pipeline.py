@@ -321,6 +321,22 @@ class HybridVisionPipeline:
                         merged = self._merge_ranked_candidates(sig_preds, raw_preds, agreed_label=fused_label)
                         return "success", fused_label, fused_conf, merged, f"Detector and SigLIP 2 agree on {fused_label}."
 
+            # Rule 3B: Decisive asymmetric confidence
+            # If one classifier produces a solid prediction (>= MODERATE_CONFIDENCE_THRESHOLD) while the
+            # competing classifier's top guess is low confidence (< 35.0%, below reliability threshold),
+            # accept the decisive prediction rather than erroneously discarding both into 'uncertain'.
+            if top_sig.confidence >= MODERATE_CONFIDENCE_THRESHOLD and top_raw.confidence < 35.0:
+                fused_label = display_name(top_sig.label)
+                fused_conf = round(top_sig.confidence * 0.85, 2)
+                merged = self._merge_ranked_candidates(sig_preds, raw_preds, agreed_label=fused_label)
+                return "success", fused_label, fused_conf, merged, f"Decisive SigLIP 2 prediction ({top_sig.label}) with low-confidence specialist alternative."
+
+            if top_raw.confidence >= MODERATE_CONFIDENCE_THRESHOLD and top_sig.confidence < 35.0:
+                fused_label = display_name(top_raw.label)
+                fused_conf = round(top_raw.confidence * 0.85, 2)
+                merged = self._merge_ranked_candidates(raw_preds, sig_preds, agreed_label=fused_label)
+                return "success", fused_label, fused_conf, merged, f"Decisive Raw Food specialist prediction ({top_raw.label}) with low-confidence semantic alternative."
+
             # Rule 4: Contradictory Evidence -> Do NOT force a fake prediction
             merged = self._merge_ranked_candidates(raw_preds, sig_preds)
             reason = (
