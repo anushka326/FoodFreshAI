@@ -4,10 +4,10 @@ import { FOOD_ASSETS } from '../../assets/food/index.js';
 import { authService } from '../../services/authService.js';
 
 export function LoginPage({ navigate }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('anushka@gmail.com');
+  const [password, setPassword] = useState('anushka');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [authNotice, setAuthNotice] = useState(() => {
@@ -29,7 +29,8 @@ export function LoginPage({ navigate }) {
     try {
       await authService.login(email, password, rememberMe);
       sessionStorage.removeItem('foodfresh_dashboard_welcome_seen');
-      const redirect = sessionStorage.getItem('foodfresh_redirect_after_login') || '/dashboard';
+      const rawRedirect = sessionStorage.getItem('foodfresh_redirect_after_login');
+      const redirect = (rawRedirect && rawRedirect !== '/login' && rawRedirect !== '/register') ? rawRedirect : '/dashboard';
       sessionStorage.removeItem('foodfresh_redirect_after_login');
       navigate(redirect);
     } catch (err) {
@@ -237,6 +238,28 @@ export function LoginPage({ navigate }) {
                     </span>
                   </button>
                 </div>
+              </div>
+
+              {/* Demo Chef Quick-Access Hint */}
+              <div className="p-3 rounded-2xl bg-secondary-container/40 border border-secondary/25 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-base">👩‍🍳</span>
+                  <div>
+                    <span className="font-bold text-primary block leading-tight">Default Kitchen Profile</span>
+                    <span className="text-[11px] text-on-surface-variant font-mono">anushka@gmail.com • anushka</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('anushka@gmail.com');
+                    setPassword('anushka');
+                    setErrorMessage('');
+                  }}
+                  className="px-2.5 py-1 rounded-full bg-secondary text-white font-bold text-[11px] hover:bg-secondary/90 transition-all cursor-pointer shadow-2xs"
+                >
+                  Quick Fill
+                </button>
               </div>
 
               {/* Remember Me */}

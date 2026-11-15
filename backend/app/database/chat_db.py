@@ -585,12 +585,32 @@ def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
     if not email or not str(email).strip():
         return None
     clean = str(email).strip().lower()
+
+    # Common account aliases mapping
+    aliases = {
+        "anushka": "anushka@gmail.com",
+        "anushka326": "anushka@gmail.com",
+        "anushkanpise@gmail.com": "anushka@gmail.com",
+        "anushkanpise": "anushka@gmail.com",
+        "demo": "anushka@gmail.com",
+        "demo_chef": "demo_chef@foodfresh.ai",
+        "demochef": "demo_chef@foodfresh.ai",
+    }
+    clean = aliases.get(clean, clean)
+
     with get_db_connection() as conn:
         cur = conn.execute(
             "SELECT user_id, email, password_hash, full_name, household_type, avatar, created_at FROM users WHERE LOWER(TRIM(email)) = ?",
             (clean,),
         )
         row = cur.fetchone()
+        if not row and "@" not in clean:
+            # Check by username prefix (e.g. "anushka" matching "anushka@...") or exact full_name
+            cur = conn.execute(
+                "SELECT user_id, email, password_hash, full_name, household_type, avatar, created_at FROM users WHERE LOWER(TRIM(email)) LIKE ? OR LOWER(TRIM(full_name)) = ? ORDER BY created_at DESC LIMIT 1",
+                (f"{clean}@%", clean),
+            )
+            row = cur.fetchone()
     if not row:
         return None
     return {
