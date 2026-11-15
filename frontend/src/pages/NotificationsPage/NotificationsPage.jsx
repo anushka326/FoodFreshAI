@@ -360,3 +360,4 @@ export function NotificationsPage({ navigate }) {
 }
 
 export default NotificationsPage;
+

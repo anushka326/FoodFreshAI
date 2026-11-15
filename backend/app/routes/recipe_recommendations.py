@@ -109,6 +109,7 @@ def get_recipe_detail(
             "id": recipe["id"],
             "name": recipe["name"],
             "category": recipe["category"],
+            "cuisine": recipe.get("cuisine", "Global"),
             "prep_time_minutes": recipe["prep_time_minutes"],
             "steps": recipe["steps"],
             "required_ingredients": recipe["required_ingredients"],
@@ -117,6 +118,7 @@ def get_recipe_detail(
             "match_score": 0,
             "reason": "None of these ingredients are currently in your pantry.",
             "image_emoji": recipe["image_emoji"],
+            "youtube_url": recipe.get("youtube_url", ""),
             "expiry_urgency": False,
         },
     }

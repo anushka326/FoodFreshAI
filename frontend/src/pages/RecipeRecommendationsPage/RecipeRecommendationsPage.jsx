@@ -22,7 +22,8 @@ const CATEGORY_CONFIG = {
 
 // ─── Tab config ───────────────────────────────────────────────────────────────
 const TABS = [
-  { id: 'all',        label: 'All' },
+  { id: 'all',        label: 'All Recipes' },
+  { id: 'indian',     label: 'Indian Recipes 🇮🇳' },
   { id: 'best_match', label: 'Best Match ⭐' },
   { id: 'use_soon',   label: 'Use Soon 🔥' },
   { id: 'quick',      label: 'Quick ⚡' },
@@ -33,18 +34,34 @@ function RecipeCard({ recipe, onViewRecipe }) {
   const catCfg = CATEGORY_CONFIG[recipe.category] || CATEGORY_CONFIG.quick;
   const maxMissing = 3;
   const extraMissing = (recipe.missing_ingredients?.length || 0) - maxMissing;
+  const isIndian = recipe.cuisine === 'Indian';
 
   return (
-    <div className="p-5 rounded-3xl bg-white border border-surface-container-high/70 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between">
+    <div className="p-5 rounded-3xl bg-white border border-surface-container-high/70 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group">
       <div>
-        {/* Emoji hero */}
-        <div className={`w-full aspect-video rounded-2xl flex items-center justify-center mb-3.5 border border-surface-container-high ${catCfg.emojiContainerClass}`}>
-          <span className="text-6xl select-none">{recipe.image_emoji || '🍽️'}</span>
+        {/* Emoji hero with cuisine badge overlay */}
+        <div className={`relative w-full aspect-video rounded-2xl flex items-center justify-center mb-3.5 border border-surface-container-high ${catCfg.emojiContainerClass} overflow-hidden`}>
+          <span className="text-6xl select-none group-hover:scale-110 transition-transform duration-300">
+            {recipe.image_emoji || '🍽️'}
+          </span>
+          <div className="absolute top-2 left-2 flex items-center gap-1">
+            {isIndian ? (
+              <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-orange-600 text-white shadow-xs flex items-center gap-1">
+                <span>🇮🇳</span> Indian
+              </span>
+            ) : (
+              <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-slate-800/80 backdrop-blur-xs text-white shadow-xs flex items-center gap-1">
+                <span>🌍</span> Global
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Title row */}
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <h3 className="font-bold text-sm text-primary truncate flex-1">{recipe.name}</h3>
+        <div className="flex items-start justify-between gap-2 mb-1.5">
+          <h3 className="font-bold text-sm text-primary flex-1 leading-snug line-clamp-1" title={recipe.name}>
+            {recipe.name}
+          </h3>
           <div className="flex flex-wrap items-center gap-1 shrink-0">
             {recipe.expiry_urgency && (
               <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-red-100 text-red-700 border border-red-200">
@@ -102,14 +119,31 @@ function RecipeCard({ recipe, onViewRecipe }) {
         )}
       </div>
 
-      {/* Footer */}
-      <div className="pt-3 border-t border-surface-container-low flex items-center justify-end">
+      {/* Footer with YouTube button and View Recipe button */}
+      <div className="pt-3 border-t border-surface-container-low flex items-center justify-between gap-2 mt-2">
+        {recipe.youtube_url ? (
+          <a
+            href={recipe.youtube_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1.5 rounded-full bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white text-[11px] font-bold transition-all flex items-center gap-1.5 shrink-0"
+            title="Watch cooking video tutorial on YouTube"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            <span>Watch Video</span>
+          </a>
+        ) : <span />}
+
         <button
           type="button"
           onClick={() => onViewRecipe(recipe)}
-          className="px-3 py-1.5 rounded-full bg-primary text-white text-xs font-bold hover:bg-primary-container hover:text-on-primary transition-colors cursor-pointer"
+          className="px-3.5 py-1.5 rounded-full bg-primary text-white text-xs font-bold hover:bg-primary-container hover:text-on-primary transition-colors cursor-pointer flex items-center gap-1 shadow-2xs"
         >
-          View Recipe
+          <span>View Recipe</span>
+          <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
         </button>
       </div>
     </div>
@@ -120,6 +154,7 @@ function RecipeCard({ recipe, onViewRecipe }) {
 function RecipeDrawer({ recipe, onClose }) {
   if (!recipe) return null;
   const catCfg = CATEGORY_CONFIG[recipe.category] || CATEGORY_CONFIG.quick;
+  const isIndian = recipe.cuisine === 'Indian';
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -130,10 +165,21 @@ function RecipeDrawer({ recipe, onClose }) {
       />
 
       {/* Drawer panel */}
-      <div className="relative w-full max-w-md bg-white h-full shadow-2xl p-6 sm:p-8 flex flex-col overflow-y-auto z-10 border-l border-surface-container-high animate-in slide-in-from-right duration-300">
+      <div className="relative w-full max-w-lg bg-white h-full shadow-2xl p-6 sm:p-8 flex flex-col overflow-y-auto z-10 border-l border-surface-container-high animate-in slide-in-from-right duration-300">
         {/* Top bar */}
         <div className="flex items-center justify-between pb-4 border-b border-surface-container-low mb-5">
-          <span className="text-xs font-bold text-secondary uppercase tracking-wider">Recipe Detail</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Recipe Detail</span>
+            {isIndian ? (
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-orange-100 text-orange-800 border border-orange-200 flex items-center gap-1">
+                <span>🇮🇳</span> Indian Cuisine
+              </span>
+            ) : (
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200 flex items-center gap-1">
+                <span>🌍</span> Global Cuisine
+              </span>
+            )}
+          </div>
           <button
             type="button"
             onClick={onClose}
@@ -151,10 +197,33 @@ function RecipeDrawer({ recipe, onClose }) {
         {/* Title */}
         <div className="mb-4">
           <h2 className="text-xl font-extrabold text-primary">{recipe.name}</h2>
-          <span className={`inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${catCfg.badgeClass}`}>
-            {catCfg.label}
-          </span>
+          <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${catCfg.badgeClass}`}>
+              {catCfg.label}
+            </span>
+            {recipe.expiry_urgency && (
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-red-100 text-red-700 border border-red-200">
+                Uses Expiring Produce 🔥
+              </span>
+            )}
+          </div>
         </div>
+
+        {/* YouTube Watch Video CTA (Prominent) */}
+        {recipe.youtube_url && (
+          <a
+            href={recipe.youtube_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-5 w-full py-2.5 px-4 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all group"
+          >
+            <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            <span>Watch Step-by-Step Cooking Video on YouTube</span>
+            <span className="material-symbols-outlined text-[15px] group-hover:translate-x-0.5 transition-transform">open_in_new</span>
+          </a>
+        )}
 
         {/* Score + time strip */}
         <div className="grid grid-cols-2 gap-2.5 text-xs mb-5">
@@ -249,17 +318,20 @@ function RecipeDrawer({ recipe, onClose }) {
           </div>
         )}
 
-        {/* Prep steps */}
+        {/* Detailed Prep steps */}
         {recipe.steps?.length > 0 && (
           <div className="mb-6">
-            <span className="font-bold text-primary block mb-2 text-xs">📋 Preparation Steps</span>
-            <ol className="space-y-2">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-bold text-primary block text-xs">📋 Step-by-Step Cooking Guide</span>
+              <span className="text-[10px] text-on-surface-variant font-medium">{recipe.steps.length} steps</span>
+            </div>
+            <ol className="space-y-2.5">
               {recipe.steps.map((step, idx) => (
-                <li key={idx} className="flex gap-2.5 text-xs text-on-surface">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-[10px]">
+                <li key={idx} className="flex gap-2.5 text-xs text-on-surface p-2.5 rounded-xl bg-surface-container-low/70 border border-surface-container-high/50">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center font-bold text-[10px] shadow-2xs">
                     {idx + 1}
                   </span>
-                  <span className="leading-relaxed">{step}</span>
+                  <span className="leading-relaxed pt-0.5">{step}</span>
                 </li>
               ))}
             </ol>
@@ -267,7 +339,20 @@ function RecipeDrawer({ recipe, onClose }) {
         )}
 
         {/* Close footer */}
-        <div className="pt-4 border-t border-surface-container-low flex justify-end mt-auto">
+        <div className="pt-4 border-t border-surface-container-low flex items-center justify-between gap-2 mt-auto">
+          {recipe.youtube_url ? (
+            <a
+              href={recipe.youtube_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-bold text-red-600 hover:text-red-700 flex items-center gap-1.5 transition-colors"
+            >
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              <span>Watch on YouTube</span>
+            </a>
+          ) : <span />}
           <button
             type="button"
             onClick={onClose}
@@ -314,6 +399,7 @@ export function RecipeRecommendationsPage({ navigate }) {
   // Derive tab counts
   const tabCounts = {
     all:        recommendations?.all?.length        || 0,
+    indian:     recommendations?.indian?.length     || 0,
     best_match: recommendations?.best_match?.length || 0,
     use_soon:   recommendations?.use_soon?.length   || 0,
     quick:      recommendations?.quick?.length      || 0,
@@ -327,7 +413,7 @@ export function RecipeRecommendationsPage({ navigate }) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-on-surface-variant font-medium">Finding recipes for your pantry…</p>
+        <p className="text-sm text-on-surface-variant font-medium">Finding delicious recipes tailored to your pantry…</p>
       </div>
     );
   }
@@ -359,7 +445,7 @@ export function RecipeRecommendationsPage({ navigate }) {
             🍳 Recipe Recommendations
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant mt-0.5">
-            Recipes tailored to your pantry items
+            Smart recipes crafted from your live pantry inventory — featuring authentic Indian dishes and global favorites.
           </p>
         </div>
 
@@ -374,7 +460,7 @@ export function RecipeRecommendationsPage({ navigate }) {
       </div>
 
       {/* ── Summary Strip ─────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-4 rounded-2xl bg-white border border-surface-container-high/80 shadow-2xs">
           <span className="text-xs font-semibold text-on-surface-variant block">Pantry Items</span>
           <span className="text-2xl font-extrabold text-primary block mt-1">
@@ -388,7 +474,13 @@ export function RecipeRecommendationsPage({ navigate }) {
           </span>
         </div>
         <div className="p-4 rounded-2xl bg-white border border-surface-container-high/80 shadow-2xs">
-          <span className="text-xs font-semibold text-on-surface-variant block">Recipes Found</span>
+          <span className="text-xs font-semibold text-on-surface-variant block">Indian Recipes 🇮🇳</span>
+          <span className="text-2xl font-extrabold text-amber-700 block mt-1">
+            {pantry.indian_recipes_count ?? tabCounts.indian} dishes
+          </span>
+        </div>
+        <div className="p-4 rounded-2xl bg-white border border-surface-container-high/80 shadow-2xs">
+          <span className="text-xs font-semibold text-on-surface-variant block">Total Recipes</span>
           <span className="text-2xl font-extrabold text-secondary block mt-1">
             {pantry.matched_recipes_count ?? tabCounts.all} recipes
           </span>
@@ -440,10 +532,14 @@ export function RecipeRecommendationsPage({ navigate }) {
             </>
           ) : (
             <>
-              <span className="text-4xl block mb-2">🥘</span>
-              <h3 className="text-base font-bold text-primary">No recipes match this view</h3>
+              <span className="text-4xl block mb-2">{activeTab === 'indian' ? '🍛' : '🥘'}</span>
+              <h3 className="text-base font-bold text-primary">
+                {activeTab === 'indian' ? 'No Indian recipes match your current pantry yet' : 'No recipes match this view'}
+              </h3>
               <p className="text-xs text-on-surface-variant mt-1.5 max-w-md mx-auto leading-relaxed">
-                You have {pantry.total_items} item{pantry.total_items === 1 ? '' : 's'} in your pantry, but none matched this category ({activeTab.replace('_', ' ')}). Try switching categories or logging more produce.
+                {activeTab === 'indian'
+                  ? 'Add Indian kitchen staples like potatoes, onions, tomatoes, spinach, ginger, garlic, or cauliflower to your pantry to unlock authentic Indian recipes!'
+                  : `You have ${pantry.total_items} item${pantry.total_items === 1 ? '' : 's'} in your pantry, but none matched this category (${activeTab.replace('_', ' ')}). Try switching categories or logging more produce.`}
               </p>
               <div className="mt-4 flex items-center justify-center gap-2">
                 {activeTab !== 'all' && (
