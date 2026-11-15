@@ -142,6 +142,12 @@ def chat_with_fresho_buddy(req: ChatMessageRequest, user: dict = Depends(get_cur
             "text": reply_dict["text"],
             "status": reply_dict.get("status", "success"),
             "model": reply_dict.get("model"),
+            "aiCallAttempted": reply_dict.get("aiCallAttempted", False),
+            "fallbackUsed": reply_dict.get("fallbackUsed", False),
+            "contextLevel": reply_dict.get("contextLevel"),
+            "intent": reply_dict.get("intent"),
+            "targetFood": reply_dict.get("targetFood"),
+            "providerError": reply_dict.get("providerError"),
             "timestamp": bot_msg_record["createdAt"],
         },
     }

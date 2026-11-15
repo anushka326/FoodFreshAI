@@ -9,8 +9,15 @@ Verifies:
 """
 
 import asyncio
+import sys
+from pathlib import Path
 import uuid
 import httpx
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from backend.app.main import app
 from backend.app.database import chat_db
 
@@ -19,8 +26,18 @@ async def run_tests():
     print("Testing Themed Avatar Selection & Account Isolation")
     print("==================================================")
 
-    transport = httpx.ASGITransport(app=app)
-    async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+    try:
+        r = httpx.get("http://127.0.0.1:8000/api/health", timeout=1.0)
+        use_live = (r.status_code == 200)
+    except Exception:
+        use_live = False
+
+    if use_live:
+        client_kwargs = {"base_url": "http://127.0.0.1:8000", "timeout": 15.0}
+    else:
+        client_kwargs = {"transport": httpx.ASGITransport(app=app), "base_url": "http://test"}
+
+    async with httpx.AsyncClient(**client_kwargs) as client:
         # 1. Register User 1
         u1_email = f"chef_pip_{uuid.uuid4().hex[:6]}@foodfresh.test"
         u1_pass = "PantryGuard123!"

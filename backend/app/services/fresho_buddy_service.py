@@ -418,6 +418,13 @@ class FreshoBuddyService:
                 "text": empty_msg,
                 "status": "success",
                 "model": "fresho_pantry_guard",
+                "contextLevel": context_level.value,
+                "intent": fresho_intent.value,
+                "targetFood": target_food,
+                "pantryInjected": False,
+                "aiCallAttempted": False,
+                "fallbackUsed": False,
+                "providerError": None,
             }
 
         # Build Authority Blocks for LLM Prompt
@@ -601,9 +608,13 @@ class FreshoBuddyService:
                         "pantryInjected": bool(authority_block),
                         "aiCallAttempted": True,
                         "fallbackUsed": False,
+                        "providerError": None,
                     }
             except Exception as e:
+                last_provider_error = f"{type(e).__name__}: {e}"
                 logger.warning(f"[FreshoBuddy Diagnostic] AI Provider call failed ({type(e).__name__}: {e}). Activating domain intelligence.")
+        else:
+            last_provider_error = "AI credentials not configured or invalid API key format."
 
         # --- DOMAIN INTELLIGENCE ENGINE (Guarantees zero downtime & accurate grounded guidance) ---
         logger.info(f"[FreshoBuddy Diagnostic] Domain intelligence activated for query: '{user_message[:50]}'")
@@ -639,6 +650,7 @@ class FreshoBuddyService:
             "pantryInjected": bool(authority_block),
             "aiCallAttempted": ai_attempted,
             "fallbackUsed": True,
+            "providerError": last_provider_error,
         }
 
 

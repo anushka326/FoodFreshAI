@@ -486,12 +486,13 @@ def detect_fresho_intent(
     ):
         return FreshoIntent.PANTRY_LIST, ContextLevel.STRONG, None
 
-    # General food storage advice without ownership -> SIMPLE context!
+    # Storage advice
     store_match = re.search(r"how\s+(?:should|to|do)(?:\s+i)?\s+store\s+(?:the\s+|this\s+|fresh\s+|ripe\s+)?([a-z\s]+)", q)
     if store_match and store_match.group(1):
         cleaned = store_match.group(1).replace("?", "")
         cleaned = re.sub(r"\b(?:properly|correctly|well|today|fresh|ripe|whole)\b", "", cleaned).strip()
-        return FreshoIntent.STORAGE_ADVICE, ContextLevel.SIMPLE, target_food or cleaned or None
+        matched_target = target_food or extract_food_noun(cleaned) or cleaned or None
+        return FreshoIntent.STORAGE_ADVICE, ContextLevel.MEDIUM if matched_target else ContextLevel.SIMPLE, matched_target
 
     # General Freshness Explanation (e.g. why bananas get brown spots) -> SIMPLE context!
     if any(p in q for p in ("slightly spoiled", "what is slightly spoiled", "what does slightly spoiled mean")):

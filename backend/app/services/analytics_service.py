@@ -24,6 +24,55 @@ MONTH_NAMES = {
 }
 
 
+# Documented Food-Specific Agricultural Environmental Factors (LCA Benchmarks)
+# Sources: Poore & Nemecek (2018), Science; FAO Food Wastage Footprint; USDA Food Data Central
+FOOD_ENVIRONMENTAL_BENCHMARKS: Dict[str, Dict[str, float]] = {
+    "apple": {"weight_kg": 0.18, "co2_factor": 0.43, "water_factor": 822.0},
+    "banana": {"weight_kg": 0.12, "co2_factor": 0.86, "water_factor": 790.0},
+    "mango": {"weight_kg": 0.25, "co2_factor": 1.15, "water_factor": 1800.0},
+    "orange": {"weight_kg": 0.15, "co2_factor": 0.39, "water_factor": 560.0},
+    "citrus": {"weight_kg": 0.15, "co2_factor": 0.40, "water_factor": 560.0},
+    "sweet lime": {"weight_kg": 0.15, "co2_factor": 0.40, "water_factor": 560.0},
+    "strawberry": {"weight_kg": 0.25, "co2_factor": 1.40, "water_factor": 320.0},
+    "berry": {"weight_kg": 0.20, "co2_factor": 1.40, "water_factor": 350.0},
+    "tomato": {"weight_kg": 0.12, "co2_factor": 1.42, "water_factor": 214.0},
+    "potato": {"weight_kg": 0.20, "co2_factor": 0.46, "water_factor": 287.0},
+    "onion": {"weight_kg": 0.15, "co2_factor": 0.40, "water_factor": 272.0},
+    "broccoli": {"weight_kg": 0.30, "co2_factor": 0.57, "water_factor": 285.0},
+    "spinach": {"weight_kg": 0.20, "co2_factor": 0.53, "water_factor": 290.0},
+    "lettuce": {"weight_kg": 0.20, "co2_factor": 0.53, "water_factor": 237.0},
+    "carrot": {"weight_kg": 0.10, "co2_factor": 0.37, "water_factor": 257.0},
+    "cucumber": {"weight_kg": 0.20, "co2_factor": 0.90, "water_factor": 353.0},
+    "rice": {"weight_kg": 0.20, "co2_factor": 2.70, "water_factor": 2500.0},
+    "bread": {"weight_kg": 0.25, "co2_factor": 1.25, "water_factor": 1608.0},
+    "milk": {"weight_kg": 0.50, "co2_factor": 3.15, "water_factor": 628.0},
+    "yogurt": {"weight_kg": 0.20, "co2_factor": 2.60, "water_factor": 1200.0},
+    "cheese": {"weight_kg": 0.20, "co2_factor": 5.90, "water_factor": 3178.0},
+}
+GENERIC_PRODUCE_BENCHMARK = {"weight_kg": 0.18, "co2_factor": 0.55, "water_factor": 350.0}
+ENVIRONMENTAL_DISCLAIMER = (
+    "Illustrative estimation modeled from published agricultural life cycle assessments "
+    "(Poore & Nemecek 2018, Science; FAO Food Wastage Footprint). Not certified personal laboratory measurements."
+)
+
+
+def compute_item_environmental_impact(food_name: str) -> Dict[str, float]:
+    """Compute food-specific agricultural lifecycle estimates."""
+    fn = (food_name or "").lower()
+    matched = None
+    for k, bench in FOOD_ENVIRONMENTAL_BENCHMARKS.items():
+        if k in fn:
+            matched = bench
+            break
+    if not matched:
+        matched = GENERIC_PRODUCE_BENCHMARK
+
+    w_kg = matched["weight_kg"]
+    co2_kg = round(w_kg * matched["co2_factor"], 3)
+    water_l = round(w_kg * matched["water_factor"], 1)
+    return {"weight_kg": w_kg, "co2_kg": co2_kg, "water_liters": water_l}
+
+
 def _format_month_label(ym: str) -> str:
     parts = ym.split("-")
     if len(parts) == 2:
@@ -43,25 +92,55 @@ def record_user_food_action(
 ) -> Dict[str, Any]:
     """
     Record an actual user action (consumed or wasted) for a pantry food item.
-    Also removes/archives the item from active pantry storage if pantry_item_id is provided.
+    Also removes/archives the item from active pantry storage atomically if pantry_item_id is provided.
+    Guarantees that items with unknown remaining shelf-life are NOT classified as saved,
+    and prevents duplicate action logs if an item is already processed.
     """
     clean_action = "consumed" if action.lower() == "consumed" else "wasted"
     remaining_days = None
+    is_spoiled = False
 
-    # Inspect current pantry item state to determine remaining days at action time
+    # Inspect current pantry item state to determine remaining days and freshness at action time
     if pantry_item_id:
         active_items = get_current_pantry_state(user_id)
         matched = next((i for i in active_items if i.get("id") == pantry_item_id), None)
-        if matched:
+        if not matched:
+            # Check if item was already archived to prevent duplicate logging
+            archived = chat_db.get_archived_pantry_items(user_id)
+            already = next((i for i in archived if i.get("id") == pantry_item_id), None)
+            if already:
+                logger.info(f"Pantry item {pantry_item_id} already marked as {already.get('removalAction')}; skipping duplicate logging.")
+                return {
+                    "logId": f"dup_{pantry_item_id}",
+                    "userId": user_id,
+                    "foodName": food_name or already.get("foodName"),
+                    "action": clean_action,
+                    "alreadyProcessed": True,
+                }
+        else:
             remaining_days = matched.get("remainingDays")
+            status_val = matched.get("status") or matched.get("statusCategory") or ""
+            is_spoiled = any(k in str(status_val).lower() for k in ("spoil", "rot", "decay", "bad"))
             if not food_name:
                 food_name = matched.get("foodName") or "Produce"
             if not cultivar:
                 cultivar = matched.get("cultivar")
 
+        # Soft-delete/archive the item from active inventory
+        archived_ok = chat_db.delete_pantry_item(pantry_item_id, user_id, action=clean_action, reason=reason)
+        if not archived_ok and not matched:
+            return {
+                "logId": f"dup_{pantry_item_id}",
+                "userId": user_id,
+                "foodName": food_name,
+                "action": clean_action,
+                "alreadyProcessed": True,
+            }
+
     # Food saved calculation:
-    # An item is 'saved' if it was consumed before or on the day of expiry (remainingDays >= 0 or None)
-    was_saved = 1 if (clean_action == "consumed" and (remaining_days is None or remaining_days >= 0)) else 0
+    # An item is ONLY classified as saved if it was consumed, NOT spoiled, AND remaining shelf-life is known!
+    # Items with unknown remaining days (None) or spoiled condition are strictly NOT classified as saved.
+    was_saved = 1 if (clean_action == "consumed" and not is_spoiled and remaining_days is not None and remaining_days >= 0) else 0
 
     log = chat_db.record_food_impact(
         user_id=user_id,
@@ -73,13 +152,6 @@ def record_user_food_action(
         cultivar=cultivar,
         reason=reason,
     )
-
-    # Remove consumed/discarded item from active pantry inventory and preserve in archived history logs
-    if pantry_item_id:
-        try:
-            chat_db.delete_pantry_item(pantry_item_id, user_id, action=clean_action, reason=reason)
-        except Exception as e:
-            logger.warning(f"Could not archive pantry item {pantry_item_id} after logging impact: {e}")
 
     return log
 
@@ -105,7 +177,8 @@ def get_user_analytics(user_id: str) -> Dict[str, Any]:
     if not user_id:
         return _empty_analytics_response(total_active, total_archived, total_tracked_all_time, active_items)
 
-    logs = chat_db.list_food_impact_logs(user_id, limit=500)
+    # Calculate lifetime metrics across ALL user records (fix 500-record truncation)
+    logs = chat_db.list_food_impact_logs(user_id, limit=None)
 
     if not logs:
         return _empty_analytics_response(total_active, total_archived, total_tracked_all_time, active_items)
@@ -127,13 +200,22 @@ def get_user_analytics(user_id: str) -> Dict[str, Any]:
         if log["action"] == "consumed" and log.get("remainingDays") is not None and log["remainingDays"] <= 2
     )
 
-    # Environmental impact calculations
-    # Average produce item weighs ~0.35 kg.
-    # Saving 1 kg food avoids ~2.5 kg CO2e greenhouse gas emissions.
-    # Embedded agricultural water footprint is ~95 liters per fresh fruit/vegetable.
-    waste_prevented_kg = round(food_saved_count * 0.35, 2)
-    co2_saved_kg = round(waste_prevented_kg * 2.5, 2)
-    water_saved_liters = round(food_saved_count * 95.0, 1)
+    # Environmental impact calculations using documented food-specific LCA benchmarks (Poore & Nemecek 2018, FAO)
+    total_waste_prevented_kg = 0.0
+    total_co2_saved_kg = 0.0
+    total_water_saved_liters = 0.0
+
+    for log in logs:
+        if log["action"] == "consumed" and log.get("wasSaved"):
+            fn = log.get("foodName") or "Produce"
+            item_env = compute_item_environmental_impact(fn)
+            total_waste_prevented_kg += item_env["weight_kg"]
+            total_co2_saved_kg += item_env["co2_kg"]
+            total_water_saved_liters += item_env["water_liters"]
+
+    waste_prevented_kg = round(total_waste_prevented_kg, 2)
+    co2_saved_kg = round(total_co2_saved_kg, 2)
+    water_saved_liters = round(total_water_saved_liters, 1)
 
     # Freshness distribution of active inventory
     fresh_count = 0
@@ -251,6 +333,8 @@ def get_user_analytics(user_id: str) -> Dict[str, Any]:
         "total_active_inventory": total_active,
         "total_archived": total_archived,
         "total_tracked_all_time": total_tracked_all_time,
+        "is_illustrative_estimate": True,
+        "environmental_disclaimer": ENVIRONMENTAL_DISCLAIMER,
     }
 
 
@@ -292,6 +376,8 @@ def _empty_analytics_response(
         "total_active_inventory": total_active,
         "total_archived": total_archived,
         "total_tracked_all_time": total_tracked_all_time,
+        "is_illustrative_estimate": True,
+        "environmental_disclaimer": ENVIRONMENTAL_DISCLAIMER,
     }
 
 

@@ -342,6 +342,13 @@ def _migrate_schema(conn: sqlite3.Connection) -> None:
     )
     conn.commit()
 
+    # Automatic safe migration of legacy users from previous SQLite databases
+    try:
+        from backend.app.database.migration import migrate_legacy_users
+        migrate_legacy_users()
+    except Exception as e:
+        logger.debug(f"Legacy migration skipped: {e}")
+
 
 # Run table initialization on import
 init_db()
@@ -646,6 +653,17 @@ def update_user_profile(
 
     record = get_user_by_id(user_id)
     return user_record_to_public(record) if record else None
+
+
+def update_user_password(user_id: str, new_password_hash: str) -> bool:
+    """Update password hash for an existing user (e.g. hash upgrade)."""
+    with get_db_connection() as conn:
+        cur = conn.execute(
+            "UPDATE users SET password_hash = ? WHERE user_id = ?",
+            (new_password_hash, user_id),
+        )
+        conn.commit()
+        return cur.rowcount > 0
 
 
 def create_session(user_id: str, ttl_days: int = 30) -> str:
@@ -1026,7 +1044,7 @@ def delete_pantry_item(
     row_data = None
     with get_db_connection() as conn:
         cur = conn.execute(
-            "SELECT * FROM pantry_history WHERE id = ? AND user_id = ?",
+            "SELECT * FROM pantry_history WHERE id = ? AND user_id = ? AND (is_archived = 0 OR is_archived IS NULL)",
             (item_id, user_id),
         )
         row = cur.fetchone()
@@ -1042,7 +1060,7 @@ def delete_pantry_item(
                 removal_action = ?,
                 removal_reason = ?,
                 updated_at = ?
-            WHERE id = ? AND user_id = ?
+            WHERE id = ? AND user_id = ? AND (is_archived = 0 OR is_archived IS NULL)
             """,
             (
                 now_iso,
@@ -1431,18 +1449,28 @@ def record_food_impact(
     }
 
 
-def list_food_impact_logs(user_id: str, limit: int = 200) -> List[Dict[str, Any]]:
+def list_food_impact_logs(user_id: str, limit: Optional[int] = 200) -> List[Dict[str, Any]]:
     """Retrieve chronologically ordered food impact action logs for a user."""
     with get_db_connection() as conn:
-        cur = conn.execute(
-            """
-            SELECT * FROM food_impact_logs
-            WHERE user_id = ?
-            ORDER BY created_at DESC
-            LIMIT ?
-            """,
-            (user_id, limit),
-        )
+        if limit is not None and limit > 0:
+            cur = conn.execute(
+                """
+                SELECT * FROM food_impact_logs
+                WHERE user_id = ?
+                ORDER BY created_at DESC
+                LIMIT ?
+                """,
+                (user_id, limit),
+            )
+        else:
+            cur = conn.execute(
+                """
+                SELECT * FROM food_impact_logs
+                WHERE user_id = ?
+                ORDER BY created_at DESC
+                """,
+                (user_id,),
+            )
         rows = cur.fetchall()
 
     return [

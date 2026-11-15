@@ -278,7 +278,17 @@ export function ImpactAnalyticsPage({ navigate }) {
             </div>
           </div>
 
-          {/* ── 1b. Environmental & Sustainability Impact Strip ── */}
+          {/* ── 1b. Environmental & Sustainability Impact Strip (Illustrative Life Cycle Estimation) ── */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mt-1 mb-2 px-1">
+            <span className="text-xs font-bold text-on-surface-variant flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[16px] text-primary">eco</span>
+              Estimated Sustainability Footprint (Illustrative Life Cycle Models)
+            </span>
+            <span className="text-[10px] text-on-surface-variant/75 italic">
+              Estimated from agricultural LCA benchmarks (FAO / Poore & Nemecek) • Not certified lab measurements
+            </span>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Food Waste Prevented */}
             <div className="p-4 rounded-3xl bg-[#edf7eb] border border-[#d8ecd2] shadow-2xs flex items-center gap-3">
@@ -288,7 +298,7 @@ export function ImpactAnalyticsPage({ navigate }) {
               <div>
                 <span className="text-[11px] font-bold text-on-surface-variant block">Food Waste Prevented</span>
                 <span className="text-xl font-extrabold text-primary block mt-0.5">
-                  {analytics.waste_prevented_kg || 0} kg
+                  ~{analytics.waste_prevented_kg || 0} kg <span className="text-[11px] font-medium text-primary/70">(est.)</span>
                 </span>
                 <span className="text-[10px] text-[#2c5332] font-semibold">Avoided landfill mass</span>
               </div>
@@ -302,9 +312,9 @@ export function ImpactAnalyticsPage({ navigate }) {
               <div>
                 <span className="text-[11px] font-bold text-on-surface-variant block">CO₂e Avoided</span>
                 <span className="text-xl font-extrabold text-emerald-800 block mt-0.5">
-                  {analytics.co2_saved_kg || 0} kg
+                  ~{analytics.co2_saved_kg || 0} kg <span className="text-[11px] font-medium text-emerald-700/70">(est.)</span>
                 </span>
-                <span className="text-[10px] text-emerald-700 font-semibold">Greenhouse footprint</span>
+                <span className="text-[10px] text-emerald-700 font-semibold">Modeled greenhouse footprint</span>
               </div>
             </div>
 
@@ -316,9 +326,9 @@ export function ImpactAnalyticsPage({ navigate }) {
               <div>
                 <span className="text-[11px] font-bold text-on-surface-variant block">Water Conserved</span>
                 <span className="text-xl font-extrabold text-sky-800 block mt-0.5">
-                  {analytics.water_saved_liters || 0} L
+                  ~{analytics.water_saved_liters || 0} L <span className="text-[11px] font-medium text-sky-700/70">(est.)</span>
                 </span>
-                <span className="text-[10px] text-sky-700 font-semibold">Embedded agricultural water</span>
+                <span className="text-[10px] text-sky-700 font-semibold">Embedded crop water footprint</span>
               </div>
             </div>
 
