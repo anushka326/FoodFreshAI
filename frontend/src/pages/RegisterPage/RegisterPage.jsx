@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BRANDING_ASSETS } from '../../assets/branding/index.js';
 import { FOOD_ASSETS } from '../../assets/food/index.js';
+import { LandingMascotAnimation } from '../../components/mascot/LandingMascotAnimation.jsx';
 import { authService } from '../../services/authService.js';
 
 export function RegisterPage({ navigate }) {
@@ -19,12 +20,22 @@ export function RegisterPage({ navigate }) {
       setErrorMessage('Please enter your name or kitchen title.');
       return;
     }
-    if (!email.trim()) {
+    const cleanEmail = email.trim();
+    if (!cleanEmail) {
       setErrorMessage('Please enter your email address.');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      setErrorMessage('Please enter a valid email address (e.g. chef@example.com).');
       return;
     }
     if (!password) {
       setErrorMessage('Please create a password.');
+      return;
+    }
+    if (password.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long.');
       return;
     }
     if (password !== confirmPassword) {
@@ -42,7 +53,7 @@ export function RegisterPage({ navigate }) {
     try {
       await authService.register({
         fullName: fullName.trim(),
-        email: email.trim(),
+        email: cleanEmail,
         password,
       });
       sessionStorage.removeItem('foodfresh_dashboard_welcome_seen');
@@ -50,7 +61,7 @@ export function RegisterPage({ navigate }) {
       sessionStorage.removeItem('foodfresh_redirect_after_login');
       navigate(redirect);
     } catch (err) {
-      setErrorMessage(err.message || 'Registration encountered an issue.');
+      setErrorMessage(err.message || 'Registration could not be completed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -60,12 +71,12 @@ export function RegisterPage({ navigate }) {
     <div className="min-h-screen bg-surface flex flex-col justify-center items-center p-4 sm:p-6 md:p-8 font-sans">
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden border border-surface-container-high/60 grid grid-cols-1 lg:grid-cols-12 min-h-[680px]">
         {/* Left Visual Brand Column (5 cols) */}
-        <div className="relative hidden lg:flex lg:col-span-5 flex-col justify-between p-10 overflow-hidden bg-primary text-white">
+        <div className="relative hidden lg:flex lg:col-span-5 flex-col justify-between p-8 xl:p-10 overflow-hidden bg-primary text-white">
           <div className="absolute inset-0 z-0">
             <img
               src={FOOD_ASSETS.pantryProduceHero}
               alt="Fresh kitchen produce"
-              className="w-full h-full object-cover opacity-25 mix-blend-overlay"
+              className="w-full h-full object-cover opacity-20 mix-blend-overlay"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-primary/95 via-primary/85 to-primary" />
           </div>
@@ -91,41 +102,13 @@ export function RegisterPage({ navigate }) {
             </button>
           </div>
 
-          {/* Central perks */}
-          <div className="relative z-10 my-auto space-y-5">
-            <h2 className="text-2xl font-bold tracking-tight text-white leading-tight">
-              Join thousands of conscious home chefs reducing household food waste.
-            </h2>
-
-            <div className="space-y-3.5 text-xs">
-              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15">
-                <span className="text-lg">📊</span>
-                <div>
-                  <p className="font-bold text-white">Continuous Freshness Tracking</p>
-                  <p className="text-white/80">Log your counter produce and monitor quality windows in real-time.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15">
-                <span className="text-lg">🔔</span>
-                <div>
-                  <p className="font-bold text-white">Smart Expiry Reminders</p>
-                  <p className="text-white/80">Gentle notifications before delicate produce slips past its culinary prime.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15">
-                <span className="text-lg">🌿</span>
-                <div>
-                  <p className="font-bold text-white">Ethylene Gas Chemistry Guides</p>
-                  <p className="text-white/80">Understand how storing apples next to greens impacts cellular aging.</p>
-                </div>
-              </div>
-            </div>
+          {/* Prominent Startup/Loading Mascot Animation in the green panel */}
+          <div className="relative z-10 my-auto w-full flex items-center justify-center">
+            <LandingMascotAnimation embedded={true} />
           </div>
 
-          <div className="relative z-10 text-[11px] text-white/70 italic border-t border-white/10 pt-4">
-            “Small decisions today prevent waste tomorrow.”
+          <div className="relative z-10 text-[11px] text-white/70 italic border-t border-white/10 pt-4 text-center">
+            “Know your food. Save your food. Waste less.”
           </div>
         </div>
 

@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth.js';
 import { UserAvatar } from '../common/UserAvatar.jsx';
+import { NotificationCenter } from '../notifications/NotificationCenter.jsx';
+import { PwaInstallPrompt } from '../common/PwaInstallPrompt.jsx';
+import { offlineSyncService } from '../../services/offlineSyncService.js';
 
 export function Navbar({ onMenuToggle, currentRoute, navigate }) {
   const { user } = useAuth();
   const displayName = user?.fullName || 'Kitchen Chef';
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+
+  useEffect(() => {
+    const unsub = offlineSyncService.subscribe((state) => {
+      setIsOnline(state.isOnline);
+    });
+    return unsub;
+  }, []);
 
   return (
     <header className="fixed top-0 right-0 left-0 lg:left-72 h-20 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-30 flex items-center justify-between px-4 sm:px-8 lg:px-12 border-b border-surface-container-high/40">
@@ -29,12 +40,25 @@ export function Navbar({ onMenuToggle, currentRoute, navigate }) {
       </div>
 
       {/* Right User Telemetry & Avatar */}
-      <div className="flex items-center gap-3 sm:gap-6">
-        {/* Pantry Guard Active Indicator */}
-        <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low shadow-2xs border border-surface-container-high/50">
-          <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-          <span className="text-xs font-semibold text-primary">Pantry Guard Active</span>
-        </div>
+      <div className="flex items-center gap-2.5 sm:gap-4">
+        {/* PWA Install Button */}
+        <PwaInstallPrompt variant="navbar-pill" />
+
+        {/* Online / Offline Status Badge */}
+        {!isOnline ? (
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-amber-600 animate-pulse" />
+            <span>Offline</span>
+          </div>
+        ) : (
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low shadow-2xs border border-surface-container-high/50">
+            <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+            <span className="text-xs font-semibold text-primary">Pantry Guard Active</span>
+          </div>
+        )}
+
+        {/* Smart Notifications Bell & Drawer */}
+        <NotificationCenter navigate={navigate} />
 
         {/* User Profile Pill */}
         <button
@@ -44,7 +68,8 @@ export function Navbar({ onMenuToggle, currentRoute, navigate }) {
         >
           <div className="relative">
             <UserAvatar
-              src={user?.avatarUrl}
+              avatar={user?.avatar || user?.avatarUrl}
+              src={user?.avatar || user?.avatarUrl}
               name={displayName}
               size="md"
             />

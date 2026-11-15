@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth.js';
 import { UserAvatar } from '../../components/common/UserAvatar.jsx';
 import { Toast } from '../../components/common/Toast.jsx';
+import { AvatarSelectionModal } from '../../components/avatars/AvatarSelectionModal.jsx';
 
 export function SettingsPage({ navigate }) {
   const { user, updateProfile, logout } = useAuth();
@@ -13,6 +14,10 @@ export function SettingsPage({ navigate }) {
   const [roadmapOnDashboard, setRoadmapOnDashboard] = useState(true);
   const [floatingBuddy, setFloatingBuddy] = useState(true);
   const [autoSaveHistory, setAutoSaveHistory] = useState(true);
+
+  // Avatar Selection Modal State
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [isSavingAvatar, setIsSavingAvatar] = useState(false);
 
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
@@ -34,6 +39,20 @@ export function SettingsPage({ navigate }) {
     e.preventDefault();
     await updateProfile({ fullName, email });
     triggerToast('Kitchen profile updated successfully!');
+  };
+
+  const handleSaveAvatar = async (newAvatarId) => {
+    setIsSavingAvatar(true);
+    try {
+      await updateProfile({ avatar: newAvatarId, avatarUrl: newAvatarId });
+      setIsAvatarModalOpen(false);
+      triggerToast('Kitchen avatar updated successfully! 🌱');
+    } catch (err) {
+      triggerToast(err.message || 'Failed to update avatar.');
+      throw err;
+    } finally {
+      setIsSavingAvatar(false);
+    }
   };
 
   const handleSignOut = async () => {
@@ -60,7 +79,8 @@ export function SettingsPage({ navigate }) {
         <div className="flex items-center gap-4 text-center sm:text-left">
           <div className="relative">
             <UserAvatar
-              src={user?.avatarUrl}
+              avatar={user?.avatar || user?.avatarUrl}
+              src={user?.avatar || user?.avatarUrl}
               name={fullName || 'Kitchen Chef'}
               size="xl"
             />
@@ -80,10 +100,11 @@ export function SettingsPage({ navigate }) {
 
         <button
           type="button"
-          onClick={() => triggerToast('Avatar customization will be available when file storage is connected.')}
-          className="px-4 py-2 rounded-full bg-surface-container-low hover:bg-surface-container text-primary font-bold text-xs transition-colors cursor-pointer"
+          onClick={() => setIsAvatarModalOpen(true)}
+          className="px-4 py-2 rounded-full bg-surface-container-low hover:bg-surface-container text-primary font-bold text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-2xs hover:shadow-xs active:scale-95"
         >
-          Change Photo
+          <span className="material-symbols-outlined text-[16px]">account_circle</span>
+          <span>Change Avatar</span>
         </button>
       </div>
 
@@ -290,6 +311,15 @@ export function SettingsPage({ navigate }) {
           Sign Out of Kitchen
         </button>
       </div>
+
+      {/* Themed Avatar Selection Modal */}
+      <AvatarSelectionModal
+        isOpen={isAvatarModalOpen}
+        onClose={() => setIsAvatarModalOpen(false)}
+        currentAvatarId={user?.avatar || user?.avatarUrl}
+        onSaveAvatar={handleSaveAvatar}
+        isSaving={isSavingAvatar}
+      />
     </div>
   );
 }

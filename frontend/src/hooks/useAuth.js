@@ -10,6 +10,17 @@ export function useAuth() {
       setUser(userData);
       setLoading(false);
     });
+
+    const handleProfileUpdate = (e) => {
+      if (e.detail?.user) {
+        setUser(e.detail.user);
+      }
+    };
+
+    window.addEventListener('foodfresh_user_profile_updated', handleProfileUpdate);
+    return () => {
+      window.removeEventListener('foodfresh_user_profile_updated', handleProfileUpdate);
+    };
   }, []);
 
   const login = async (email, password) => {

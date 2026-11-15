@@ -41,3 +41,7 @@ database/*.db
 data.zip
 data/raw.zip
 scratch/
+scratch_bottle.png
+FoodFreshAI/
+scripts/test_gemini_key.py
+scripts/list_gemini_models.py

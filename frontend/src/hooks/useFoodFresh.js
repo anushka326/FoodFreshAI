@@ -4,14 +4,20 @@ import { roadmapService } from '../services/roadmapService.js';
 
 export function useFoodFresh() {
   const [history, setHistory] = useState([]);
+  const [archivedHistory, setArchivedHistory] = useState([]);
+  const [activityLogs, setActivityLogs] = useState([]);
+  const [totalTracked, setTotalTracked] = useState(0);
   const [roadmap, setRoadmap] = useState({ active: [], completed: [], total: 0, completionRate: 0 });
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     setLoading(true);
-    const histData = await historyService.getHistoryItems();
-    const roadData = await roadmapService.rebuildFromPantryHistory(histData);
-    setHistory(histData);
+    const bundle = await historyService.getHistoryData();
+    const roadData = await roadmapService.rebuildFromPantryHistory(bundle.items);
+    setHistory(bundle.items || []);
+    setArchivedHistory(bundle.archivedItems || []);
+    setActivityLogs(bundle.activityLogs || []);
+    setTotalTracked(bundle.totalTracked || ((bundle.items || []).length + (bundle.archivedItems || []).length));
     setRoadmap(roadData);
     setLoading(false);
   };
@@ -20,11 +26,19 @@ export function useFoodFresh() {
     loadData();
   }, []);
 
-  const deleteHistoryItem = async (id) => {
-    await historyService.deleteHistoryItem(id);
-    setHistory((prev) => prev.filter((item) => item.id !== id));
-    const refreshed = await roadmapService.getRoadmap();
-    setRoadmap(refreshed);
+  const deleteHistoryItem = async (id, options = {}) => {
+    await historyService.deleteHistoryItem(id, options);
+    await loadData();
+  };
+
+  const restoreHistoryItem = async (id) => {
+    await historyService.restoreHistoryItem(id);
+    await loadData();
+  };
+
+  const permanentlyDeleteHistoryItem = async (id) => {
+    await historyService.permanentlyDeleteHistoryItem(id);
+    await loadData();
   };
 
   const markRoadmapEaten = async (id) => {
@@ -41,10 +55,15 @@ export function useFoodFresh() {
 
   return {
     history,
+    archivedHistory,
+    activityLogs,
+    totalTracked,
     roadmap,
     loading,
     refresh: loadData,
     deleteHistoryItem,
+    restoreHistoryItem,
+    permanentlyDeleteHistoryItem,
     markRoadmapEaten,
     undoRoadmapItem,
   };

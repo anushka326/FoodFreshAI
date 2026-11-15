@@ -7,6 +7,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import secrets
+import sqlite3
 import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Optional, Tuple
@@ -53,13 +54,18 @@ def register_user(
     user_id = f"usr_{uuid.uuid4().hex[:16]}"
     salt = secrets.token_hex(16)
     pwd_hash = hash_password(password, salt)
-    user = chat_db.create_user(
-        user_id=user_id,
-        email=clean_email,
-        password_hash=f"{salt}${pwd_hash}",
-        full_name=full_name.strip(),
-        household_type=household_type,
-    )
+    try:
+        user = chat_db.create_user(
+            user_id=user_id,
+            email=clean_email,
+            password_hash=f"{salt}${pwd_hash}",
+            full_name=full_name.strip(),
+            household_type=household_type,
+        )
+    except sqlite3.IntegrityError as e:
+        logger.warning(f"Integrity error during registration for {clean_email}: {e}")
+        raise ValueError("An account with this email already exists.")
+
     token = chat_db.create_session(user_id)
     return {"user": user, "token": token}
 
@@ -101,3 +107,15 @@ def logout_user(token: Optional[str]) -> bool:
     if not token:
         return False
     return chat_db.delete_session(str(token).strip())
+
+
+def update_profile(
+    user_id: str,
+    full_name: Optional[str] = None,
+    avatar: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Update authenticated user profile (display name or themed avatar)."""
+    updated = chat_db.update_user_profile(user_id=user_id, full_name=full_name, avatar=avatar)
+    if not updated:
+        raise ValueError("User not found or update failed.")
+    return updated

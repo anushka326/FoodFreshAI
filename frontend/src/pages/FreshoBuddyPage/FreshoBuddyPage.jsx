@@ -23,17 +23,25 @@ export function FreshoBuddyPage({ navigate }) {
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [feedbackState, setFeedbackState] = useState({});
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Pantry Mode toggle - synchronized globally
+  const [pantryMode, setPantryMode] = useState(() => freshoBuddyService.getPantryMode());
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Subscribe to food context changes
+  // Subscribe to food context changes and pantry mode changes
   useEffect(() => {
-    const unsubscribe = freshoBuddyService.subscribeFoodContext((ctx) => {
+    const unsubContext = freshoBuddyService.subscribeFoodContext((ctx) => {
       setFoodContext(ctx);
     });
-    return unsubscribe;
+    const unsubPantryMode = freshoBuddyService.subscribePantryMode((mode) => {
+      setPantryMode(mode);
+    });
+    return () => {
+      unsubContext();
+      unsubPantryMode();
+    };
   }, []);
 
   // Fetch conversations on mount & when userId changes
@@ -74,11 +82,9 @@ export function FreshoBuddyPage({ navigate }) {
 
   const handleSelectConversation = async (conv) => {
     if (activeConvId === conv.conversationId) return;
-
     setActiveConvId(conv.conversationId);
     setActiveTitle(conv.title);
     setErrorMessage(null);
-
     const fullConv = await freshoBuddyService.getConversation(conv.conversationId);
     if (fullConv && fullConv.messages && fullConv.messages.length > 0) {
       setMessages(
@@ -109,16 +115,28 @@ export function FreshoBuddyPage({ navigate }) {
     const success = await freshoBuddyService.deleteConversation(convId);
     if (success) {
       setConversations((prev) => prev.filter((c) => c.conversationId !== convId));
-      if (activeConvId === convId) {
-        handleNewConversation();
-      }
+      if (activeConvId === convId) handleNewConversation();
       triggerToast('Conversation deleted');
     }
+  };
+
+  const handleTogglePantryMode = () => {
+    const next = !pantryMode;
+    freshoBuddyService.setPantryMode(next);
+    setPantryMode(next);
+    triggerToast(next ? '🥦 Pantry Mode ON – answers grounded in your real pantry' : '🌐 Pantry Mode OFF – general food Q&A');
   };
 
   const handleSend = async (queryText) => {
     const text = (queryText || inputVal).trim();
     if (!text || isThinking) return;
+
+    if (!navigator.onLine) {
+      const offlineNotice = 'Offline Mode: FreshoBuddy AI requires an active internet connection to generate fresh culinary guidance. Please reconnect to chat.';
+      setErrorMessage(offlineNotice);
+      triggerToast(offlineNotice);
+      return;
+    }
 
     setErrorMessage(null);
     setLastQuery(text);
@@ -137,14 +155,11 @@ export function FreshoBuddyPage({ navigate }) {
     setThinkingSteps(freshoBuddyService.getThinkingSteps(text, foodContext));
 
     try {
-      const reply = await freshoBuddyService.sendMessage(text, activeConvId, null, foodContext);
+      const reply = await freshoBuddyService.sendMessage(text, activeConvId, null, foodContext, pantryMode);
 
-      // If a new conversation was created on the backend, update state and reload sidebar
       if (reply.conversationId && reply.conversationId !== activeConvId) {
         setActiveConvId(reply.conversationId);
-        if (reply.title) {
-          setActiveTitle(reply.title);
-        }
+        if (reply.title) setActiveTitle(reply.title);
         loadConversationList();
       }
 
@@ -180,34 +195,23 @@ export function FreshoBuddyPage({ navigate }) {
   };
 
   const toggleFeedback = (msgId, type) => {
-    setFeedbackState((prev) => ({
-      ...prev,
-      [msgId]: prev[msgId] === type ? null : type,
-    }));
+    setFeedbackState((prev) => ({ ...prev, [msgId]: prev[msgId] === type ? null : type }));
     triggerToast(type === 'like' ? 'Thanks for the feedback! 🌱' : 'Feedback noted! 🌱');
   };
 
-  // Categorize conversations into Today, Yesterday, and Older
+  // Categorize conversations
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   const startOfYesterday = startOfToday - 24 * 60 * 60 * 1000;
-
-  const todayConvs = [];
-  const yesterdayConvs = [];
-  const olderConvs = [];
-
+  const todayConvs = [], yesterdayConvs = [], olderConvs = [];
   conversations.forEach((conv) => {
     const cTime = new Date(conv.updatedAt || conv.createdAt).getTime();
-    if (cTime >= startOfToday) {
-      todayConvs.push(conv);
-    } else if (cTime >= startOfYesterday) {
-      yesterdayConvs.push(conv);
-    } else {
-      olderConvs.push(conv);
-    }
+    if (cTime >= startOfToday) todayConvs.push(conv);
+    else if (cTime >= startOfYesterday) yesterdayConvs.push(conv);
+    else olderConvs.push(conv);
   });
 
-  const suggestionChips = freshoBuddyService.getSuggestionChips(foodContext);
+  const suggestionChips = freshoBuddyService.getSuggestionChips(foodContext, pantryMode);
 
   return (
     <div className="space-y-6 pb-12 font-sans">
@@ -217,19 +221,13 @@ export function FreshoBuddyPage({ navigate }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
           <div className="w-14 h-14 shrink-0 flex items-center justify-center filter drop-shadow-[0_4px_10px_rgba(20,83,45,0.22)] animate-mascot-breathe">
-            <img
-              src={MASCOT_ASSETS.freshoBuddyUrl}
-              alt="FreshoBuddy Mascot"
-              className="w-full h-full object-contain"
-            />
+            <img src={MASCOT_ASSETS.freshoBuddyUrl} alt="FreshoBuddy Mascot" className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight">
-                FreshoBuddy AI
-              </h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight">FreshoBuddy AI</h1>
               <span className="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold">
-                Google Gemini
+                Groq
               </span>
             </div>
             <p className="text-xs sm:text-sm text-on-surface-variant mt-0.5">
@@ -239,6 +237,35 @@ export function FreshoBuddyPage({ navigate }) {
         </div>
 
         <div className="flex items-center gap-2.5 self-start sm:self-auto">
+          {/* ── Pantry Mode Toggle ── */}
+          <button
+            type="button"
+            onClick={handleTogglePantryMode}
+            title={pantryMode ? 'Pantry Mode is ON – click to turn OFF' : 'Pantry Mode is OFF – click to turn ON'}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm border cursor-pointer select-none ${
+              pantryMode
+                ? 'bg-secondary text-white border-secondary'
+                : 'bg-surface-container text-on-surface-variant border-surface-container-high hover:bg-surface-container-high'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[16px]">kitchen</span>
+            <span>Pantry Mode</span>
+            <span
+              className={`inline-block w-7 h-4 rounded-full transition-colors relative ${
+                pantryMode ? 'bg-white/40' : 'bg-surface-container-highest'
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 w-3 h-3 rounded-full transition-all ${
+                  pantryMode ? 'left-3.5 bg-white' : 'left-0.5 bg-on-surface-variant'
+                }`}
+              />
+            </span>
+            <span className={`ml-0.5 font-extrabold ${pantryMode ? 'text-white' : 'text-on-surface-variant'}`}>
+              {pantryMode ? 'ON' : 'OFF'}
+            </span>
+          </button>
+
           <button
             type="button"
             onClick={handleNewConversation}
@@ -260,11 +287,27 @@ export function FreshoBuddyPage({ navigate }) {
         </div>
       </div>
 
-      {/* Main Studio Grid: Left Sidebar (History) + Main Chat Area */}
+      {/* Pantry Mode Status Banner */}
+      {pantryMode && (
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-secondary-container/40 border border-secondary/20 text-xs text-on-secondary-container font-semibold">
+          <span className="material-symbols-outlined text-[16px] text-secondary">inventory_2</span>
+          <span>
+            <strong>Pantry Mode ON</strong> – FreshoBuddy is using your real pantry records to answer questions about expiry, Eat First priorities, and ingredient-based recipes.
+          </span>
+          <button
+            type="button"
+            onClick={handleTogglePantryMode}
+            className="ml-auto text-secondary hover:text-primary cursor-pointer font-bold underline shrink-0"
+          >
+            Turn OFF
+          </button>
+        </div>
+      )}
+
+      {/* Main Studio Grid: Left Sidebar + Main Chat Area */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* LEFT SIDEBAR: Persistent Chat History */}
         <div className="lg:col-span-4 xl:col-span-3 flex flex-col h-[700px] bg-white rounded-3xl border border-surface-container-high/70 shadow-sm overflow-hidden">
-          {/* Sidebar Top: New Chat Button */}
           <div className="p-4 border-b border-surface-container-low flex items-center justify-between">
             <button
               type="button"
@@ -276,7 +319,6 @@ export function FreshoBuddyPage({ navigate }) {
             </button>
           </div>
 
-          {/* Conversation History List */}
           <div className="flex-1 overflow-y-auto p-3 space-y-4">
             {conversations.length === 0 ? (
               <div className="p-6 text-center text-xs text-on-surface-variant">
@@ -285,12 +327,9 @@ export function FreshoBuddyPage({ navigate }) {
               </div>
             ) : (
               <>
-                {/* Today */}
                 {todayConvs.length > 0 && (
                   <div>
-                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-secondary px-3 py-1">
-                      Today
-                    </h3>
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-secondary px-3 py-1">Today</h3>
                     <div className="space-y-1 mt-1">
                       {todayConvs.map((conv) => (
                         <div
@@ -319,13 +358,9 @@ export function FreshoBuddyPage({ navigate }) {
                     </div>
                   </div>
                 )}
-
-                {/* Yesterday */}
                 {yesterdayConvs.length > 0 && (
                   <div>
-                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-secondary px-3 py-1">
-                      Yesterday
-                    </h3>
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-secondary px-3 py-1">Yesterday</h3>
                     <div className="space-y-1 mt-1">
                       {yesterdayConvs.map((conv) => (
                         <div
@@ -354,13 +389,9 @@ export function FreshoBuddyPage({ navigate }) {
                     </div>
                   </div>
                 )}
-
-                {/* Older */}
                 {olderConvs.length > 0 && (
                   <div>
-                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-secondary px-3 py-1">
-                      Older
-                    </h3>
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-secondary px-3 py-1">Older</h3>
                     <div className="space-y-1 mt-1">
                       {olderConvs.map((conv) => (
                         <div
@@ -399,10 +430,13 @@ export function FreshoBuddyPage({ navigate }) {
           {/* Main Area Header */}
           <div className="p-4 bg-surface-container-low/70 border-b border-surface-container-high/60 flex items-center justify-between">
             <div className="flex items-center gap-2.5 min-w-0">
-              <span className="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse shrink-0" />
-              <h2 className="text-sm font-bold text-primary truncate">
-                {activeTitle}
-              </h2>
+              <span className={`w-2.5 h-2.5 rounded-full shrink-0 animate-pulse ${pantryMode ? 'bg-secondary' : 'bg-primary'}`} />
+              <h2 className="text-sm font-bold text-primary truncate">{activeTitle}</h2>
+              {pantryMode && (
+                <span className="px-2 py-0.5 rounded-full bg-secondary text-white text-[10px] font-bold shrink-0">
+                  Pantry Mode
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <button
@@ -416,7 +450,7 @@ export function FreshoBuddyPage({ navigate }) {
             </div>
           </div>
 
-          {/* Active Food Context Banner (Phase 18 & 22) */}
+          {/* Active Food Context Banner */}
           {foodContext && (
             <div className="px-4 py-2.5 bg-secondary-container/30 border-b border-secondary-container/60 flex items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2 truncate">
@@ -453,20 +487,13 @@ export function FreshoBuddyPage({ navigate }) {
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex gap-3 max-w-[85%] ${
-                  msg.sender === 'user' ? 'ml-auto flex-row-reverse' : ''
-                }`}
+                className={`flex gap-3 max-w-[85%] ${msg.sender === 'user' ? 'ml-auto flex-row-reverse' : ''}`}
               >
                 {msg.sender === 'bot' && (
                   <div className="w-8 h-8 rounded-full bg-secondary-container shrink-0 flex items-center justify-center p-1">
-                    <img
-                      src={MASCOT_ASSETS.freshoBuddyUrl}
-                      alt="Buddy"
-                      className="w-full h-full object-contain"
-                    />
+                    <img src={MASCOT_ASSETS.freshoBuddyUrl} alt="Buddy" className="w-full h-full object-contain" />
                   </div>
                 )}
-
                 <div
                   className={`p-4 rounded-3xl text-xs sm:text-sm leading-relaxed space-y-2 ${
                     msg.sender === 'user'
@@ -496,9 +523,7 @@ export function FreshoBuddyPage({ navigate }) {
                         <button
                           type="button"
                           onClick={() => toggleFeedback(msg.id, 'like')}
-                          className={`hover:text-secondary cursor-pointer p-0.5 ${
-                            feedbackState[msg.id] === 'like' ? 'text-secondary' : ''
-                          }`}
+                          className={`hover:text-secondary cursor-pointer p-0.5 ${feedbackState[msg.id] === 'like' ? 'text-secondary' : ''}`}
                         >
                           <span className="material-symbols-outlined text-[13px]">thumb_up</span>
                         </button>
@@ -557,10 +582,7 @@ export function FreshoBuddyPage({ navigate }) {
           {/* Input Box & Send Button */}
           <div className="p-3 sm:p-4 border-t border-surface-container-high/60 bg-surface-container-low/40">
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSend();
-              }}
+              onSubmit={(e) => { e.preventDefault(); handleSend(); }}
               className="flex items-center gap-2"
             >
               <input
@@ -569,9 +591,11 @@ export function FreshoBuddyPage({ navigate }) {
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
                 placeholder={
-                  foodContext?.detectedFood
+                  pantryMode
+                    ? 'Ask about your pantry items, expiry alerts, or Eat First priorities...'
+                    : foodContext?.detectedFood
                     ? `Ask FreshoBuddy about this ${foodContext.detectedFood}...`
-                    : 'Ask about food storage, freshness, or zero-waste ideas...'
+                    : 'Ask about food storage, freshness, nutrition, or zero-waste recipes...'
                 }
                 className="flex-1 py-3 px-4 rounded-2xl bg-white border border-surface-container-high text-xs sm:text-sm text-on-surface focus:outline-none focus:border-primary shadow-xs"
               />

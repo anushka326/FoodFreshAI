@@ -6,6 +6,10 @@ from backend.app.routes.fresho_buddy import router as fresho_buddy_router
 from backend.app.routes.pantry_history import router as pantry_history_router
 from backend.app.routes.auth import router as auth_router
 from backend.app.routes.ml_feedback import router as ml_feedback_router
+from backend.app.routes.recipe_recommendations import router as recipe_recommendations_router
+from backend.app.routes.notifications import router as notifications_router
+from backend.app.routes.analytics import router as analytics_router
+from backend.app.routes.packaged_food import router as packaged_food_router
 
 app = FastAPI(
     title="FoodFresh AI Backend",
@@ -27,6 +31,10 @@ app.include_router(fresho_buddy_router)
 app.include_router(pantry_history_router)
 app.include_router(auth_router)
 app.include_router(ml_feedback_router)
+app.include_router(recipe_recommendations_router)
+app.include_router(notifications_router)
+app.include_router(analytics_router)
+app.include_router(packaged_food_router)
 
 
 @app.get("/")

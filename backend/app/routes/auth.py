@@ -28,6 +28,15 @@ class LoginRequest(BaseModel):
     password: str = Field(..., min_length=1)
 
 
+class UpdateProfileRequest(BaseModel):
+    fullName: Optional[str] = Field(default=None, description="Display name for the user")
+    avatar: Optional[str] = Field(default=None, description="Themed avatar identifier or data")
+
+
+class UpdateAvatarRequest(BaseModel):
+    avatar: str = Field(..., min_length=1, description="Themed avatar identifier or data")
+
+
 class AuthResponse(BaseModel):
     success: bool = True
     token: str
@@ -47,8 +56,15 @@ def register(req: RegisterRequest):
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:
-        logger.error(f"Register failed: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Registration failed.")
+        logger.exception(f"Register failed: {e}")
+        err_text = str(e).strip()
+        if "UNIQUE constraint failed" in err_text or "already exists" in err_text.lower():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="An account with this email already exists.",
+            )
+        detail_msg = err_text if err_text else "Registration could not be completed. Please check your information and try again."
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=detail_msg)
 
 
 @router.post("/login")
@@ -75,3 +91,54 @@ def logout(
     if credentials and credentials.credentials:
         auth_svc.logout_user(credentials.credentials)
     return {"success": True, "message": "Logged out."}
+
+
+@router.put("/profile")
+def update_profile(
+    req: UpdateProfileRequest,
+    user: dict = Depends(get_current_user),
+):
+    """Update authenticated user's profile information (display name, avatar)."""
+    user_id = user["id"]
+    try:
+        updated = auth_svc.update_profile(
+            user_id=user_id,
+            full_name=req.fullName,
+            avatar=req.avatar,
+        )
+        return {"success": True, "user": updated, "message": "Profile updated successfully."}
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except Exception as e:
+        logger.error(f"Profile update failed for user {user_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not update profile.",
+        )
+
+
+@router.put("/avatar")
+def update_avatar(
+    req: UpdateAvatarRequest,
+    user: dict = Depends(get_current_user),
+):
+    """Update authenticated user's avatar selection."""
+    user_id = user["id"]
+    try:
+        updated = auth_svc.update_profile(
+            user_id=user_id,
+            avatar=req.avatar,
+        )
+        return {
+            "success": True,
+            "user": updated,
+            "message": "Avatar updated successfully.",
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except Exception as e:
+        logger.error(f"Avatar update failed for user {user_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not update avatar.",
+        )
