@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BRANDING_ASSETS } from '../../assets/branding/index.js';
 import { FOOD_ASSETS } from '../../assets/food/index.js';
 import { LandingMascotAnimation } from '../../components/mascot/LandingMascotAnimation.jsx';
-import { HeroAvatarDoodleEcosystem } from '../../components/avatars/HeroAvatarDoodleEcosystem.jsx';
-import { LandingAvatarShowcaseSection } from '../../components/avatars/LandingAvatarShowcaseSection.jsx';
+import { LandingDoodlesBackground } from '../../components/doodles/LandingDoodlesBackground.jsx';
 import { authService } from '../../services/authService.js';
 
 export function LandingPage({ navigate }) {
@@ -37,6 +36,9 @@ export function LandingPage({ navigate }) {
 
   return (
     <div className="min-h-screen bg-surface font-sans text-on-surface flex flex-col relative overflow-x-hidden selection:bg-secondary-container selection:text-on-secondary-container">
+      {/* ── BACKGROUND DOODLES OVERLAY (NON-CLICKABLE, SPARSELY SPREAD, NO CIRCLES) ── */}
+      <LandingDoodlesBackground />
+
       {/* 6-STEP ORGANIC FOODFRESH AI MASCOT OPENING ANIMATION */}
       {showIntro && (
         <LandingMascotAnimation
@@ -90,9 +92,13 @@ export function LandingPage({ navigate }) {
             >
               Impact Analytics
             </button>
-            <a href="#avatars" className="hover:text-secondary transition-colors">
-              Avatars
-            </a>
+            <button
+              type="button"
+              onClick={() => handleProtectedNav('/recipes')}
+              className="hover:text-secondary transition-colors cursor-pointer"
+            >
+              Recipes
+            </button>
           </nav>
 
           <div className="flex items-center gap-3 sm:gap-4">
@@ -124,10 +130,10 @@ export function LandingPage({ navigate }) {
       </header>
 
       {/* Main Landing Content */}
-      <main className="flex-1 w-full pt-20">
+      <main className="flex-1 w-full pt-20 relative z-10">
         {/* HERO SECTION */}
-        <section className="px-4 sm:px-6 pt-10 pb-16 max-w-4xl mx-auto flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-high text-primary text-xs font-bold mb-6 shadow-2xs">
+        <section className="px-4 sm:px-6 pt-10 pb-16 max-w-4xl mx-auto flex flex-col items-center text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 theme-card-glow text-primary text-xs font-bold mb-6">
             <span className="text-[14px]">🍃</span>
             <span>Intelligent Kitchen Intelligence & Freshness System</span>
           </div>
@@ -167,7 +173,7 @@ export function LandingPage({ navigate }) {
             <button
               type="button"
               onClick={() => handleProtectedNav('/fresho-buddy')}
-              className="px-3 py-1 rounded-full bg-surface-container-low hover:bg-surface-container text-primary font-semibold border border-surface-container-high flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-full bg-white/95 hover:bg-white text-primary font-semibold theme-card-glow flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <span>🤖</span>
               <span>FreshoBuddy AI</span>
@@ -175,7 +181,7 @@ export function LandingPage({ navigate }) {
             <button
               type="button"
               onClick={() => handleProtectedNav('/analytics')}
-              className="px-3 py-1 rounded-full bg-surface-container-low hover:bg-surface-container text-primary font-semibold border border-surface-container-high flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-full bg-white/95 hover:bg-white text-primary font-semibold theme-card-glow flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <span>📊</span>
               <span>Impact Analytics</span>
@@ -183,60 +189,58 @@ export function LandingPage({ navigate }) {
             <button
               type="button"
               onClick={() => handleProtectedNav('/recipes')}
-              className="px-3 py-1 rounded-full bg-surface-container-low hover:bg-surface-container text-primary font-semibold border border-surface-container-high flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-full bg-white/95 hover:bg-white text-primary font-semibold theme-card-glow flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <span>🍳</span>
               <span>Rescue Recipes</span>
             </button>
           </div>
 
-          {/* Central Hero Visual with Organic Avatar Doodle Composition */}
-          <HeroAvatarDoodleEcosystem onAvatarClick={() => handleProtectedNav('/settings')}>
-            <div className="w-full max-w-lg rounded-3xl overflow-hidden bg-surface-container-low p-2 shadow-md border border-surface-container-high/60">
-              <div className="relative w-full aspect-square sm:aspect-video rounded-2xl overflow-hidden">
-                <img
-                  src={FOOD_ASSETS.landingHeroProduce}
-                  alt="Fresh kitchen countertop produce"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent" />
+          {/* Central Hero Produce Showcase Card with Theme Glow Line */}
+          <div className="w-full max-w-lg rounded-3xl overflow-hidden bg-white/95 p-2 shadow-md theme-card-glow relative z-10">
+            <div className="relative w-full aspect-square sm:aspect-video rounded-2xl overflow-hidden">
+              <img
+                src={FOOD_ASSETS.landingHeroProduce}
+                alt="Fresh kitchen countertop produce"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent" />
 
-                {/* Floating Badges */}
-                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md shadow-sm flex items-center gap-1.5 text-xs font-bold text-primary">
-                  <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                  <span>🌿 Fresh</span>
-                </div>
-
-                <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md shadow-sm flex items-center gap-1.5 text-xs font-bold text-on-surface">
-                  <span className="material-symbols-outlined text-tertiary-container text-[14px]">schedule</span>
-                  <span>⏳ Quality Window</span>
-                </div>
-
-                <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-white/95 backdrop-blur-md shadow-md flex items-center justify-between text-left">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🍎</span>
-                    <div>
-                      <p className="text-xs sm:text-sm font-bold text-on-surface leading-tight">Food Identified</p>
-                      <p className="text-[11px] text-on-surface-variant">Storage guidance & Eat First priority ready</p>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-primary text-[22px]">verified</span>
-                </div>
+              {/* Floating Badges */}
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md shadow-sm flex items-center gap-1.5 text-xs font-bold text-primary">
+                <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+                <span>🌿 Fresh</span>
               </div>
 
-              <div className="mt-2 py-1 px-4 flex items-center justify-around text-xs font-semibold text-on-surface-variant">
-                <span className="text-primary font-bold">Food Recognition</span>
-                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                <span className="text-primary font-bold">AI Guidance</span>
-                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                <span className="text-secondary font-bold">Eat First Action</span>
+              <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md shadow-sm flex items-center gap-1.5 text-xs font-bold text-on-surface">
+                <span className="material-symbols-outlined text-tertiary-container text-[14px]">schedule</span>
+                <span>⏳ Quality Window</span>
+              </div>
+
+              <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-white/95 backdrop-blur-md shadow-md flex items-center justify-between text-left">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🍎</span>
+                  <div>
+                    <p className="text-xs sm:text-sm font-bold text-on-surface leading-tight">Food Identified</p>
+                    <p className="text-[11px] text-on-surface-variant">Storage guidance & Eat First priority ready</p>
+                  </div>
+                </div>
+                <span className="material-symbols-outlined text-primary text-[22px]">verified</span>
               </div>
             </div>
-          </HeroAvatarDoodleEcosystem>
+
+            <div className="mt-2 py-1 px-4 flex items-center justify-around text-xs font-semibold text-on-surface-variant">
+              <span className="text-primary font-bold">Food Recognition</span>
+              <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+              <span className="text-primary font-bold">AI Guidance</span>
+              <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+              <span className="text-secondary font-bold">Eat First Action</span>
+            </div>
+          </div>
         </section>
 
         {/* CORE RECOGNITION & FRESHNESS FEATURES SECTION */}
-        <section id="features" className="px-4 sm:px-6 py-16 max-w-5xl mx-auto scroll-mt-20">
+        <section id="features" className="px-4 sm:px-6 py-16 max-w-5xl mx-auto scroll-mt-20 relative z-10">
           <div className="text-center mb-12">
             <p className="text-xs font-bold text-secondary uppercase tracking-widest mb-1">
               Simplicity in Action
@@ -248,9 +252,9 @@ export function LandingPage({ navigate }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Feature 1 */}
-            <div className="p-6 rounded-3xl bg-surface-container-low border border-surface-container-high/60 shadow-sm flex flex-col justify-between">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-2xl mb-4 shadow-2xs">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-secondary flex items-center justify-center text-2xl mb-4 shadow-2xs">
                   🍎
                 </div>
                 <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">
@@ -266,9 +270,9 @@ export function LandingPage({ navigate }) {
             </div>
 
             {/* Feature 2 */}
-            <div className="p-6 rounded-3xl bg-surface-container-low border border-surface-container-high/60 shadow-sm flex flex-col justify-between">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-2xl mb-4 shadow-2xs">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-secondary flex items-center justify-center text-2xl mb-4 shadow-2xs">
                   🌿
                 </div>
                 <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">
@@ -284,9 +288,9 @@ export function LandingPage({ navigate }) {
             </div>
 
             {/* Feature 3 */}
-            <div className="p-6 rounded-3xl bg-surface-container-low border border-surface-container-high/60 shadow-sm flex flex-col justify-between">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-2xl mb-4 shadow-2xs">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-secondary flex items-center justify-center text-2xl mb-4 shadow-2xs">
                   ⏳
                 </div>
                 <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">
@@ -302,9 +306,9 @@ export function LandingPage({ navigate }) {
             </div>
 
             {/* Feature 4 with Ranking UI */}
-            <div className="p-6 rounded-3xl bg-surface-container-low border border-surface-container-high/60 shadow-sm flex flex-col justify-between">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-2xl mb-4 shadow-2xs">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-secondary flex items-center justify-center text-2xl mb-4 shadow-2xs">
                   🥇
                 </div>
                 <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">
@@ -318,7 +322,7 @@ export function LandingPage({ navigate }) {
                 </p>
 
                 {/* Priority Preview Strip */}
-                <div className="p-3 rounded-2xl bg-white/90 border border-surface-container-high/80 flex flex-col gap-2">
+                <div className="p-3 rounded-2xl bg-surface-container-low/90 border border-surface-container-high/80 flex flex-col gap-2">
                   <div className="flex items-center justify-between p-2 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed text-xs font-bold">
                     <span>🥇 Strawberry Box</span>
                     <span className="bg-tertiary-container text-on-tertiary px-2 py-0.5 rounded-full text-[10px]">
@@ -339,10 +343,10 @@ export function LandingPage({ navigate }) {
           </div>
         </section>
 
-        {/* EXPANDED KITCHEN INTELLIGENCE CAPABILITIES (REPLACED COMING SOON PLACEHOLDERS) */}
-        <section id="capabilities" className="px-4 sm:px-6 py-16 bg-surface-container-low/60 scroll-mt-20">
+        {/* EXPANDED KITCHEN INTELLIGENCE CAPABILITIES */}
+        <section id="capabilities" className="px-4 sm:px-6 py-16 scroll-mt-20 relative z-10">
           <div className="max-w-5xl mx-auto text-center mb-12">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold mb-3 shadow-2xs">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 theme-card-glow text-primary text-xs font-bold mb-3">
               <span>✨</span>
               <span>Complete Kitchen Intelligence</span>
             </span>
@@ -356,7 +360,7 @@ export function LandingPage({ navigate }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
             {/* Card 1: FreshoBuddy AI */}
-            <div className="p-6 rounded-3xl bg-white border border-surface-container-high/80 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-secondary flex items-center justify-center text-2xl mb-4 group-hover:scale-108 transition-transform">
                   🤖
@@ -382,7 +386,7 @@ export function LandingPage({ navigate }) {
             </div>
 
             {/* Card 2: Impact Analytics */}
-            <div className="p-6 rounded-3xl bg-white border border-surface-container-high/80 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-108 transition-transform">
                   📊
@@ -408,7 +412,7 @@ export function LandingPage({ navigate }) {
             </div>
 
             {/* Card 3: Smart Pantry Management */}
-            <div className="p-6 rounded-3xl bg-white border border-surface-container-high/80 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-green-50 text-primary flex items-center justify-center text-2xl mb-4 group-hover:scale-108 transition-transform">
                   🛒
@@ -434,7 +438,7 @@ export function LandingPage({ navigate }) {
             </div>
 
             {/* Card 4: Zero-Waste Rescue Recipes */}
-            <div className="p-6 rounded-3xl bg-white border border-surface-container-high/80 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-108 transition-transform">
                   🍳
@@ -460,7 +464,7 @@ export function LandingPage({ navigate }) {
             </div>
 
             {/* Card 5: Packaged Food Scanner */}
-            <div className="p-6 rounded-3xl bg-white border border-surface-container-high/80 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-108 transition-transform">
                   🏷️
@@ -486,7 +490,7 @@ export function LandingPage({ navigate }) {
             </div>
 
             {/* Card 6: Pantry Activity History */}
-            <div className="p-6 rounded-3xl bg-white border border-surface-container-high/80 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group">
+            <div className="p-6 rounded-3xl bg-white/95 theme-card-glow shadow-sm flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-108 transition-transform">
                   📋
@@ -513,16 +517,8 @@ export function LandingPage({ navigate }) {
           </div>
         </section>
 
-        {/* THEMED AVATAR SHOWCASE SECTION */}
-        <div id="avatars" className="scroll-mt-20">
-          <LandingAvatarShowcaseSection
-            onSelectAvatar={() => handleProtectedNav('/settings')}
-            onGoToSettings={() => handleProtectedNav('/settings')}
-          />
-        </div>
-
         {/* PROBLEM LIFECYCLE SECTION */}
-        <section className="px-4 sm:px-6 py-16 bg-surface-container-low/50 flex flex-col items-center">
+        <section className="px-4 sm:px-6 py-16 flex flex-col items-center relative z-10">
           <div className="max-w-xl w-full text-center mb-10">
             <p className="text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
               The Everyday Dilemma
@@ -539,13 +535,13 @@ export function LandingPage({ navigate }) {
           </div>
 
           <div className="w-full max-w-sm flex flex-col items-center gap-2 mb-8">
-            <div className="w-full py-2.5 px-4 rounded-full bg-white shadow-xs flex items-center gap-3 text-xs sm:text-sm font-bold text-on-surface">
+            <div className="w-full py-2.5 px-4 rounded-full bg-white/95 theme-card-glow flex items-center gap-3 text-xs sm:text-sm font-bold text-on-surface">
               <span>🛒</span>
               <span>Buy Fresh Food</span>
             </div>
             <span className="material-symbols-outlined text-outline text-[16px]">arrow_downward</span>
 
-            <div className="w-full py-2.5 px-4 rounded-full bg-white shadow-xs flex items-center gap-3 text-xs sm:text-sm font-bold text-on-surface">
+            <div className="w-full py-2.5 px-4 rounded-full bg-white/95 theme-card-glow flex items-center gap-3 text-xs sm:text-sm font-bold text-on-surface">
               <span>🏠</span>
               <span>Store in Pantry / Fridge</span>
             </div>
@@ -569,7 +565,7 @@ export function LandingPage({ navigate }) {
             </div>
           </div>
 
-          <div className="w-full max-w-md p-5 rounded-2xl bg-surface-container-high text-center shadow-sm border border-surface-container-highest">
+          <div className="w-full max-w-md p-5 rounded-2xl bg-white/95 theme-card-glow text-center shadow-sm">
             <div className="flex items-center justify-center gap-1.5 text-primary font-bold text-xs mb-1">
               <span className="material-symbols-outlined text-[18px]">lightbulb</span>
               <span>A Smarter Solution</span>
@@ -581,14 +577,14 @@ export function LandingPage({ navigate }) {
         </section>
 
         {/* 4-STEP HOW IT WORKS */}
-        <section className="px-4 sm:px-6 py-16 max-w-5xl mx-auto">
+        <section className="px-4 sm:px-6 py-16 max-w-5xl mx-auto relative z-10">
           <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-2">From Food to Action</h2>
             <p className="text-xs sm:text-sm text-on-surface-variant">A simple 4-step visual process to help everyday kitchens.</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl bg-white shadow-2xs border border-surface-container-high flex flex-col">
+            <div className="p-5 rounded-2xl bg-white/95 theme-card-glow shadow-2xs flex flex-col">
               <span className="text-2xl font-extrabold text-secondary mb-1">01</span>
               <div className="flex items-center gap-1.5 mb-1">
                 <span>📷</span>
@@ -597,7 +593,7 @@ export function LandingPage({ navigate }) {
               <p className="text-xs text-on-surface-variant">Take or upload a clear food image.</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white shadow-2xs border border-surface-container-high flex flex-col">
+            <div className="p-5 rounded-2xl bg-white/95 theme-card-glow shadow-2xs flex flex-col">
               <span className="text-2xl font-extrabold text-secondary mb-1">02</span>
               <div className="flex items-center gap-1.5 mb-1">
                 <span>🔍</span>
@@ -606,7 +602,7 @@ export function LandingPage({ navigate }) {
               <p className="text-xs text-on-surface-variant">Hybrid vision identifies the food item.</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white shadow-2xs border border-surface-container-high flex flex-col">
+            <div className="p-5 rounded-2xl bg-white/95 theme-card-glow shadow-2xs flex flex-col">
               <span className="text-2xl font-extrabold text-secondary mb-1">03</span>
               <div className="flex items-center gap-1.5 mb-1">
                 <span>🌿</span>
@@ -615,7 +611,7 @@ export function LandingPage({ navigate }) {
               <p className="text-xs text-on-surface-variant">See estimated visible freshness & quality window.</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white shadow-2xs border border-surface-container-high flex flex-col">
+            <div className="p-5 rounded-2xl bg-white/95 theme-card-glow shadow-2xs flex flex-col">
               <span className="text-2xl font-extrabold text-secondary mb-1">04</span>
               <div className="flex items-center gap-1.5 mb-1">
                 <span>💡</span>
@@ -627,11 +623,11 @@ export function LandingPage({ navigate }) {
         </section>
 
         {/* LIVE EXPERIENCE DEMO CARD */}
-        <section className="px-4 sm:px-6 py-16 max-w-lg mx-auto text-center">
+        <section className="px-4 sm:px-6 py-16 max-w-lg mx-auto text-center relative z-10">
           <span className="text-xs font-bold text-secondary uppercase tracking-wider">Live Experience</span>
           <h2 className="text-2xl sm:text-3xl font-bold text-primary mt-1 mb-8">Instant Clarity in Action</h2>
 
-          <div className="p-5 rounded-3xl bg-white shadow-md border border-surface-container-high text-left">
+          <div className="p-5 rounded-3xl bg-white/95 theme-card-glow shadow-md text-left">
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-4">
               <img
                 src={FOOD_ASSETS.honeycrispAppleCut}
@@ -684,7 +680,7 @@ export function LandingPage({ navigate }) {
         </section>
 
         {/* SOCIAL IMPACT PROGRESSION */}
-        <section className="px-4 sm:px-6 py-16 bg-surface-container-low/70 text-center">
+        <section className="px-4 sm:px-6 py-16 text-center relative z-10">
           <div className="max-w-xl mx-auto mb-8">
             <span className="text-xs font-bold text-secondary uppercase tracking-wider block mb-1">Thoughtful Living</span>
             <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-2">Small Decisions.<br />Less Avoidable Waste.</h2>
@@ -694,15 +690,15 @@ export function LandingPage({ navigate }) {
           </div>
 
           <div className="w-full max-w-md mx-auto flex flex-col gap-2.5">
-            <div className="p-3 rounded-2xl bg-white shadow-2xs flex items-center justify-between text-xs sm:text-sm font-semibold text-primary">
+            <div className="p-3 rounded-2xl bg-white/95 theme-card-glow flex items-center justify-between text-xs sm:text-sm font-semibold text-primary">
               <span className="flex items-center gap-2">🍎 Clearer Food Visibility</span>
               <span className="material-symbols-outlined text-secondary text-[18px]">arrow_forward</span>
             </div>
-            <div className="p-3 rounded-2xl bg-white shadow-2xs flex items-center justify-between text-xs sm:text-sm font-semibold text-primary">
+            <div className="p-3 rounded-2xl bg-white/95 theme-card-glow flex items-center justify-between text-xs sm:text-sm font-semibold text-primary">
               <span className="flex items-center gap-2">💡 Timely Eat First Priorities</span>
               <span className="material-symbols-outlined text-secondary text-[18px]">arrow_forward</span>
             </div>
-            <div className="p-3 rounded-2xl bg-white shadow-2xs flex items-center justify-between text-xs sm:text-sm font-semibold text-primary">
+            <div className="p-3 rounded-2xl bg-white/95 theme-card-glow flex items-center justify-between text-xs sm:text-sm font-semibold text-primary">
               <span className="flex items-center gap-2">🥗 Better Food Utilization</span>
               <span className="material-symbols-outlined text-secondary text-[18px]">arrow_forward</span>
             </div>
@@ -714,8 +710,8 @@ export function LandingPage({ navigate }) {
         </section>
 
         {/* FINAL CALL TO ACTION */}
-        <section className="px-4 sm:px-6 py-16 text-center">
-          <div className="max-w-xl mx-auto p-8 sm:p-12 rounded-3xl bg-surface-container-high shadow-md border border-surface-container-highest flex flex-col items-center">
+        <section className="px-4 sm:px-6 py-16 text-center relative z-10">
+          <div className="max-w-xl mx-auto p-8 sm:p-12 rounded-3xl bg-white/95 theme-card-glow shadow-md flex flex-col items-center">
             <span className="text-4xl mb-3">🍃</span>
             <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-2">
               Give Your Food a Second Look.
@@ -744,7 +740,7 @@ export function LandingPage({ navigate }) {
       </main>
 
       {/* ENHANCED FOOTER WITH VERIFIED ROUTES */}
-      <footer className="w-full bg-surface-container-low/80 border-t border-surface-container-high/60 py-12 px-4 text-center">
+      <footer className="w-full bg-surface-container-low/80 border-t border-surface-container-high/60 py-12 px-4 text-center relative z-10">
         <div className="max-w-4xl mx-auto flex flex-col items-center">
           <div className="flex items-center gap-2 mb-2">
             <img src={BRANDING_ASSETS.logoUrl} alt="Logo" className="h-6 w-auto" />
@@ -763,7 +759,6 @@ export function LandingPage({ navigate }) {
             <button type="button" onClick={() => handleProtectedNav('/recipes')} className="hover:underline cursor-pointer">Rescue Recipes</button>
             <button type="button" onClick={() => handleProtectedNav('/packaged-food')} className="hover:underline cursor-pointer">Packaged Food</button>
             <button type="button" onClick={() => handleProtectedNav('/history')} className="hover:underline cursor-pointer">Activity Logs</button>
-            <button type="button" onClick={() => handleProtectedNav('/settings')} className="hover:underline cursor-pointer">Avatars & Profile</button>
             <button type="button" onClick={() => navigate('/login')} className="hover:underline cursor-pointer">Sign In</button>
           </div>
 
