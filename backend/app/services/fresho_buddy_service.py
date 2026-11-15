@@ -348,7 +348,7 @@ class FreshoBuddyService:
         history: Optional[List[Dict[str, Any]]] = None,
         analysis_context: Optional[Dict[str, Any]] = None,
         pantry_items: Optional[List[Dict[str, Any]]] = None,
-        pantry_mode: bool = False,
+        pantry_mode: Optional[bool] = None,
     ) -> Dict[str, Any]:
         """
         Generate response using Groq/Grok or intelligent domain fallback:
@@ -370,6 +370,9 @@ class FreshoBuddyService:
             has_analysis_context=bool(analysis_context),
             is_short_follow_up=is_short_follow,
         )
+
+        if pantry_mode is None:
+            pantry_mode = bool(user_id != "guest" and (has_pantry_ownership(user_message) or context_level == ContextLevel.STRONG))
 
         if fresho_intent == FreshoIntent.FOLLOW_UP and len(history) > 0:
             resolved_food, was_pantry_scoped, prior_intent, prior_level = resolve_follow_up_context(history)

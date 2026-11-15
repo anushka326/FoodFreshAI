@@ -264,9 +264,9 @@ OWNERSHIP_PATTERNS = [
     r"\bin\s+my\s+pantry\b",
     r"\bfrom\s+my\s+pantry\b",
     r"\bmy\s+pantry\b",
-    r"\bdo\s+i\s+have\b",
+    r"\bdo\s+i\s+(?:currently\s+)?have\b",
     r"\bhave\s+any\b",
-    r"\bi\s+have\b",
+    r"\bi\s+(?:currently\s+)?have\b",
     r"\bi\s+saved\b",
     r"\bi\s+logged\b",
     r"\bfor\s+my\b",
@@ -480,9 +480,13 @@ def detect_fresho_intent(
                 "my saved food",
                 "which food is freshest",
                 "least fresh",
+                "what foods do i have",
+                "what foods do i currently have",
+                "what do i have",
+                "what do i currently have",
             )
         )
-        or (ownership and any(p in q for p in ("pantry", "saved food", "logged food")))
+        or (ownership and any(p in q for p in ("pantry", "saved food", "logged food", "foods", "items")))
     ):
         return FreshoIntent.PANTRY_LIST, ContextLevel.STRONG, None
 
