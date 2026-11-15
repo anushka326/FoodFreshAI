@@ -1,0 +1,56 @@
+{
+  "dataset_name": "FoodFresh AI Food Recognition V3",
+  "version": "v3",
+  "created_at": "2026-09-22 23:17:24",
+  "num_classes": 24,
+  "classes": [
+    "Apple",
+    "Avocado",
+    "Banana",
+    "Cherry",
+    "Corn",
+    "Cucumber",
+    "Eggplant",
+    "Grape",
+    "Guava",
+    "Lemon",
+    "Mango",
+    "Onion",
+    "Orange",
+    "Papaya",
+    "Peach",
+    "Pear",
+    "Pepper",
+    "Pineapple",
+    "Plum",
+    "Pomegranate",
+    "Potato",
+    "Strawberry",
+    "Tomato",
+    "Watermelon"
+  ],
+  "source_datasets": [
+    "Fruits-360 (v2)",
+    "AgriFreshNET (7 approved foods)"
+  ],
+  "mapping_file": "data/processed/cross_dataset/food_class_mapping_v3.json",
+  "manifests": {
+    "train": "data/processed/food_recognition_v3/manifests/v3_train_manifest.csv",
+    "val": "data/processed/food_recognition_v3/manifests/v3_val_manifest.csv",
+    "benchmark_test": "data/processed/food_recognition_v3/manifests/v3_benchmark_test_manifest.csv",
+    "real_world_test": "data/processed/food_recognition_v3/manifests/v3_real_world_test_manifest.csv"
+  },
+  "counts": {
+    "train_total": 85585,
+    "train_fruits360": 76961,
+    "train_agrifreshnet": 8624,
+    "val_total": 21095,
+    "val_fruits360": 19233,
+    "val_agrifreshnet": 1862,
+    "benchmark_test_total": 32016,
+    "real_world_test_total": 1904,
+    "grand_total": 140600
+  },
+  "leakage_policy": "Grouped containment: Fruits-360 grouped by original subfolder; AgriFreshNET grouped strictly by base photo stem (aug_ prefixes stripped).",
+  "notes": "No manual real-world photos were present on disk during dataset generation. data/real_world_food/ directory remains structured and ready for future ingest."
+}

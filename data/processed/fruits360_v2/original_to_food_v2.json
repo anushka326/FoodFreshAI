@@ -1,0 +1,1312 @@
+{
+  "Almonds 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Apple 10": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 11": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 12": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 13": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 14": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 17": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 18": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 19": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 20": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 21": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 22": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 23": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 5": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 6": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 7": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 8": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple 9": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Braeburn 1": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Crimson Snow 1": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Golden 1": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Golden 2": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Golden 3": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Granny Smith 1": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Pink Lady 1": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Red 1": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Red 2": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Red 3": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Red Delicious 1": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Red Yellow 1": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apple Red Yellow 2": {
+    "normalized_food": "Apple",
+    "selected": true,
+    "class_id": 0
+  },
+  "Apricot 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Avocado 1": {
+    "normalized_food": "Avocado",
+    "selected": true,
+    "class_id": 1
+  },
+  "Avocado 2": {
+    "normalized_food": "Avocado",
+    "selected": true,
+    "class_id": 1
+  },
+  "Avocado Black 1": {
+    "normalized_food": "Avocado",
+    "selected": true,
+    "class_id": 1
+  },
+  "Avocado Black 2": {
+    "normalized_food": "Avocado",
+    "selected": true,
+    "class_id": 1
+  },
+  "Avocado Green 1": {
+    "normalized_food": "Avocado",
+    "selected": true,
+    "class_id": 1
+  },
+  "Banana 1": {
+    "normalized_food": "Banana",
+    "selected": true,
+    "class_id": 2
+  },
+  "Banana 3": {
+    "normalized_food": "Banana",
+    "selected": true,
+    "class_id": 2
+  },
+  "Banana 4": {
+    "normalized_food": "Banana",
+    "selected": true,
+    "class_id": 2
+  },
+  "Banana Lady Finger 1": {
+    "normalized_food": "Banana",
+    "selected": true,
+    "class_id": 2
+  },
+  "Banana Red 1": {
+    "normalized_food": "Banana",
+    "selected": true,
+    "class_id": 2
+  },
+  "Bean pod 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Beetroot 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "BlackBerry 3": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "BlackBerry 4": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Blackberry 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Blackberry 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Blackberry 5": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Blueberry 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cabbage red 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cabbage white 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cactus fruit 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cactus fruit green 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cactus fruit red 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Caju seed 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cantaloupe 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cantaloupe 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cantaloupe 3": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Carambola 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Carambola 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Carambola 3": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Carrot 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cauliflower 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Celery 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cherimoya 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cherry 1": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry 2": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry 3": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry 4": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry 5": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Rainier 1": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Rainier 2": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Rainier 3": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Sour 1": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Wax 1": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Wax 2": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Wax Black 1": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Wax Red 1": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Wax Red 2": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Wax Red 3": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Cherry Wax Yellow 1": {
+    "normalized_food": "Cherry",
+    "selected": true,
+    "class_id": 3
+  },
+  "Chestnut 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Clementine 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Cocos 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Corn 1": {
+    "normalized_food": "Corn",
+    "selected": true,
+    "class_id": 4
+  },
+  "Corn Husk 1": {
+    "normalized_food": "Corn",
+    "selected": true,
+    "class_id": 4
+  },
+  "Cucumber 1": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 10": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 11": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 12": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 13": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 3": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 4": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 5": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 6": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 7": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 8": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Cucumber 9": {
+    "normalized_food": "Cucumber",
+    "selected": true,
+    "class_id": 5
+  },
+  "Dates 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Dates 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Eggplant 1": {
+    "normalized_food": "Eggplant",
+    "selected": true,
+    "class_id": 6
+  },
+  "Eggplant long 1": {
+    "normalized_food": "Eggplant",
+    "selected": true,
+    "class_id": 6
+  },
+  "Fig 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Ginger 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Ginger Root 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Gooseberry 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Granadilla 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Grape 1": {
+    "normalized_food": "Grape",
+    "selected": true,
+    "class_id": 7
+  },
+  "Grape Blue 1": {
+    "normalized_food": "Grape",
+    "selected": true,
+    "class_id": 7
+  },
+  "Grape Pink 1": {
+    "normalized_food": "Grape",
+    "selected": true,
+    "class_id": 7
+  },
+  "Grape White 1": {
+    "normalized_food": "Grape",
+    "selected": true,
+    "class_id": 7
+  },
+  "Grape White 2": {
+    "normalized_food": "Grape",
+    "selected": true,
+    "class_id": 7
+  },
+  "Grape White 3": {
+    "normalized_food": "Grape",
+    "selected": true,
+    "class_id": 7
+  },
+  "Grape White 4": {
+    "normalized_food": "Grape",
+    "selected": true,
+    "class_id": 7
+  },
+  "Grape pink 2": {
+    "normalized_food": "Grape",
+    "selected": true,
+    "class_id": 7
+  },
+  "Grapefruit Pink 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Grapefruit White 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Guava 1": {
+    "normalized_food": "Guava",
+    "selected": true,
+    "class_id": 8
+  },
+  "Hazelnut 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Huckleberry 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Kaki 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Kiwi 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Kohlrabi 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Kumquats 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Lemon 1": {
+    "normalized_food": "Lemon",
+    "selected": true,
+    "class_id": 9
+  },
+  "Lemon Meyer 1": {
+    "normalized_food": "Lemon",
+    "selected": true,
+    "class_id": 9
+  },
+  "Limes 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Lychee 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Mandarine 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Mango 1": {
+    "normalized_food": "Mango",
+    "selected": true,
+    "class_id": 10
+  },
+  "Mango Red 1": {
+    "normalized_food": "Mango",
+    "selected": true,
+    "class_id": 10
+  },
+  "Mangostan 1": {
+    "normalized_food": "Mango",
+    "selected": true,
+    "class_id": 10
+  },
+  "Maracuja 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Melon Piel de Sapo 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Mulberry 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Mushroom champignon 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Mushroom champignon 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nectarine 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nectarine Flat 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nectarine Flat 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nut 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nut 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nut 3": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nut 4": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nut 5": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nut Forest 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Nut Pecan 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Onion 2": {
+    "normalized_food": "Onion",
+    "selected": true,
+    "class_id": 11
+  },
+  "Onion Red 1": {
+    "normalized_food": "Onion",
+    "selected": true,
+    "class_id": 11
+  },
+  "Onion Red 2": {
+    "normalized_food": "Onion",
+    "selected": true,
+    "class_id": 11
+  },
+  "Onion Red 3": {
+    "normalized_food": "Onion",
+    "selected": true,
+    "class_id": 11
+  },
+  "Onion White 1": {
+    "normalized_food": "Onion",
+    "selected": true,
+    "class_id": 11
+  },
+  "Onion White 2": {
+    "normalized_food": "Onion",
+    "selected": true,
+    "class_id": 11
+  },
+  "Orange 1": {
+    "normalized_food": "Orange",
+    "selected": true,
+    "class_id": 12
+  },
+  "Orange 2": {
+    "normalized_food": "Orange",
+    "selected": true,
+    "class_id": 12
+  },
+  "Orange 3": {
+    "normalized_food": "Orange",
+    "selected": true,
+    "class_id": 12
+  },
+  "Orange peeled 1": {
+    "normalized_food": "Orange",
+    "selected": true,
+    "class_id": 12
+  },
+  "Papaya 1": {
+    "normalized_food": "Papaya",
+    "selected": true,
+    "class_id": 13
+  },
+  "Papaya 2": {
+    "normalized_food": "Papaya",
+    "selected": true,
+    "class_id": 13
+  },
+  "Passion Fruit 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Peach 1": {
+    "normalized_food": "Peach",
+    "selected": true,
+    "class_id": 14
+  },
+  "Peach 2": {
+    "normalized_food": "Peach",
+    "selected": true,
+    "class_id": 14
+  },
+  "Peach 3": {
+    "normalized_food": "Peach",
+    "selected": true,
+    "class_id": 14
+  },
+  "Peach 4": {
+    "normalized_food": "Peach",
+    "selected": true,
+    "class_id": 14
+  },
+  "Peach 5": {
+    "normalized_food": "Peach",
+    "selected": true,
+    "class_id": 14
+  },
+  "Peach 6": {
+    "normalized_food": "Peach",
+    "selected": true,
+    "class_id": 14
+  },
+  "Peach Flat 1": {
+    "normalized_food": "Peach",
+    "selected": true,
+    "class_id": 14
+  },
+  "Peanut shell 1x 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Pear 1": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 10": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 11": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 12": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 13": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 14": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 2": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 3": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 5": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 6": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 7": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 8": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear 9": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear Abate 1": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear Forelle 1": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear Kaiser 1": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear Monster 1": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear Red 1": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear Stone 1": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pear Williams 1": {
+    "normalized_food": "Pear",
+    "selected": true,
+    "class_id": 15
+  },
+  "Pepino 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Pepper 1": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper 2": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper Green 1": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper Orange 1": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper Orange 2": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper Red 1": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper Red 2": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper Red 3": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper Red 4": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper Red 5": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Pepper Yellow 1": {
+    "normalized_food": "Pepper",
+    "selected": true,
+    "class_id": 16
+  },
+  "Physalis 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Physalis with Husk 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Pineapple 1": {
+    "normalized_food": "Pineapple",
+    "selected": true,
+    "class_id": 17
+  },
+  "Pineapple Mini 1": {
+    "normalized_food": "Pineapple",
+    "selected": true,
+    "class_id": 17
+  },
+  "Pistachio 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Pitahaya Red 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Plum 1": {
+    "normalized_food": "Plum",
+    "selected": true,
+    "class_id": 18
+  },
+  "Plum 2": {
+    "normalized_food": "Plum",
+    "selected": true,
+    "class_id": 18
+  },
+  "Plum 3": {
+    "normalized_food": "Plum",
+    "selected": true,
+    "class_id": 18
+  },
+  "Plum 4": {
+    "normalized_food": "Plum",
+    "selected": true,
+    "class_id": 18
+  },
+  "Plum 5": {
+    "normalized_food": "Plum",
+    "selected": true,
+    "class_id": 18
+  },
+  "Pomegranate 1": {
+    "normalized_food": "Pomegranate",
+    "selected": true,
+    "class_id": 19
+  },
+  "Pomelo Sweetie 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Potato Red 1": {
+    "normalized_food": "Potato",
+    "selected": true,
+    "class_id": 20
+  },
+  "Potato Red 2": {
+    "normalized_food": "Potato",
+    "selected": true,
+    "class_id": 20
+  },
+  "Potato Sweet 1": {
+    "normalized_food": "Potato",
+    "selected": true,
+    "class_id": 20
+  },
+  "Potato White 1": {
+    "normalized_food": "Potato",
+    "selected": true,
+    "class_id": 20
+  },
+  "Quince 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Quince 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Quince 3": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Quince 4": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Rambutan 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Raspberry 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Raspberry 2": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Raspberry 3": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Raspberry 4": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Raspberry 5": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Raspberry 6": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Redcurrant 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Salak 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Strawberry 1": {
+    "normalized_food": "Strawberry",
+    "selected": true,
+    "class_id": 21
+  },
+  "Strawberry 2": {
+    "normalized_food": "Strawberry",
+    "selected": true,
+    "class_id": 21
+  },
+  "Strawberry 3": {
+    "normalized_food": "Strawberry",
+    "selected": true,
+    "class_id": 21
+  },
+  "Strawberry Wedge 1": {
+    "normalized_food": "Strawberry",
+    "selected": true,
+    "class_id": 21
+  },
+  "Tamarillo 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Tangelo 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Tomato 1": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato 10": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato 11": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato 2": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato 3": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato 4": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato 5": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato 7": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato 8": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato 9": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato Cherry Maroon 1": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato Cherry Orange 1": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato Cherry Red 1": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato Cherry Red 2": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato Cherry Yellow 1": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato Heart 1": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato Maroon 1": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato Maroon 2": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Tomato Yellow 1": {
+    "normalized_food": "Tomato",
+    "selected": true,
+    "class_id": 22
+  },
+  "Walnut 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Watermelon 1": {
+    "normalized_food": "Watermelon",
+    "selected": true,
+    "class_id": 23
+  },
+  "Zucchini 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Zucchini Green 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "Zucchini dark 1": {
+    "normalized_food": null,
+    "selected": false,
+    "class_id": null
+  },
+  "orange 4": {
+    "normalized_food": "Orange",
+    "selected": true,
+    "class_id": 12
+  }
+}

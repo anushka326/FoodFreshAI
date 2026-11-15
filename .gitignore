@@ -24,9 +24,10 @@ __pycache__/
 *$py.class
 *.so
 
-# Datasets
-data/raw/
-data/processed/
+# Datasets - Large Raw Archives Excluded (Distributed via GitHub Releases)
+data/raw/*
+!data/raw/Synthetic data/
+!data/raw/foodkeeper/
 data/feedback/images/
 
 # Models

@@ -1,0 +1,13 @@
+{
+  "freshness_to_id": {
+    "Fresh": 0,
+    "Semi-Fresh": 1,
+    "Rotten": 2
+  },
+  "id_to_freshness": {
+    "0": "Fresh",
+    "1": "Semi-Fresh",
+    "2": "Rotten"
+  },
+  "num_classes": 3
+}

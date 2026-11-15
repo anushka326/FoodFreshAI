@@ -1,0 +1,53 @@
+{
+  "dataset": "Fruits-360",
+  "dataset_variant": "100x100",
+  "train_source": "D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Training",
+  "test_source": "D:/VIT TY SEM5/ML Project/FOODFRESHAI/data/raw/fruits-360-100x100-main/Test",
+  "selected_foods": [
+    "Apple",
+    "Banana",
+    "Cucumber",
+    "Eggplant",
+    "Grape",
+    "Orange",
+    "Papaya",
+    "Peach",
+    "Pear",
+    "Pepper",
+    "Pineapple",
+    "Tomato"
+  ],
+  "num_classes": 12,
+  "class_to_id": {
+    "Apple": 0,
+    "Banana": 1,
+    "Cucumber": 2,
+    "Eggplant": 3,
+    "Grape": 4,
+    "Orange": 5,
+    "Papaya": 6,
+    "Peach": 7,
+    "Pear": 8,
+    "Pepper": 9,
+    "Pineapple": 10,
+    "Tomato": 11
+  },
+  "id_to_class": {
+    "0": "Apple",
+    "1": "Banana",
+    "2": "Cucumber",
+    "3": "Eggplant",
+    "4": "Grape",
+    "5": "Orange",
+    "6": "Papaya",
+    "7": "Peach",
+    "8": "Pear",
+    "9": "Pepper",
+    "10": "Pineapple",
+    "11": "Tomato"
+  },
+  "original_class_count": 123,
+  "training_image_count": 69130,
+  "test_image_count": 22996,
+  "total_selected_images": 92126
+}

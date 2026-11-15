@@ -1,0 +1,31 @@
+{
+  "num_classes": 12,
+  "id_to_food": {
+    "0": "Apple",
+    "1": "Banana",
+    "2": "Cucumber",
+    "3": "Eggplant",
+    "4": "Grape",
+    "5": "Orange",
+    "6": "Papaya",
+    "7": "Peach",
+    "8": "Pear",
+    "9": "Pepper",
+    "10": "Pineapple",
+    "11": "Tomato"
+  },
+  "food_to_id": {
+    "Apple": 0,
+    "Banana": 1,
+    "Cucumber": 2,
+    "Eggplant": 3,
+    "Grape": 4,
+    "Orange": 5,
+    "Papaya": 6,
+    "Peach": 7,
+    "Pear": 8,
+    "Pepper": 9,
+    "Pineapple": 10,
+    "Tomato": 11
+  }
+}

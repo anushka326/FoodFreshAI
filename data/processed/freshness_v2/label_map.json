@@ -1,0 +1,23 @@
+{
+  "classes": [
+    "fresh",
+    "rotten",
+    "slightly_spoiled"
+  ],
+  "label_to_index": {
+    "fresh": 0,
+    "rotten": 1,
+    "slightly_spoiled": 2
+  },
+  "index_to_label": {
+    "0": "fresh",
+    "1": "rotten",
+    "2": "slightly_spoiled"
+  },
+  "display_names": {
+    "fresh": "Fresh",
+    "slightly_spoiled": "Slightly Spoiled",
+    "rotten": "Rotten"
+  },
+  "source_mapping_rationale": "AgriFreshNET 'Fresh' maps to 'Fresh' (peak post-harvest quality). AgriFreshNET 'Semi-Fresh' maps to 'Slightly Spoiled' (early softening, surface spotting, or initial oxidation). AgriFreshNET 'Rotten' maps to 'Rotten' (microbial decay, structural decomposition, extensive mold)."
+}

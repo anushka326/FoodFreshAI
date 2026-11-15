@@ -1,0 +1,46 @@
+{
+  "dataset_name": "AgriFreshNET Freshness",
+  "random_seed": 42,
+  "num_classes": 3,
+  "total_images": 14160,
+  "train_count": 9856,
+  "val_count": 2131,
+  "test_count": 2173,
+  "split_proportions": {
+    "train": 0.696,
+    "val": 0.1505,
+    "test": 0.1535
+  },
+  "food_types": [
+    "Banana",
+    "Bittermelon",
+    "Cucumber",
+    "Eggplant",
+    "Orange",
+    "Papaya",
+    "Pineapple",
+    "Tomato"
+  ],
+  "freshness_stages": [
+    "Fresh",
+    "Semi-Fresh",
+    "Rotten"
+  ],
+  "class_counts_by_split": {
+    "train": {
+      "Fresh": 3296,
+      "Semi-Fresh": 3295,
+      "Rotten": 3265
+    },
+    "val": {
+      "Rotten": 723,
+      "Semi-Fresh": 709,
+      "Fresh": 699
+    },
+    "test": {
+      "Rotten": 732,
+      "Fresh": 725,
+      "Semi-Fresh": 716
+    }
+  }
+}

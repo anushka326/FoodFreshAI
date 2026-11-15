@@ -1,0 +1,222 @@
+[
+  {
+    "food_name": "Apple",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Avocado",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Banana",
+    "fruits360_available": true,
+    "agrifreshnet_available": true,
+    "agrifreshnet_classes": [
+      "Fresh Banana(1-4)",
+      "Rotten banana(7-13)",
+      "Semi fresh banana(4-7)"
+    ],
+    "mapping_status": "name_variant",
+    "notes": "Matches Banana in AgriFreshNET with folder syntax/casing variations: ['Fresh Banana(1-4)', 'Rotten banana(7-13)', 'Semi fresh banana(4-7)']."
+  },
+  {
+    "food_name": "Cherry",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Corn",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Cucumber",
+    "fruits360_available": true,
+    "agrifreshnet_available": true,
+    "agrifreshnet_classes": [
+      "Fresh Cucumber(1-6)",
+      "Rotten Cucumber(12-20)",
+      "Semi Fresh Cucumber(6-12)"
+    ],
+    "mapping_status": "exact",
+    "notes": "Exact match with 3 canonical quality stages in AgriFreshNET: ['Fresh Cucumber(1-6)', 'Rotten Cucumber(12-20)', 'Semi Fresh Cucumber(6-12)']."
+  },
+  {
+    "food_name": "Eggplant",
+    "fruits360_available": true,
+    "agrifreshnet_available": true,
+    "agrifreshnet_classes": [
+      "Fresh eggplant(1-4)",
+      "Rotten eggplant(8-15)",
+      "Semi_Fresh eggplant(4-8)"
+    ],
+    "mapping_status": "name_variant",
+    "notes": "Matches Eggplant in AgriFreshNET with folder syntax/casing variations: ['Fresh eggplant(1-4)', 'Rotten eggplant(8-15)', 'Semi_Fresh eggplant(4-8)']."
+  },
+  {
+    "food_name": "Grape",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Guava",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Lemon",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Mango",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Onion",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Orange",
+    "fruits360_available": true,
+    "agrifreshnet_available": true,
+    "agrifreshnet_classes": [
+      "Fresh Orange(1-9)",
+      "Rotten Orange(20-35)",
+      "Semi fresh Orange(9-20)"
+    ],
+    "mapping_status": "exact",
+    "notes": "Exact match with 3 canonical quality stages in AgriFreshNET: ['Fresh Orange(1-9)', 'Rotten Orange(20-35)', 'Semi fresh Orange(9-20)']."
+  },
+  {
+    "food_name": "Papaya",
+    "fruits360_available": true,
+    "agrifreshnet_available": true,
+    "agrifreshnet_classes": [
+      "Fresh Papaya(1-4)",
+      "Rotten Papaya(7-12)",
+      "Semi Fresh Papaya(4-7)"
+    ],
+    "mapping_status": "exact",
+    "notes": "Exact match with 3 canonical quality stages in AgriFreshNET: ['Fresh Papaya(1-4)', 'Rotten Papaya(7-12)', 'Semi Fresh Papaya(4-7)']."
+  },
+  {
+    "food_name": "Peach",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Pear",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Pepper",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Pineapple",
+    "fruits360_available": true,
+    "agrifreshnet_available": true,
+    "agrifreshnet_classes": [
+      "Fresh pineapple(1-15)",
+      "Rotten Pineapple(25-35)",
+      "Semi fresh Pineapple (15-25)"
+    ],
+    "mapping_status": "name_variant",
+    "notes": "Matches Pineapple in AgriFreshNET with folder syntax/casing variations: ['Fresh pineapple(1-15)', 'Rotten Pineapple(25-35)', 'Semi fresh Pineapple (15-25)']."
+  },
+  {
+    "food_name": "Plum",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Pomegranate",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Potato",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Strawberry",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  },
+  {
+    "food_name": "Tomato",
+    "fruits360_available": true,
+    "agrifreshnet_available": true,
+    "agrifreshnet_classes": [
+      "Fresh Tomato(1-10)",
+      "Rotten Tomato(24-35)",
+      "Semi fresh Tomato(10-24)"
+    ],
+    "mapping_status": "exact",
+    "notes": "Exact match with 3 canonical quality stages in AgriFreshNET: ['Fresh Tomato(1-10)', 'Rotten Tomato(24-35)', 'Semi fresh Tomato(10-24)']."
+  },
+  {
+    "food_name": "Watermelon",
+    "fruits360_available": true,
+    "agrifreshnet_available": false,
+    "agrifreshnet_classes": [],
+    "mapping_status": "no_match",
+    "notes": "Class exists in Fruits-360 V2 but has no representation in AgriFreshNET."
+  }
+]

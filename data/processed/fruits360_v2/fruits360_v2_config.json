@@ -1,0 +1,41 @@
+{
+  "dataset_name": "Fruits-360 V2",
+  "num_classes": 24,
+  "selected_foods": [
+    "Apple",
+    "Avocado",
+    "Banana",
+    "Cherry",
+    "Corn",
+    "Cucumber",
+    "Eggplant",
+    "Grape",
+    "Guava",
+    "Lemon",
+    "Mango",
+    "Onion",
+    "Orange",
+    "Papaya",
+    "Peach",
+    "Pear",
+    "Pepper",
+    "Pineapple",
+    "Plum",
+    "Pomegranate",
+    "Potato",
+    "Strawberry",
+    "Tomato",
+    "Watermelon"
+  ],
+  "total_images": 128210,
+  "train_count": 76961,
+  "val_count": 19233,
+  "test_count": 32016,
+  "pomegranate_stats": {
+    "class_id": 19,
+    "train_count": 394,
+    "val_count": 98,
+    "test_count": 164,
+    "total_count": 656
+  }
+}
