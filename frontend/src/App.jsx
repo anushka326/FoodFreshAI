@@ -10,12 +10,13 @@ import { FreshoBuddyPage } from './pages/FreshoBuddyPage/FreshoBuddyPage.jsx';
 import { RecipeRecommendationsPage } from './pages/RecipeRecommendationsPage/RecipeRecommendationsPage.jsx';
 import { ImpactAnalyticsPage } from './pages/ImpactAnalyticsPage/ImpactAnalyticsPage.jsx';
 import { PackagedFoodScannerPage } from './pages/PackagedFoodScannerPage/PackagedFoodScannerPage.jsx';
+import { NotificationsPage } from './pages/NotificationsPage/NotificationsPage.jsx';
 import { AppLayout } from './components/layout/AppLayout.jsx';
 import { authService } from './services/authService.js';
 import { OfflineStatusBanner } from './components/common/OfflineStatusBanner.jsx';
 import { PwaInstallPrompt } from './components/common/PwaInstallPrompt.jsx';
 
-const PROTECTED_ROUTES = ['/dashboard', '/analyze', '/packaged-food', '/history', '/settings', '/fresho-buddy', '/recipes', '/analytics'];
+const PROTECTED_ROUTES = ['/dashboard', '/analyze', '/packaged-food', '/history', '/settings', '/fresho-buddy', '/recipes', '/analytics', '/alerts', '/notifications'];
 
 export function App() {
   // Support both window.location.pathname / hash or clean state router with auth guard
@@ -155,6 +156,13 @@ export function App() {
         return (
           <AppLayout currentRoute={currentRoute} navigate={navigate}>
             <ImpactAnalyticsPage navigate={navigate} />
+          </AppLayout>
+        );
+      case '/alerts':
+      case '/notifications':
+        return (
+          <AppLayout currentRoute={currentRoute} navigate={navigate}>
+            <NotificationsPage navigate={navigate} />
           </AppLayout>
         );
       case '/':

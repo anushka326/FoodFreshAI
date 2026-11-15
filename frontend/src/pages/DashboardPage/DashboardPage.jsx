@@ -229,14 +229,16 @@ export function DashboardPage({ navigate }) {
                 </span>
               )}
             </div>
-            <button
-              type="button"
-              onClick={() => navigate('/history')}
-              className="text-xs font-bold text-secondary hover:text-primary transition-colors flex items-center gap-1 cursor-pointer"
-            >
-              <span>View All in Pantry</span>
-              <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => navigate('/alerts')}
+                className="text-xs font-bold text-secondary hover:text-primary transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <span>View All Alerts</span>
+                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">

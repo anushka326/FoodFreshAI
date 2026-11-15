@@ -35,6 +35,13 @@ export function Sidebar({ currentRoute, navigate, isOpen, onClose }) {
       icon: 'history',
     },
     {
+      id: 'alerts',
+      path: '/alerts',
+      label: 'Expiry Alerts',
+      icon: 'notifications_active',
+      badge: 'ALERTS',
+    },
+    {
       id: 'recipes',
       path: '/recipes',
       label: 'Recipe Ideas',
