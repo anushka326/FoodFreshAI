@@ -274,3 +274,100 @@ export function FreshoBuddyDoodle({ className = "w-full h-full" }) {
     />
   );
 }
+
+export function CherryDoodle({ className = "w-full h-full" }) {
+  return (
+    <svg viewBox="12 10 76 76" fill="none" className={className} aria-hidden="true">
+      {/* Curved stems */}
+      <path d="M35 52 C35 32 46 16 52 14" stroke="#15803d" strokeWidth="3" strokeLinecap="round" />
+      <path d="M62 56 C61 36 54 20 52 14" stroke="#15803d" strokeWidth="3" strokeLinecap="round" />
+      {/* Green leaf */}
+      <path d="M52 14 C62 8 70 12 68 18 C60 22 54 18 52 14 Z" fill="#22c55e" />
+      <circle cx="52" cy="14" r="2.5" fill="#15803d" />
+      {/* Left Cherry */}
+      <circle cx="34" cy="58" r="15" fill="#ef4444" />
+      <circle cx="28" cy="52" r="2" fill="#fca5a5" opacity="0.8" />
+      <circle cx="30" cy="58" r="2.2" fill="#1e1b4b" />
+      <circle cx="38" cy="58" r="2.2" fill="#1e1b4b" />
+      <path d="M32 63 Q34 66 36 63" stroke="#1e1b4b" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+      <circle cx="27" cy="61" r="2" fill="#f87171" opacity="0.8" />
+      <circle cx="41" cy="61" r="2" fill="#f87171" opacity="0.8" />
+      {/* Right Cherry */}
+      <circle cx="64" cy="62" r="14" fill="#dc2626" />
+      <circle cx="59" cy="56" r="1.8" fill="#fca5a5" opacity="0.8" />
+      <circle cx="60" cy="62" r="2" fill="#1e1b4b" />
+      <circle cx="68" cy="62" r="2" fill="#1e1b4b" />
+      <path d="M62 67 Q64 70 66 67" stroke="#1e1b4b" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+      <circle cx="57" cy="65" r="1.8" fill="#f87171" opacity="0.8" />
+      <circle cx="71" cy="65" r="1.8" fill="#f87171" opacity="0.8" />
+    </svg>
+  );
+}
+
+export function WatermelonDoodle({ className = "w-full h-full" }) {
+  return (
+    <svg viewBox="12 18 76 68" fill="none" className={className} aria-hidden="true">
+      {/* Outer green rind */}
+      <path d="M16 46 C20 74 50 82 84 56 C82 54 78 50 76 48 C48 70 26 62 20 42 Z" fill="#15803d" />
+      {/* Light green inner rind */}
+      <path d="M20 44 C26 66 50 74 76 52 C74 50 71 47 69 45 C48 64 28 58 23 41 Z" fill="#86efac" />
+      {/* Sweet red flesh slice */}
+      <path d="M23 42 C28 62 50 70 72 48 C70 38 48 30 23 42 Z" fill="#f43f5e" />
+      {/* Watermelon seeds */}
+      <ellipse cx="34" cy="48" rx="1.5" ry="2.5" fill="#1e1b4b" transform="rotate(-15 34 48)" />
+      <ellipse cx="44" cy="44" rx="1.5" ry="2.5" fill="#1e1b4b" transform="rotate(5 44 44)" />
+      <ellipse cx="58" cy="46" rx="1.5" ry="2.5" fill="#1e1b4b" transform="rotate(20 58 46)" />
+      <ellipse cx="46" cy="60" rx="1.5" ry="2.5" fill="#1e1b4b" transform="rotate(10 46 60)" />
+      {/* Cheerful Kawaii Face */}
+      <circle cx="38" cy="52" r="2.5" fill="#1e1b4b" />
+      <circle cx="52" cy="52" r="2.5" fill="#1e1b4b" />
+      <circle cx="39" cy="51" r="0.8" fill="#ffffff" />
+      <circle cx="53" cy="51" r="0.8" fill="#ffffff" />
+      <path d="M42 57 Q45 61 48 57" stroke="#1e1b4b" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <circle cx="34" cy="55" r="2.2" fill="#fb7185" opacity="0.85" />
+      <circle cx="56" cy="55" r="2.2" fill="#fb7185" opacity="0.85" />
+    </svg>
+  );
+}
+
+export function AvocadoDoodle({ className = "w-full h-full" }) {
+  return (
+    <svg viewBox="15 12 70 78" fill="none" className={className} aria-hidden="true">
+      {/* Dark green outer peel */}
+      <path d="M50 16 C38 16 30 26 28 40 C24 58 30 82 50 82 C70 82 76 58 72 40 C70 26 62 16 50 16 Z" fill="#166534" />
+      {/* Lime creamy interior */}
+      <path d="M50 20 C40 20 34 29 32 41 C29 56 34 78 50 78 C66 78 71 56 68 41 C66 29 60 20 50 20 Z" fill="#d9f99d" />
+      {/* Brown pit belly */}
+      <circle cx="50" cy="58" r="14" fill="#854d0e" />
+      <circle cx="46" cy="54" r="2.5" fill="#a16207" opacity="0.6" />
+      {/* Friendly Face on the pit */}
+      <circle cx="45" cy="57" r="2.2" fill="#fef08a" />
+      <circle cx="55" cy="57" r="2.2" fill="#fef08a" />
+      <path d="M48 62 Q50 65 52 62" stroke="#fef08a" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+      {/* Rosy cheeks */}
+      <circle cx="41" cy="60" r="2" fill="#ca8a04" opacity="0.8" />
+      <circle cx="59" cy="60" r="2" fill="#ca8a04" opacity="0.8" />
+    </svg>
+  );
+}
+
+export function LemonDoodle({ className = "w-full h-full" }) {
+  return (
+    <svg viewBox="14 16 72 72" fill="none" className={className} aria-hidden="true">
+      {/* Lemon body with tapered tips */}
+      <path d="M22 34 C20 44 26 62 42 70 C58 78 72 72 76 60 C80 48 76 30 58 22 C42 16 24 24 22 34 Z" fill="#facc15" />
+      {/* Tips */}
+      <circle cx="21" cy="33" r="2.5" fill="#eab308" />
+      <circle cx="77" cy="61" r="2.5" fill="#eab308" />
+      {/* Green leaf at top */}
+      <path d="M58 22 C64 14 74 16 72 22 C66 26 60 24 58 22 Z" fill="#22c55e" />
+      {/* Kawaii Face */}
+      <circle cx="40" cy="44" r="2.6" fill="#1e1b4b" />
+      <path d="M54 44 Q57 41 60 44" stroke="#1e1b4b" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      <path d="M45 51 Q49 56 53 51" stroke="#1e1b4b" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      <circle cx="35" cy="48" r="2.5" fill="#f97316" opacity="0.6" />
+      <circle cx="61" cy="48" r="2.5" fill="#f97316" opacity="0.6" />
+    </svg>
+  );
+}
+
