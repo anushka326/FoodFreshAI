@@ -1,19 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-<<<<<<< HEAD
 
-from .router.auth import router as auth_router
-
-app = FastAPI(title="FoodFresh AI Backend")
-
-# CORS (allow all for development)
-=======
 from backend.app.routes.health import router as health_router
 from backend.app.routes.food_recognition import router as food_recognition_router
 from backend.app.routes.fresho_buddy import router as fresho_buddy_router
 from backend.app.routes.pantry_history import router as pantry_history_router
 from backend.app.routes.auth import router as auth_router
 from backend.app.routes.ml_feedback import router as ml_feedback_router
+from backend.app.routes.recipe_recommendations import router as recipe_recommendations_router
+from backend.app.routes.notifications import router as notifications_router
+from backend.app.routes.analytics import router as analytics_router
+from backend.app.routes.packaged_food import router as packaged_food_router
 
 app = FastAPI(
     title="FoodFresh AI Backend",
@@ -21,7 +18,6 @@ app = FastAPI(
     version="1.0.0",
 )
 
->>>>>>> frontend/main
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,16 +26,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-<<<<<<< HEAD
-app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
-
-=======
+# Core & Feature Routes
 app.include_router(health_router)
 app.include_router(food_recognition_router)
 app.include_router(fresho_buddy_router)
 app.include_router(pantry_history_router)
 app.include_router(auth_router)
 app.include_router(ml_feedback_router)
+app.include_router(recipe_recommendations_router)
+app.include_router(notifications_router)
+app.include_router(analytics_router)
+app.include_router(packaged_food_router)
 
 
 @app.get("/")
@@ -47,5 +44,5 @@ def root():
     return {
         "message": "Welcome to FoodFresh AI Backend",
         "health_check": "/api/health",
+        "docs": "/docs",
     }
->>>>>>> frontend/main

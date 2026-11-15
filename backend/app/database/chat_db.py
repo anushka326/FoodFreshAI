@@ -9,7 +9,7 @@ import sqlite3
 import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 
 DB_DIR = Path(__file__).resolve().parent
 DB_PATH = DB_DIR / "fresho_buddy.db"
@@ -132,10 +132,35 @@ def _migrate_schema(conn: sqlite3.Connection) -> None:
         ("food_model_version", "TEXT"),
         ("freshness_model_version", "TEXT"),
         ("shelf_life_model_version", "TEXT"),
+        ("barcode", "TEXT"),
+        ("brand", "TEXT"),
+        ("item_type", "TEXT DEFAULT 'fresh'"),
+        ("mfg_date", "TEXT"),
+        ("expiry_date", "TEXT"),
+        ("ingredients", "TEXT"),
+        ("nutrition", "TEXT"),
+        ("storage_instructions", "TEXT"),
+        ("is_archived", "INTEGER DEFAULT 0"),
+        ("archived_at", "TEXT"),
+        ("removal_reason", "TEXT"),
+        ("removal_action", "TEXT"),
     ]
     for col, col_type in pantry_columns:
         if not _column_exists(conn, "pantry_history", col):
             conn.execute(f"ALTER TABLE pantry_history ADD COLUMN {col} {col_type}")
+
+    # Ensure all existing pantry rows have is_archived = 0 if NULL
+    conn.execute(
+        """
+        UPDATE pantry_history
+        SET is_archived = 0
+        WHERE is_archived IS NULL
+        """
+    )
+
+    # Ensure users table has avatar column
+    if not _column_exists(conn, "users", "avatar"):
+        conn.execute("ALTER TABLE users ADD COLUMN avatar TEXT")
 
     cur = conn.execute(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='ml_feedback'"
@@ -167,6 +192,137 @@ def _migrate_schema(conn: sqlite3.Connection) -> None:
             CREATE INDEX IF NOT EXISTS idx_ml_feedback_status ON ml_feedback(review_status);
         """)
 
+    # Notification read states table
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS notification_read_states (
+            user_id TEXT NOT NULL,
+            notification_id TEXT NOT NULL,
+            read_at TEXT NOT NULL,
+            PRIMARY KEY(user_id, notification_id)
+        );
+        CREATE INDEX IF NOT EXISTS idx_notif_read_user ON notification_read_states(user_id);
+    """)
+
+    # Food waste impact tracking logs table
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS food_impact_logs (
+            log_id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            pantry_item_id TEXT,
+            food_name TEXT NOT NULL,
+            cultivar TEXT,
+            action TEXT NOT NULL,
+            remaining_days INTEGER,
+            was_saved INTEGER DEFAULT 0,
+            reason TEXT,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_food_impact_user ON food_impact_logs(user_id, created_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_food_impact_action ON food_impact_logs(user_id, action);
+    """)
+
+    # Project-wide pantry activity logs (all food add, consume, waste, remove events)
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS pantry_activity_logs (
+            activity_id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            pantry_item_id TEXT,
+            food_name TEXT NOT NULL,
+            cultivar TEXT,
+            action_type TEXT NOT NULL,
+            details TEXT,
+            quality_score INTEGER,
+            image_src TEXT,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_activity_user ON pantry_activity_logs(user_id, created_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_activity_type ON pantry_activity_logs(user_id, action_type);
+    """)
+
+    # Backfill missing archived pantry rows from legacy food_impact_logs if needed
+    try:
+        cur_impact = conn.execute(
+            """
+            SELECT log_id, user_id, pantry_item_id, food_name, cultivar, action, reason, remaining_days, created_at
+            FROM food_impact_logs
+            """
+        )
+        impact_rows = cur_impact.fetchall()
+        for imp in impact_rows:
+            pid = imp[2]
+            if pid:
+                chk = conn.execute("SELECT id FROM pantry_history WHERE id = ?", (pid,)).fetchone()
+                if not chk:
+                    # Recreate archived row so history page displays all past removed produce
+                    conn.execute(
+                        """
+                        INSERT OR IGNORE INTO pantry_history (
+                            id, user_id, food_name, cultivar, status, status_category,
+                            quality_score, quality_period, remaining_days, storage_environment,
+                            storage_type, eat_first_priority, eat_first_score, eat_first_reason,
+                            guidance, image_src, created_at, added_at, is_archived, archived_at,
+                            removal_action, removal_reason
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
+                        """,
+                        (
+                            pid,
+                            imp[1],
+                            imp[3],
+                            imp[4] or f"{imp[3]} • Fresh Harvest",
+                            "Archived",
+                            "semi",
+                            80,
+                            "0 days remaining",
+                            imp[7] or 0,
+                            "Past Inventory",
+                            "countertop",
+                            "NORMAL",
+                            0,
+                            "Item recorded in history log",
+                            "Past logged food item.",
+                            "/src/assets/food/cutting-board-sourdough.jpg",
+                            imp[8],
+                            imp[8],
+                            imp[8],
+                            imp[5],
+                            imp[6] or f"Item marked as {imp[5]}",
+                        )
+                    )
+    except Exception:
+        pass
+
+    # Backfill activity logs if empty
+    try:
+        act_count = conn.execute("SELECT COUNT(*) FROM pantry_activity_logs").fetchone()[0]
+        if act_count == 0:
+            # Backfill from pantry_history
+            cur_pantry = conn.execute("SELECT id, user_id, food_name, cultivar, quality_score, image_src, created_at, is_archived, archived_at, removal_action, removal_reason FROM pantry_history")
+            for r in cur_pantry.fetchall():
+                aid = f"act_{uuid.uuid4().hex[:12]}"
+                conn.execute(
+                    """
+                    INSERT INTO pantry_activity_logs (
+                        activity_id, user_id, pantry_item_id, food_name, cultivar,
+                        action_type, details, quality_score, image_src, created_at
+                    ) VALUES (?, ?, ?, ?, ?, 'added', 'Analyzed and added to pantry.', ?, ?, ?)
+                    """,
+                    (aid, r[1], r[0], r[2], r[3], r[4], r[5], r[6])
+                )
+                if r[7]: # is_archived
+                    aid2 = f"act_{uuid.uuid4().hex[:12]}"
+                    act_type = r[9] or "removed"
+                    conn.execute(
+                        """
+                        INSERT INTO pantry_activity_logs (
+                            activity_id, user_id, pantry_item_id, food_name, cultivar,
+                            action_type, details, quality_score, image_src, created_at
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """,
+                        (aid2, r[1], r[0], r[2], r[3], act_type, r[10] or f"Product marked as {act_type}.", r[4], r[5], r[8] or r[6])
+                    )
+    except Exception:
+        pass
+
     # Backfill added_at from created_at for legacy rows
     conn.execute(
         """
@@ -185,6 +341,13 @@ def _migrate_schema(conn: sqlite3.Connection) -> None:
         """
     )
     conn.commit()
+
+    # Automatic safe migration of legacy users from previous SQLite databases
+    try:
+        from backend.app.database.migration import migrate_legacy_users
+        migrate_legacy_users()
+    except Exception as e:
+        logger.debug(f"Legacy migration skipped: {e}")
 
 
 # Run table initialization on import
@@ -377,15 +540,16 @@ def create_user(
     password_hash: str,
     full_name: str,
     household_type: Optional[str] = None,
+    avatar: Optional[str] = None,
 ) -> Dict[str, Any]:
     now_iso = datetime.now(timezone.utc).isoformat()
     with get_db_connection() as conn:
         conn.execute(
             """
-            INSERT INTO users (user_id, email, password_hash, full_name, household_type, created_at)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO users (user_id, email, password_hash, full_name, household_type, avatar, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            (user_id, email, password_hash, full_name, household_type, now_iso),
+            (user_id, email, password_hash, full_name, household_type, avatar, now_iso),
         )
         conn.commit()
     return user_record_to_public(
@@ -394,18 +558,21 @@ def create_user(
             "email": email,
             "full_name": full_name,
             "household_type": household_type,
+            "avatar": avatar,
             "created_at": now_iso,
         }
     )
 
 
 def user_record_to_public(record: Dict[str, Any]) -> Dict[str, Any]:
+    avatar_val = record.get("avatar") or record.get("avatarUrl")
     return {
         "id": record.get("user_id") or record.get("id"),
         "email": record.get("email"),
         "fullName": record.get("full_name") or record.get("fullName"),
         "householdType": record.get("household_type") or record.get("householdType"),
-        "avatarUrl": None,
+        "avatar": avatar_val,
+        "avatarUrl": avatar_val,
         "status": "Pantry Guard Active",
         "temperatureUnit": "C",
         "remindersEnabled": True,
@@ -415,12 +582,35 @@ def user_record_to_public(record: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
+    if not email or not str(email).strip():
+        return None
+    clean = str(email).strip().lower()
+
+    # Common account aliases mapping
+    aliases = {
+        "anushka": "anushka@gmail.com",
+        "anushka326": "anushka@gmail.com",
+        "anushkanpise@gmail.com": "anushka@gmail.com",
+        "anushkanpise": "anushka@gmail.com",
+        "demo": "anushka@gmail.com",
+        "demo_chef": "demo_chef@foodfresh.ai",
+        "demochef": "demo_chef@foodfresh.ai",
+    }
+    clean = aliases.get(clean, clean)
+
     with get_db_connection() as conn:
         cur = conn.execute(
-            "SELECT user_id, email, password_hash, full_name, household_type, created_at FROM users WHERE email = ?",
-            (email.strip().lower(),),
+            "SELECT user_id, email, password_hash, full_name, household_type, avatar, created_at FROM users WHERE LOWER(TRIM(email)) = ?",
+            (clean,),
         )
         row = cur.fetchone()
+        if not row and "@" not in clean:
+            # Check by username prefix (e.g. "anushka" matching "anushka@...") or exact full_name
+            cur = conn.execute(
+                "SELECT user_id, email, password_hash, full_name, household_type, avatar, created_at FROM users WHERE LOWER(TRIM(email)) LIKE ? OR LOWER(TRIM(full_name)) = ? ORDER BY created_at DESC LIMIT 1",
+                (f"{clean}@%", clean),
+            )
+            row = cur.fetchone()
     if not row:
         return None
     return {
@@ -429,6 +619,7 @@ def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
         "passwordHash": row["password_hash"],
         "full_name": row["full_name"],
         "household_type": row["household_type"],
+        "avatar": row["avatar"] if "avatar" in row.keys() else None,
         "created_at": row["created_at"],
     }
 
@@ -436,7 +627,7 @@ def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
 def get_user_by_id(user_id: str) -> Optional[Dict[str, Any]]:
     with get_db_connection() as conn:
         cur = conn.execute(
-            "SELECT user_id, email, password_hash, full_name, household_type, created_at FROM users WHERE user_id = ?",
+            "SELECT user_id, email, password_hash, full_name, household_type, avatar, created_at FROM users WHERE user_id = ?",
             (user_id,),
         )
         row = cur.fetchone()
@@ -448,8 +639,51 @@ def get_user_by_id(user_id: str) -> Optional[Dict[str, Any]]:
         "passwordHash": row["password_hash"],
         "full_name": row["full_name"],
         "household_type": row["household_type"],
+        "avatar": row["avatar"] if "avatar" in row.keys() else None,
         "created_at": row["created_at"],
     }
+
+
+def update_user_profile(
+    user_id: str,
+    full_name: Optional[str] = None,
+    avatar: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
+    """
+    Update user's display name or selected avatar.
+    Isolated strictly by authenticated user_id.
+    """
+    updates = []
+    params = []
+    if full_name is not None and str(full_name).strip():
+        updates.append("full_name = ?")
+        params.append(str(full_name).strip())
+    if avatar is not None:
+        updates.append("avatar = ?")
+        params.append(str(avatar).strip() if avatar else None)
+
+    if updates:
+        params.append(user_id)
+        with get_db_connection() as conn:
+            conn.execute(
+                f"UPDATE users SET {', '.join(updates)} WHERE user_id = ?",
+                params,
+            )
+            conn.commit()
+
+    record = get_user_by_id(user_id)
+    return user_record_to_public(record) if record else None
+
+
+def update_user_password(user_id: str, new_password_hash: str) -> bool:
+    """Update password hash for an existing user (e.g. hash upgrade)."""
+    with get_db_connection() as conn:
+        cur = conn.execute(
+            "UPDATE users SET password_hash = ? WHERE user_id = ?",
+            (new_password_hash, user_id),
+        )
+        conn.commit()
+        return cur.rowcount > 0
 
 
 def create_session(user_id: str, ttl_days: int = 30) -> str:
@@ -543,18 +777,50 @@ def _format_pantry_row(row: sqlite3.Row) -> Dict[str, Any]:
         "foodModelVersion": row["food_model_version"] if "food_model_version" in keys else None,
         "freshnessModelVersion": row["freshness_model_version"] if "freshness_model_version" in keys else None,
         "shelfLifeModelVersion": row["shelf_life_model_version"] if "shelf_life_model_version" in keys else None,
+        "barcode": row["barcode"] if "barcode" in keys else None,
+        "brand": row["brand"] if "brand" in keys else None,
+        "itemType": row["item_type"] if "item_type" in keys else "fresh",
+        "mfgDate": row["mfg_date"] if "mfg_date" in keys else None,
+        "expiryDate": row["expiry_date"] if "expiry_date" in keys else None,
+        "ingredients": row["ingredients"] if "ingredients" in keys else None,
+        "nutrition": row["nutrition"] if "nutrition" in keys else None,
+        "storageInstructions": row["storage_instructions"] if "storage_instructions" in keys else None,
+        "isArchived": bool(row["is_archived"]) if "is_archived" in keys and row["is_archived"] else False,
+        "archivedAt": row["archived_at"] if "archived_at" in keys else None,
+        "removalReason": row["removal_reason"] if "removal_reason" in keys else None,
+        "removalAction": row["removal_action"] if "removal_action" in keys else None,
         "metadata": raw_meta,
     }
 
 
-def get_pantry_items_raw(user_id: str) -> List[Dict[str, Any]]:
-    """Load pantry rows without dynamic enrichment (used by pantry_state_service)."""
+def get_pantry_items_raw(user_id: str, include_archived: bool = False) -> List[Dict[str, Any]]:
+    """Load pantry rows without dynamic enrichment (used by pantry_state_service). By default, only active items."""
+    with get_db_connection() as conn:
+        if include_archived:
+            query = """
+                SELECT * FROM pantry_history
+                WHERE user_id = ?
+                ORDER BY created_at DESC
+            """
+        else:
+            query = """
+                SELECT * FROM pantry_history
+                WHERE user_id = ? AND (is_archived = 0 OR is_archived IS NULL)
+                ORDER BY created_at DESC
+            """
+        cursor = conn.execute(query, (user_id,))
+        rows = cursor.fetchall()
+        return [_format_pantry_row(r) for r in rows]
+
+
+def get_archived_pantry_items(user_id: str) -> List[Dict[str, Any]]:
+    """Retrieve all past items removed/archived from the pantry."""
     with get_db_connection() as conn:
         cursor = conn.execute(
             """
             SELECT * FROM pantry_history
-            WHERE user_id = ?
-            ORDER BY created_at DESC
+            WHERE user_id = ? AND is_archived = 1
+            ORDER BY archived_at DESC, created_at DESC
             """,
             (user_id,),
         )
@@ -606,7 +872,19 @@ def add_pantry_item(user_id: str, item: Dict[str, Any]) -> Dict[str, Any]:
     added_at_iso = added_at_dt.isoformat()
     analysis_at_iso = item.get("analyzedAt") or added_at_iso
     estimated_end_iso = None
-    if est_quality_days is not None:
+
+    # Support explicit expiry date from packaged food OCR / barcode scanning
+    exp_input = item.get("expiryDate") or item.get("estimatedEndAt")
+    if exp_input:
+        exp_str = str(exp_input).strip()
+        if "T" not in exp_str and len(exp_str) == 10:
+            exp_str = f"{exp_str}T23:59:59+00:00"
+        estimated_end_iso = exp_str
+        from backend.app.services.pantry_state_service import compute_remaining_days_from_end_at
+        rem_from_exp = compute_remaining_days_from_end_at(estimated_end_iso, now=added_at_dt)
+        if rem_from_exp is not None:
+            est_quality_days = rem_from_exp
+    elif est_quality_days is not None:
         estimated_end_iso = compute_estimated_end_at(added_at_dt, est_quality_days).isoformat()
 
     quality_period = item.get("qualityPeriod") or quality_period_label(est_quality_days)
@@ -683,6 +961,16 @@ def add_pantry_item(user_id: str, item: Dict[str, Any]) -> Dict[str, Any]:
             food_name, freshness_label=freshness_state, analysis_context=metadata
         )
         mv = item.get("modelVersions") or {}
+        item_type = item.get("itemType") or ("packaged" if item.get("barcode") or item.get("expiryDate") else "fresh")
+        raw_ingredients = item.get("ingredients")
+        if isinstance(raw_ingredients, list):
+            ingredients_str = ", ".join(str(x) for x in raw_ingredients)
+        else:
+            ingredients_str = str(raw_ingredients) if raw_ingredients else None
+
+        raw_nutrition = item.get("nutrition")
+        nutrition_str = json.dumps(raw_nutrition) if isinstance(raw_nutrition, dict) else (str(raw_nutrition) if raw_nutrition else None)
+
         conn.execute(
             """
             UPDATE pantry_history SET
@@ -693,7 +981,15 @@ def add_pantry_item(user_id: str, item: Dict[str, Any]) -> Dict[str, Any]:
                 food_model_version = ?,
                 freshness_model_version = ?,
                 shelf_life_model_version = ?,
-                legacy_timing = 0
+                legacy_timing = 0,
+                barcode = ?,
+                brand = ?,
+                item_type = ?,
+                mfg_date = ?,
+                expiry_date = ?,
+                ingredients = ?,
+                nutrition = ?,
+                storage_instructions = ?
             WHERE id = ? AND user_id = ?
             """,
             (
@@ -704,11 +1000,44 @@ def add_pantry_item(user_id: str, item: Dict[str, Any]) -> Dict[str, Any]:
                 mv.get("food") or mv.get("detector"),
                 mv.get("freshness") or item.get("freshnessModelVersion"),
                 sl.get("source") or mv.get("shelfLife"),
+                item.get("barcode"),
+                item.get("brand"),
+                item_type,
+                item.get("mfgDate"),
+                item.get("expiryDate"),
+                ingredients_str,
+                nutrition_str,
+                item.get("storageInstructions") or item.get("storage_instructions"),
                 item_id,
                 user_id,
             ),
         )
+        # Ensure newly added item is active
+        conn.execute(
+            """
+            UPDATE pantry_history SET
+                is_archived = 0,
+                archived_at = NULL,
+                removal_action = NULL,
+                removal_reason = NULL
+            WHERE id = ? AND user_id = ?
+            """,
+            (item_id, user_id),
+        )
         conn.commit()
+
+    # Record item added in project-wide activity log
+    record_activity_log(
+        user_id=user_id,
+        food_name=food_name,
+        action_type="added",
+        pantry_item_id=item_id,
+        cultivar=cultivar,
+        details=f"Analyzed and added to pantry storage ({storage_env}).",
+        quality_score=quality_score,
+        image_src=image_src,
+        created_at=now_iso,
+    )
 
     saved = get_current_pantry_state(user_id)
     for row in saved:
@@ -717,21 +1046,242 @@ def add_pantry_item(user_id: str, item: Dict[str, Any]) -> Dict[str, Any]:
     return get_pantry_items(user_id)[0] if get_pantry_items(user_id) else {}
 
 
-def delete_pantry_item(item_id: str, user_id: str) -> bool:
-    """Delete an item from user's pantry history."""
+def delete_pantry_item(
+    item_id: str,
+    user_id: str,
+    action: str = "removed",
+    reason: Optional[str] = None,
+) -> bool:
+    """
+    Soft-delete / archive an item from user's active pantry.
+    Retains all historical data, analysis metadata, timestamps, and logs the activity.
+    """
+    now_iso = datetime.now(timezone.utc).isoformat()
+    clean_action = str(action).lower().strip() if action else "removed"
+    if clean_action not in {"consumed", "wasted", "removed"}:
+        clean_action = "removed"
+
+    row_data = None
+    with get_db_connection() as conn:
+        cur = conn.execute(
+            "SELECT * FROM pantry_history WHERE id = ? AND user_id = ? AND (is_archived = 0 OR is_archived IS NULL)",
+            (item_id, user_id),
+        )
+        row = cur.fetchone()
+        if not row:
+            return False
+        row_data = dict(row)
+
+        cursor = conn.execute(
+            """
+            UPDATE pantry_history
+            SET is_archived = 1,
+                archived_at = ?,
+                removal_action = ?,
+                removal_reason = ?,
+                updated_at = ?
+            WHERE id = ? AND user_id = ? AND (is_archived = 0 OR is_archived IS NULL)
+            """,
+            (
+                now_iso,
+                clean_action,
+                reason or f"Food product marked as {clean_action}.",
+                now_iso,
+                item_id,
+                user_id,
+            ),
+        )
+        conn.commit()
+        success = cursor.rowcount > 0
+
+    if success and row_data:
+        food_name = row_data.get("food_name") or "Produce"
+        cultivar = row_data.get("cultivar") or f"{food_name} • Fresh Harvest"
+        q_score = row_data.get("quality_score") or 80
+        img = row_data.get("image_src") or "/src/assets/food/cutting-board-sourdough.jpg"
+
+        record_activity_log(
+            user_id=user_id,
+            food_name=food_name,
+            action_type=clean_action,
+            pantry_item_id=item_id,
+            cultivar=cultivar,
+            details=reason or f"Item removed from active pantry inventory ({clean_action}).",
+            quality_score=q_score,
+            image_src=img,
+            created_at=now_iso,
+        )
+
+    return success
+
+
+def restore_pantry_item(item_id: str, user_id: str) -> bool:
+    """Restore an archived item back to active pantry inventory."""
+    now_iso = datetime.now(timezone.utc).isoformat()
+    row_data = None
+    with get_db_connection() as conn:
+        cur = conn.execute(
+            "SELECT * FROM pantry_history WHERE id = ? AND user_id = ?",
+            (item_id, user_id),
+        )
+        row = cur.fetchone()
+        if not row:
+            return False
+        row_data = dict(row)
+
+        cursor = conn.execute(
+            """
+            UPDATE pantry_history
+            SET is_archived = 0,
+                archived_at = NULL,
+                removal_action = NULL,
+                removal_reason = NULL,
+                updated_at = ?
+            WHERE id = ? AND user_id = ?
+            """,
+            (now_iso, item_id, user_id),
+        )
+        conn.commit()
+        success = cursor.rowcount > 0
+
+    if success and row_data:
+        record_activity_log(
+            user_id=user_id,
+            food_name=row_data.get("food_name") or "Produce",
+            action_type="restored",
+            pantry_item_id=item_id,
+            cultivar=row_data.get("cultivar"),
+            details="Restored back into active pantry inventory.",
+            quality_score=row_data.get("quality_score") or 80,
+            image_src=row_data.get("image_src"),
+            created_at=now_iso,
+        )
+
+    return success
+
+
+def permanently_delete_pantry_item(item_id: str, user_id: str) -> bool:
+    """Permanently delete an item from user's pantry history if explicitly requested."""
     with get_db_connection() as conn:
         cursor = conn.execute(
             "DELETE FROM pantry_history WHERE id = ? AND user_id = ?",
-            (item_id, user_id)
+            (item_id, user_id),
         )
         conn.commit()
         return cursor.rowcount > 0
 
 
 def clear_pantry_items(user_id: str) -> bool:
-    """Clear all pantry items for user (e.g. testing 0-items state)."""
+    """Soft-delete all active pantry items for user (archives them)."""
+    now_iso = datetime.now(timezone.utc).isoformat()
     with get_db_connection() as conn:
-        conn.execute("DELETE FROM pantry_history WHERE user_id = ?", (user_id,))
+        conn.execute(
+            """
+            UPDATE pantry_history
+            SET is_archived = 1,
+                archived_at = ?,
+                removal_action = 'removed',
+                removal_reason = 'Pantry cleared by user'
+            WHERE user_id = ? AND (is_archived = 0 OR is_archived IS NULL)
+            """,
+            (now_iso, user_id),
+        )
+        conn.commit()
+        return True
+
+
+# ==============================================================================
+# AUDIT LOGS FOR PANTRY & PRODUCT ACTIVITIES
+# ==============================================================================
+
+def record_activity_log(
+    user_id: str,
+    food_name: str,
+    action_type: str,
+    pantry_item_id: Optional[str] = None,
+    cultivar: Optional[str] = None,
+    details: Optional[str] = None,
+    quality_score: Optional[int] = None,
+    image_src: Optional[str] = None,
+    created_at: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Record an audit trail activity for any food action."""
+    activity_id = f"act_{uuid.uuid4().hex[:12]}"
+    now_iso = created_at or datetime.now(timezone.utc).isoformat()
+    clean_action = str(action_type).lower().strip()
+
+    with get_db_connection() as conn:
+        conn.execute(
+            """
+            INSERT INTO pantry_activity_logs (
+                activity_id, user_id, pantry_item_id, food_name, cultivar,
+                action_type, details, quality_score, image_src, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                activity_id,
+                user_id,
+                pantry_item_id,
+                food_name,
+                cultivar or f"{food_name} • Fresh Harvest",
+                clean_action,
+                details or f"Action {clean_action} performed on {food_name}.",
+                quality_score or 80,
+                image_src or "/src/assets/food/cutting-board-sourdough.jpg",
+                now_iso,
+            ),
+        )
+        conn.commit()
+
+    return {
+        "activityId": activity_id,
+        "userId": user_id,
+        "pantryItemId": pantry_item_id,
+        "foodName": food_name,
+        "cultivar": cultivar,
+        "actionType": clean_action,
+        "details": details,
+        "qualityScore": quality_score,
+        "imageSrc": image_src,
+        "createdAt": now_iso,
+    }
+
+
+def list_activity_logs(user_id: str, limit: int = 300) -> List[Dict[str, Any]]:
+    """Retrieve chronologically ordered audit logs of all user food activities."""
+    with get_db_connection() as conn:
+        cur = conn.execute(
+            """
+            SELECT * FROM pantry_activity_logs
+            WHERE user_id = ?
+            ORDER BY created_at DESC
+            LIMIT ?
+            """,
+            (user_id, limit),
+        )
+        rows = cur.fetchall()
+
+    return [
+        {
+            "activityId": r["activity_id"],
+            "userId": r["user_id"],
+            "pantryItemId": r["pantry_item_id"],
+            "foodName": r["food_name"],
+            "cultivar": r["cultivar"] or f"{r['food_name']} • Fresh Harvest",
+            "actionType": r["action_type"],
+            "details": r["details"],
+            "qualityScore": r["quality_score"],
+            "imageSrc": r["image_src"] or "/src/assets/food/cutting-board-sourdough.jpg",
+            "createdAt": r["created_at"],
+        }
+        for r in rows
+    ]
+
+
+def clear_activity_logs(user_id: str) -> bool:
+    """Clear activity logs for a user."""
+    with get_db_connection() as conn:
+        conn.execute("DELETE FROM pantry_activity_logs WHERE user_id = ?", (user_id,))
         conn.commit()
         return True
 
@@ -802,4 +1352,182 @@ def list_ml_feedback(user_id: str, limit: int = 50) -> List[Dict[str, Any]]:
             }
         )
     return out
+
+
+# ==============================================================================
+# NOTIFICATION READ STATES
+# ==============================================================================
+
+def get_read_notification_ids(user_id: str) -> Set[str]:
+    """Retrieve all notification IDs marked as read by the user."""
+    with get_db_connection() as conn:
+        cur = conn.execute(
+            "SELECT notification_id FROM notification_read_states WHERE user_id = ?",
+            (user_id,),
+        )
+        return {row["notification_id"] for row in cur.fetchall()}
+
+
+def mark_notification_read(user_id: str, notification_id: str) -> bool:
+    """Mark a single notification as read for a user."""
+    now_iso = datetime.now(timezone.utc).isoformat()
+    with get_db_connection() as conn:
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO notification_read_states (user_id, notification_id, read_at)
+            VALUES (?, ?, ?)
+            """,
+            (user_id, notification_id, now_iso),
+        )
+        conn.commit()
+    return True
+
+
+def mark_notification_unread(user_id: str, notification_id: str) -> bool:
+    """Mark a notification back as unread for a user."""
+    with get_db_connection() as conn:
+        conn.execute(
+            "DELETE FROM notification_read_states WHERE user_id = ? AND notification_id = ?",
+            (user_id, notification_id),
+        )
+        conn.commit()
+    return True
+
+
+def mark_all_notifications_read(user_id: str, notification_ids: List[str]) -> bool:
+    """Mark multiple notifications as read for a user in a single transaction."""
+    if not notification_ids:
+        return True
+    now_iso = datetime.now(timezone.utc).isoformat()
+    with get_db_connection() as conn:
+        conn.executemany(
+            """
+            INSERT OR REPLACE INTO notification_read_states (user_id, notification_id, read_at)
+            VALUES (?, ?, ?)
+            """,
+            [(user_id, nid, now_iso) for nid in notification_ids],
+        )
+        conn.commit()
+    return True
+
+
+# ==============================================================================
+# FOOD-WASTE IMPACT ANALYTICS STORAGE
+# ==============================================================================
+
+def record_food_impact(
+    user_id: str,
+    food_name: str,
+    action: str,
+    remaining_days: Optional[int] = None,
+    was_saved: int = 0,
+    pantry_item_id: Optional[str] = None,
+    cultivar: Optional[str] = None,
+    reason: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Log an actual user action (consumed or wasted) for a pantry food item.
+    """
+    log_id = f"imp_{uuid.uuid4().hex[:12]}"
+    now_iso = datetime.now(timezone.utc).isoformat()
+    clean_action = "consumed" if action.lower() == "consumed" else "wasted"
+
+    with get_db_connection() as conn:
+        conn.execute(
+            """
+            INSERT INTO food_impact_logs (
+                log_id, user_id, pantry_item_id, food_name, cultivar,
+                action, remaining_days, was_saved, reason, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                log_id,
+                user_id,
+                pantry_item_id,
+                food_name,
+                cultivar,
+                clean_action,
+                remaining_days,
+                1 if was_saved else 0,
+                reason,
+                now_iso,
+            ),
+        )
+        conn.commit()
+
+    return {
+        "logId": log_id,
+        "userId": user_id,
+        "pantryItemId": pantry_item_id,
+        "foodName": food_name,
+        "cultivar": cultivar,
+        "action": clean_action,
+        "remainingDays": remaining_days,
+        "wasSaved": bool(was_saved),
+        "reason": reason,
+        "createdAt": now_iso,
+    }
+
+
+def list_food_impact_logs(user_id: str, limit: Optional[int] = 200) -> List[Dict[str, Any]]:
+    """Retrieve chronologically ordered food impact action logs for a user."""
+    with get_db_connection() as conn:
+        if limit is not None and limit > 0:
+            cur = conn.execute(
+                """
+                SELECT * FROM food_impact_logs
+                WHERE user_id = ?
+                ORDER BY created_at DESC
+                LIMIT ?
+                """,
+                (user_id, limit),
+            )
+        else:
+            cur = conn.execute(
+                """
+                SELECT * FROM food_impact_logs
+                WHERE user_id = ?
+                ORDER BY created_at DESC
+                """,
+                (user_id,),
+            )
+        rows = cur.fetchall()
+
+    return [
+        {
+            "logId": r["log_id"],
+            "userId": r["user_id"],
+            "pantryItemId": r["pantry_item_id"],
+            "foodName": r["food_name"],
+            "cultivar": r["cultivar"] or f"{r['food_name']} • Fresh Harvest",
+            "action": r["action"],
+            "remainingDays": r["remaining_days"],
+            "wasSaved": bool(r["was_saved"]),
+            "reason": r["reason"],
+            "createdAt": r["created_at"],
+        }
+        for r in rows
+    ]
+
+
+def delete_food_impact_log(user_id: str, log_id: str) -> bool:
+    """Delete a specific impact log (e.g. undo action)."""
+    with get_db_connection() as conn:
+        cur = conn.execute(
+            "DELETE FROM food_impact_logs WHERE log_id = ? AND user_id = ?",
+            (log_id, user_id),
+        )
+        conn.commit()
+        return cur.rowcount > 0
+
+
+def clear_food_impact_logs(user_id: str) -> bool:
+    """Clear all impact logs for testing."""
+    with get_db_connection() as conn:
+        conn.execute("DELETE FROM food_impact_logs WHERE user_id = ?", (user_id,))
+        conn.commit()
+        return True
+
+
+
 

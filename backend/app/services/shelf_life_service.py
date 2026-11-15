@@ -21,6 +21,7 @@ except ImportError:
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 FOODKEEPER_PATH = PROJECT_ROOT / "data" / "raw" / "foodkeeper" / "FoodKeeper.json"
+SHELF_LIFE_ML_MODEL_PATH = PROJECT_ROOT / "models" / "trained" / "shelf_life_model.joblib"
 
 # Metric conversion factors to days
 METRIC_TO_DAYS = {
@@ -231,14 +232,106 @@ class FoodKeeperService:
         self.products_list: List[Dict[str, Any]] = []
         self.is_loaded = False
         self.load_error: Optional[str] = None
+        self.ml_bundle: Optional[Dict[str, Any]] = None
+        self.ml_model_loaded: bool = False
 
         self._load_database()
+        self._load_ml_model()
 
     @classmethod
     def get_instance(cls) -> "FoodKeeperService":
         if cls._instance is None:
             cls._instance = cls()
         return cls._instance
+
+    def _load_ml_model(self) -> None:
+        """Load trained Shelf-Life ML Model bundle from joblib artifact."""
+        if not SHELF_LIFE_ML_MODEL_PATH.exists():
+            logger.info(f"Shelf-life ML model checkpoint not found at: {SHELF_LIFE_ML_MODEL_PATH}")
+            return
+
+        try:
+            import joblib
+            self.ml_bundle = joblib.load(SHELF_LIFE_ML_MODEL_PATH)
+            self.ml_model_loaded = True
+            model_name = self.ml_bundle.get("model_name", "ML Model")
+            metrics = self.ml_bundle.get("metrics", {})
+            logger.info(
+                f"Loaded Shelf-Life {model_name} bundle successfully (MAE={metrics.get('mae', 0):.4f}, R2={metrics.get('r2', 0):.4f})."
+            )
+        except Exception as e:
+            logger.warning(f"Could not load Shelf-Life ML model: {e}")
+            self.ml_bundle = None
+            self.ml_model_loaded = False
+
+    def predict_ml_shelf_life(
+        self,
+        food_name: str,
+        category: str,
+        food_domain: str,
+        food_form: str,
+        storage_type: str,
+        days_stored: int,
+        freshness_label: Optional[str],
+        reference_max: float
+    ) -> Optional[float]:
+        """
+        Execute empirical ML inference for remaining shelf life days.
+        Uses trained model with categorical encoding and feature scaling.
+        """
+        if not self.ml_model_loaded or not self.ml_bundle:
+            return None
+
+        try:
+            import numpy as np
+            import pandas as pd
+
+            model = self.ml_bundle["model"]
+            ohe = self.ml_bundle["ohe"]
+            scaler = self.ml_bundle["scaler"]
+            cat_cols = self.ml_bundle["cat_cols"]
+            num_cols = self.ml_bundle["num_cols"]
+
+            norm_fresh = _normalize_freshness_label(freshness_label)
+            if norm_fresh == "rotten":
+                freshness_stage = "Rotten"
+                freshness_score = 0.0
+            elif norm_fresh in ("slightly_spoiled", "slightly spoiled"):
+                freshness_stage = "Overripe/Spotted"
+                freshness_score = 50.0
+            else:
+                freshness_stage = "Fresh"
+                freshness_score = 100.0
+
+            norm_storage = "refrigerated" if storage_type.lower() in ("fridge", "crisper", "refrigerate", "refrigerated") else "countertop"
+            temp_c = 4.0 if norm_storage == "refrigerated" else 21.0
+            norm_form = food_form if food_form in ("whole", "cut", "sliced", "diced") else "whole"
+
+            row_cat = pd.DataFrame([{
+                "food_name": food_name.capitalize(),
+                "food_category": category or "Produce",
+                "food_domain": food_domain or "produce",
+                "food_form": norm_form,
+                "storage_type": norm_storage,
+                "freshness_stage": freshness_stage
+            }])[cat_cols]
+
+            row_num = pd.DataFrame([{
+                "temperature_c": temp_c,
+                "days_since_purchase": float(days_stored),
+                "reference_max_days": float(reference_max),
+                "freshness_score_0_100": freshness_score
+            }])[num_cols]
+
+            X_cat = ohe.transform(row_cat)
+            X_num = scaler.transform(row_num)
+            X = np.hstack([X_cat, X_num])
+
+            pred = float(model.predict(X)[0])
+            return max(0.0, pred)
+        except Exception as e:
+            logger.warning(f"Shelf-life ML inference error: {e}")
+            return None
 
     def _load_database(self) -> None:
         """Parse USDA FoodKeeper JSON database into memory."""
@@ -590,21 +683,59 @@ class FoodKeeperService:
         # Apply conservative visible freshness signal
         adjustment_applied = False
         heuristic_note = None
+        ml_predicted_days: Optional[float] = None
+        ml_model_version: Optional[str] = None
 
-        if freshness_norm == "rotten":
-            rem_min = 0.0
-            rem_max = 0.0
-            adjustment_applied = True
-            heuristic_note = "Visible signs of decomposition indicate that the quality window has expired."
-        elif freshness_norm in ["slightly_spoiled", "slightly spoiled"]:
-            # Conservative reduction: cut remaining quality window by 50%
-            rem_min = max(0.0, raw_rem_min * 0.5)
-            rem_max = max(1.0 if raw_rem_max >= 1.0 else 0.0, raw_rem_max * 0.5)
-            adjustment_applied = True
-            heuristic_note = "Remaining quality window reduced due to visible surface wear."
-        else:
-            rem_min = max(0.0, raw_rem_min)
-            rem_max = max(0.0, raw_rem_max)
+        # Empirical ML Shelf-Life Estimation with USDA FoodKeeper Guardrails
+        if self.ml_model_loaded:
+            prod_cat = str(product.get("_category_name") or "Produce")
+            prod_domain = "produce" if any(w in prod_cat.lower() for w in ("produce", "fruit", "vegetable")) else "bakery"
+            ml_pred = self.predict_ml_shelf_life(
+                food_name=food_name,
+                category=prod_cat,
+                food_domain=prod_domain,
+                food_form=form_norm,
+                storage_type=storage_type,
+                days_stored=days_past,
+                freshness_label=freshness_label,
+                reference_max=ref_max
+            )
+            if ml_pred is not None:
+                ml_predicted_days = round(ml_pred, 1)
+                ml_model_version = "Shelf-Life ML V1 (Trained Regressor)"
+                bounded_ml_pred = min(ml_pred, max(0.0, ref_max - days_past))
+
+                if freshness_norm == "rotten":
+                    rem_min = 0.0
+                    rem_max = 0.0
+                    adjustment_applied = True
+                    heuristic_note = "Visible signs of decomposition indicate that the quality window has expired."
+                elif freshness_norm in ["slightly_spoiled", "slightly spoiled"]:
+                    rem_min = max(0.0, bounded_ml_pred * 0.4)
+                    rem_max = max(1.0 if bounded_ml_pred >= 1.0 else 0.0, bounded_ml_pred * 0.7)
+                    adjustment_applied = True
+                    heuristic_note = "Remaining shelf-life reduced and estimated by ML regressor due to visible surface wear."
+                else:
+                    rem_min = max(0.0, bounded_ml_pred * 0.75)
+                    rem_max = max(0.0, bounded_ml_pred)
+
+                source_label_form = "FoodFresh AI Shelf-Life ML + USDA FoodKeeper Guardrail"
+
+        if ml_predicted_days is None:
+            if freshness_norm == "rotten":
+                rem_min = 0.0
+                rem_max = 0.0
+                adjustment_applied = True
+                heuristic_note = "Visible signs of decomposition indicate that the quality window has expired."
+            elif freshness_norm in ["slightly_spoiled", "slightly spoiled"]:
+                # Conservative reduction: cut remaining quality window by 50%
+                rem_min = max(0.0, raw_rem_min * 0.5)
+                rem_max = max(1.0 if raw_rem_max >= 1.0 else 0.0, raw_rem_max * 0.5)
+                adjustment_applied = True
+                heuristic_note = "Remaining quality window reduced due to visible surface wear."
+            else:
+                rem_min = max(0.0, raw_rem_min)
+                rem_max = max(0.0, raw_rem_max)
 
         # Zero-day Protection for Fresh Produce (e.g. freshly purchased whole watermelon)
         if freshness_norm == "fresh":
@@ -662,7 +793,9 @@ class FoodKeeperService:
             "tips": tips,
             "isEstimate": True,
             "heuristicAdjustment": final_heuristic_note,
-            "zeroDayReason": zero_day_reason
+            "zeroDayReason": zero_day_reason,
+            "mlPredictedDays": ml_predicted_days,
+            "mlModelVersion": ml_model_version or "Shelf-Life ML V1 (Trained Regressor)"
         }
 
     def _extract_duration(

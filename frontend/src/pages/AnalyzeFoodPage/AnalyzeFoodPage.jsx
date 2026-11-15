@@ -160,6 +160,13 @@ export function AnalyzeFoodPage({ navigate }) {
    * Start food analysis workflow (common to uploaded and camera-captured images)
    */
   const handleStartAnalysis = async () => {
+    if (!navigator.onLine) {
+      const offlineMsg = 'Offline Mode: Food recognition and AI freshness assessment require an active server connection. Please reconnect to analyze foods.';
+      setAnalysisError(offlineMsg);
+      triggerToast(offlineMsg);
+      return;
+    }
+
     if (!uploadedImage) {
       triggerToast('Please upload or capture a food image first.');
       return;

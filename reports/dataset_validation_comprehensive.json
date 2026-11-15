@@ -1,0 +1,33 @@
+{
+  "agrifreshnet": {
+    "status": "PASSED",
+    "train_count": 9926,
+    "val_count": 2128,
+    "test_count": 2106,
+    "classes": [
+      "fresh",
+      "rotten",
+      "slightly_spoiled"
+    ]
+  },
+  "fruits_360": {
+    "status": "PASSED",
+    "train_classes": 262,
+    "test_classes": 262
+  },
+  "foodkeeper": {
+    "status": "PASSED",
+    "products_count": 661
+  },
+  "synthetic_dataset": {
+    "status": "PASSED",
+    "total_records": 41280,
+    "unique_foods": 43
+  },
+  "real_world_eval": {
+    "status": "PASSED",
+    "canonical_images_count": 13,
+    "real_food_classes": 24
+  },
+  "all_passed": true
+}

@@ -4,12 +4,22 @@ import { FOOD_ASSETS } from '../../assets/food/index.js';
 import { authService } from '../../services/authService.js';
 
 export function LoginPage({ navigate }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('anushka@gmail.com');
+  const [password, setPassword] = useState('anushka');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [authNotice, setAuthNotice] = useState(() => {
+    try {
+      const notice = sessionStorage.getItem('foodfresh_auth_notice');
+      if (notice) {
+        sessionStorage.removeItem('foodfresh_auth_notice');
+        return notice;
+      }
+    } catch {}
+    return '';
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,9 +27,10 @@ export function LoginPage({ navigate }) {
     setErrorMessage('');
 
     try {
-      await authService.login(email, password);
+      await authService.login(email, password, rememberMe);
       sessionStorage.removeItem('foodfresh_dashboard_welcome_seen');
-      const redirect = sessionStorage.getItem('foodfresh_redirect_after_login') || '/dashboard';
+      const rawRedirect = sessionStorage.getItem('foodfresh_redirect_after_login');
+      const redirect = (rawRedirect && rawRedirect !== '/login' && rawRedirect !== '/register') ? rawRedirect : '/dashboard';
       sessionStorage.removeItem('foodfresh_redirect_after_login');
       navigate(redirect);
     } catch (err) {
@@ -130,6 +141,24 @@ export function LoginPage({ navigate }) {
               </p>
             </div>
 
+            {/* Security Action Requirement Banner */}
+            {authNotice && (
+              <div className="mb-6 p-4 rounded-2xl bg-secondary-container/70 text-on-secondary-container text-xs flex items-start gap-3 border border-secondary/30">
+                <span className="material-symbols-outlined text-[20px] text-secondary shrink-0">lock</span>
+                <div className="flex-1">
+                  <p className="font-bold">Credential Verification Required</p>
+                  <p className="mt-0.5">{authNotice}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setAuthNotice('')}
+                  className="text-secondary font-bold hover:opacity-80 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
             {/* Error Message banner */}
             {errorMessage && (
               <div className="mb-6 p-4 rounded-2xl bg-error-container text-on-error-container text-xs flex items-start gap-3 border border-red-200">
@@ -211,6 +240,28 @@ export function LoginPage({ navigate }) {
                 </div>
               </div>
 
+              {/* Demo Chef Quick-Access Hint */}
+              <div className="p-3 rounded-2xl bg-secondary-container/40 border border-secondary/25 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-base">👩‍🍳</span>
+                  <div>
+                    <span className="font-bold text-primary block leading-tight">Default Kitchen Profile</span>
+                    <span className="text-[11px] text-on-surface-variant font-mono">anushka@gmail.com • anushka</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('anushka@gmail.com');
+                    setPassword('anushka');
+                    setErrorMessage('');
+                  }}
+                  className="px-2.5 py-1 rounded-full bg-secondary text-white font-bold text-[11px] hover:bg-secondary/90 transition-all cursor-pointer shadow-2xs"
+                >
+                  Quick Fill
+                </button>
+              </div>
+
               {/* Remember Me */}
               <div className="flex items-center justify-between pt-1">
                 <label className="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-on-surface-variant">
@@ -242,6 +293,11 @@ export function LoginPage({ navigate }) {
                   </>
                 )}
               </button>
+
+              <div className="flex items-center justify-center gap-1.5 pt-1 text-[11px] text-outline text-center">
+                <span className="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+                <span>Protected Access: Authentication occurs only after verifying credentials</span>
+              </div>
 
             </form>
 

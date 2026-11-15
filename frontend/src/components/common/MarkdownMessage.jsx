@@ -8,7 +8,6 @@ function renderInline(text, isUser = false) {
   if (!text) return null;
 
   // Split by bold (**text** or __text__), code (`code`), or italics (*text* or _text_)
-  // Regex matches **...** | __...__ | `...` | *...*
   const tokenRegex = /(\*\*.*?\*\*|__.*?__|`.*?`|\*.*?\*)/g;
   const parts = text.split(tokenRegex);
 
@@ -59,15 +58,15 @@ function renderInline(text, isUser = false) {
 
 /**
  * Full Markdown message renderer for chat streams.
- * Handles headings, bullet lists, numbered lists, key-value highlights, and paragraphs.
+ * Handles headings, bullet lists, numbered lists, markdown tables, and paragraphs.
  */
 export function MarkdownMessage({ content = '', isUser = false }) {
   if (!content) return null;
 
-  // Split content into lines
   const lines = content.split('\n');
   const elements = [];
   let currentList = null; // { type: 'ul' | 'ol', items: [] }
+  let currentTable = null; // { headers: [], rows: [] }
 
   const flushList = (keyPrefix) => {
     if (currentList) {
@@ -96,14 +95,66 @@ export function MarkdownMessage({ content = '', isUser = false }) {
     }
   };
 
+  const flushTable = (keyPrefix) => {
+    if (currentTable) {
+      elements.push(
+        <div key={`table-${keyPrefix}`} className="overflow-x-auto my-2.5 rounded-2xl border border-surface-container-high/80 shadow-2xs">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="bg-surface-container-low border-b border-surface-container-high/80">
+                {currentTable.headers.map((h, i) => (
+                  <th key={i} className="py-2 px-3 font-extrabold text-primary">
+                    {renderInline(h, isUser)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {currentTable.rows.map((row, rIdx) => (
+                <tr key={rIdx} className="border-b border-surface-container-low/70 last:border-b-0 hover:bg-surface-container-low/30 transition-colors">
+                  {row.map((cell, cIdx) => (
+                    <td key={cIdx} className="py-2 px-3 text-on-surface">
+                      {renderInline(cell, isUser)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+      currentTable = null;
+    }
+  };
+
   lines.forEach((rawLine, idx) => {
     const line = rawLine.trim();
 
-    // Empty line: flush list and create spacing
+    // Empty line: flush list & table and create spacing
     if (!line) {
       flushList(idx);
+      flushTable(idx);
       return;
     }
+
+    // Markdown Table Row: starts and ends with |
+    if (line.startsWith('|') && line.endsWith('|')) {
+      flushList(idx);
+      // Check if it's the divider row like |---|---|
+      if (/^\|[\s\-:|]+\|$/.test(line)) {
+        return; // skip divider line
+      }
+      const cells = line.split('|').slice(1, -1).map((c) => c.trim());
+      if (!currentTable) {
+        currentTable = { headers: cells, rows: [] };
+      } else {
+        currentTable.rows.push(cells);
+      }
+      return;
+    }
+
+    // Not a table row -> flush open table
+    flushTable(idx);
 
     // Bullet list item (- or *)
     const bulletMatch = line.match(/^[-*]\s+(.*)$/);
@@ -127,7 +178,7 @@ export function MarkdownMessage({ content = '', isUser = false }) {
       return;
     }
 
-    // Not a list item -> flush any open list
+    // Not a list item -> flush open list
     flushList(idx);
 
     // Headings (###, ##, #)
@@ -164,8 +215,9 @@ export function MarkdownMessage({ content = '', isUser = false }) {
     );
   });
 
-  // Flush any trailing list
+  // Flush any trailing list or table
   flushList('end');
+  flushTable('end');
 
   return <div className="space-y-1">{elements}</div>;
 }

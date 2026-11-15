@@ -2,15 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { FOOD_ASSETS } from '../../assets/food/index.js';
 import { MASCOT_ASSETS } from '../../assets/mascot/index.js';
 import { useFoodFresh } from '../../hooks/useFoodFresh.js';
+import { useAuth } from '../../hooks/useAuth.js';
+import { UserAvatar } from '../../components/common/UserAvatar.jsx';
 import { Toast } from '../../components/common/Toast.jsx';
 import { DashboardMascotWelcome } from '../../components/mascot/DashboardMascotWelcome.jsx';
+import { notificationService } from '../../services/notificationService.js';
+import { analyticsService } from '../../services/analyticsService.js';
 
 export function DashboardPage({ navigate }) {
+  const { user } = useAuth();
   const { history, roadmap, loading, markRoadmapEaten, undoRoadmapItem } = useFoodFresh();
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [showCompletedDrawer, setShowCompletedDrawer] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [alertsData, setAlertsData] = useState({ notifications: [], unread_count: 0, summary: {} });
+  const [analyticsData, setAnalyticsData] = useState(null);
+
+  useEffect(() => {
+    notificationService.getNotifications().then(setAlertsData).catch(() => {});
+    analyticsService.getAnalytics().then(setAnalyticsData).catch(() => {});
+  }, [history]);
 
   useEffect(() => {
     // Check if dashboard welcome was already played for this session
@@ -37,6 +49,16 @@ export function DashboardPage({ navigate }) {
 
   const handleMarkEaten = async (item) => {
     await markRoadmapEaten(item.id);
+    try {
+      await analyticsService.recordAction({
+        foodName: item.name,
+        cultivar: item.cultivar || '',
+        action: 'consumed',
+        pantryItemId: item.historyId || item.id,
+      });
+    } catch (e) {
+      console.warn('Could not record consumption impact:', e);
+    }
     triggerToast(`Marked ${item.name} as eaten! Great pantry stewardship.`);
   };
 
@@ -60,10 +82,36 @@ export function DashboardPage({ navigate }) {
       {/* HERO SECTION: What's on your counter today? */}
       <section className="relative overflow-hidden rounded-3xl bg-primary text-white p-6 sm:p-8 lg:p-10 shadow-lg border border-primary-container">
         <div className="relative z-10 max-w-xl">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold text-secondary-container mb-4">
-            <span className="w-2 h-2 rounded-full bg-secondary-container animate-pulse" />
-            <span>Pantry Vision Active</span>
-          </span>
+          <div className="flex flex-wrap items-center gap-2.5 mb-4">
+            <button
+              type="button"
+              onClick={() => navigate('/settings')}
+              className="inline-flex items-center gap-2 p-1 pr-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 backdrop-blur-md transition-colors cursor-pointer group"
+              title="Click to view profile and customize avatar"
+            >
+              <UserAvatar
+                avatar={user?.avatar || user?.avatarUrl}
+                src={user?.avatar || user?.avatarUrl}
+                name={user?.fullName || 'Kitchen Chef'}
+                size="sm"
+              />
+              <span className="text-xs font-bold text-white group-hover:text-secondary-container transition-colors">
+                Chef {user?.fullName || 'Active'}
+              </span>
+            </button>
+
+            {!navigator.onLine ? (
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/25 border border-amber-400/40 backdrop-blur-md text-xs font-bold text-amber-200">
+                <span className="w-2 h-2 rounded-full bg-amber-400" />
+                <span>Offline Mode</span>
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold text-secondary-container">
+                <span className="w-2 h-2 rounded-full bg-secondary-container animate-pulse" />
+                <span>Pantry Vision Active</span>
+              </span>
+            )}
+          </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-3 leading-tight">
             What’s on your counter today?
@@ -105,7 +153,7 @@ export function DashboardPage({ navigate }) {
       </section>
 
       {/* QUICK ACTIONS ROW */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <button
           type="button"
           onClick={() => navigate('/analyze')}
@@ -115,8 +163,25 @@ export function DashboardPage({ navigate }) {
             <span className="material-symbols-outlined text-[24px]">search_insights</span>
           </div>
           <div>
-            <h2 className="font-bold text-sm sm:text-base text-primary">Analyze Single Food</h2>
+            <h2 className="font-bold text-sm sm:text-base text-primary">Analyze Fresh Food</h2>
             <p className="text-xs text-on-surface-variant mt-0.5">Upload a photo to evaluate quality & condition.</p>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => navigate('/packaged-food')}
+          className="p-5 rounded-3xl bg-surface-container-lowest border border-surface-container-high/70 hover:border-secondary hover:shadow-md transition-all text-left group flex flex-col justify-between cursor-pointer"
+        >
+          <div className="w-11 h-11 rounded-2xl bg-secondary-container flex items-center justify-center text-secondary group-hover:scale-105 transition-transform mb-3">
+            <span className="material-symbols-outlined text-[24px]">barcode_scanner</span>
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <h2 className="font-bold text-sm sm:text-base text-primary">Packaged Food</h2>
+              <span className="px-1.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[9px] font-bold">OCR</span>
+            </div>
+            <p className="text-xs text-on-surface-variant mt-0.5">Scan barcodes or labels for auto-expiry tracking.</p>
           </div>
         </button>
 
@@ -148,6 +213,102 @@ export function DashboardPage({ navigate }) {
           </div>
         </button>
       </section>
+
+      {/* SMART NOTIFICATIONS & EXPIRY ALERTS SECTION */}
+      {alertsData.notifications.length > 0 && (
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-error text-[22px]">notification_important</span>
+              <h2 className="text-xl font-extrabold text-primary tracking-tight">
+                Expiry Alerts & Actions
+              </h2>
+              {alertsData.unread_count > 0 && (
+                <span className="px-2 py-0.5 rounded-full bg-error text-white text-[11px] font-extrabold">
+                  {alertsData.unread_count} Unread
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => navigate('/alerts')}
+                className="text-xs font-bold text-secondary hover:text-primary transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <span>View All Alerts</span>
+                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {alertsData.notifications.slice(0, 3).map((alert) => (
+              <div
+                key={alert.id}
+                className="p-4 rounded-3xl bg-white border border-surface-container-high/80 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                        alert.type === 'expired'
+                          ? 'bg-red-100 text-red-800 border-red-200'
+                          : alert.type === 'expiring_today'
+                          ? 'bg-rose-100 text-rose-800 border-rose-200 font-extrabold'
+                          : alert.type === 'expiring_soon'
+                          ? 'bg-amber-100 text-amber-800 border-amber-200'
+                          : 'bg-orange-100 text-orange-800 border-orange-200'
+                      }`}
+                    >
+                      {alert.type === 'expired'
+                        ? 'Expired'
+                        : alert.type === 'expiring_today'
+                        ? 'Expires Today'
+                        : alert.type === 'expiring_soon'
+                        ? 'Expiring Soon'
+                        : 'Eat First'}
+                    </span>
+                    <span className="text-[11px] font-bold text-error">
+                      {alert.remainingDays != null
+                        ? alert.remainingDays <= 0
+                          ? 'Expired window'
+                          : `${alert.remainingDays}d left`
+                        : 'Urgent'}
+                    </span>
+                  </div>
+
+                  <h3 className="text-sm font-bold text-primary truncate">{alert.foodName}</h3>
+                  <p className="text-xs text-on-surface-variant line-clamp-2 mt-1 leading-relaxed">
+                    {alert.message}
+                  </p>
+                </div>
+
+                <div className="pt-3 mt-3 border-t border-surface-container-low flex items-center justify-between">
+                  <span className="text-[10px] text-outline font-medium truncate">
+                    {alert.cultivar}
+                  </span>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => navigate('/recipes')}
+                      className="px-2.5 py-1 rounded-full bg-secondary-container hover:bg-secondary text-on-secondary-container hover:text-white text-[11px] font-bold transition-colors cursor-pointer"
+                    >
+                      Recipes
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => navigate('/history')}
+                      className="px-2.5 py-1 rounded-full bg-surface-container-low hover:bg-surface-container text-primary text-[11px] font-bold transition-colors cursor-pointer"
+                    >
+                      Pantry
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* EAT FIRST ROADMAP 🥇 (PRIORITY ENGINE SECTION) */}
       <section className="space-y-4">
@@ -341,6 +502,69 @@ export function DashboardPage({ navigate }) {
             ))}
           </div>
         )}
+      </section>
+
+      {/* IMPACT ANALYTICS SNAPSHOT */}
+      <section className="p-6 rounded-3xl bg-surface-container-low border border-surface-container-high/70 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-2xl bg-secondary-container text-on-secondary-container flex items-center justify-center">
+              <span className="material-symbols-outlined text-[20px]">insights</span>
+            </div>
+            <div>
+              <h2 className="text-base sm:text-lg font-extrabold text-primary tracking-tight">
+                Food-Waste Impact & Sustainability
+              </h2>
+              <p className="text-xs text-on-surface-variant">
+                Live environmental & waste reduction metrics strictly computed from your pantry activity.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate('/analytics')}
+            className="px-4 py-2 rounded-full bg-primary hover:bg-primary-container text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+          >
+            <span>Open Full Analytics</span>
+            <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="p-4 rounded-2xl bg-white border border-surface-container-high/60">
+            <span className="text-[11px] font-bold text-on-surface-variant block">Food Saved Before Expiry</span>
+            <span className="text-xl font-extrabold text-secondary block mt-0.5">
+              {analyticsData?.food_saved_count || 0} items
+            </span>
+            <span className="text-[10px] text-secondary font-semibold">
+              {analyticsData?.food_saved_percentage || 0}% save rate
+            </span>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white border border-surface-container-high/60">
+            <span className="text-[11px] font-bold text-on-surface-variant block">Waste Prevented</span>
+            <span className="text-xl font-extrabold text-primary block mt-0.5">
+              {analyticsData?.waste_prevented_kg || 0} kg
+            </span>
+            <span className="text-[10px] text-on-surface-variant font-medium">Avoided landfill mass</span>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white border border-surface-container-high/60">
+            <span className="text-[11px] font-bold text-on-surface-variant block">CO₂e Avoided</span>
+            <span className="text-xl font-extrabold text-emerald-700 block mt-0.5">
+              {analyticsData?.co2_saved_kg || 0} kg
+            </span>
+            <span className="text-[10px] text-emerald-700 font-semibold">Greenhouse footprint</span>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white border border-surface-container-high/60">
+            <span className="text-[11px] font-bold text-on-surface-variant block">Water Conserved</span>
+            <span className="text-xl font-extrabold text-sky-700 block mt-0.5">
+              {analyticsData?.water_saved_liters || 0} L
+            </span>
+            <span className="text-[10px] text-sky-700 font-semibold">Embedded agricultural water</span>
+          </div>
+        </div>
       </section>
 
       {/* RECENT ANALYSES SECTION */}

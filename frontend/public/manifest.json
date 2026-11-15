@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "id": "/?source=pwa",
+  "name": "FoodFresh AI — Freshness & Pantry Intelligence",
+  "short_name": "FoodFresh AI",
+  "description": "Know Your Food. Save Your Food. Waste Less. Assess food freshness, estimate shelf life, and manage your kitchen inventory.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F8FAF8",
+  "theme_color": "#1E5128",
+  "categories": ["food", "lifestyle", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/fresho-buddy.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Analyze Food",
+      "short_name": "Analyze",
+      "description": "Scan and assess food quality and freshness",
+      "url": "/#/analyze",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Pantry Dashboard",
+      "short_name": "Dashboard",
+      "description": "View pantry roadmap and expiring items",
+      "url": "/#/dashboard",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Recipe Ideas",
+      "short_name": "Recipes",
+      "description": "Pantry-aware recipe recommendations",
+      "url": "/#/recipes",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Impact Analytics",
+      "short_name": "Impact",
+      "description": "View food saved and waste reduction stats",
+      "url": "/#/analytics",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
+

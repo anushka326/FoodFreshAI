@@ -210,6 +210,68 @@
   animation: mascotGesture 1s ease-in-out 1;
 }
 
+@keyframes doodleFloatA {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(2.5deg);
+  }
+}
+
+@keyframes doodleFloatB {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(-2.5deg);
+  }
+}
+
+@keyframes doodleFloatC {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-11px) scale(1.02);
+  }
+}
+
+.animate-doodle-float-a {
+  animation: doodleFloatA 5s ease-in-out infinite;
+}
+
+.animate-doodle-float-b {
+  animation: doodleFloatB 5.8s ease-in-out infinite;
+}
+
+.animate-doodle-float-c {
+  animation: doodleFloatC 6.4s ease-in-out infinite;
+}
+
+/* FoodFresh AI Theme-matching glow line for foreground containers/cards */
+.theme-card-glow {
+  position: relative;
+  z-index: 10;
+  border: 1px solid rgba(0, 110, 28, 0.22);
+  box-shadow: 0 4px 20px -2px rgba(1, 58, 19, 0.05),
+              0 0 16px 1px rgba(145, 247, 142, 0.32);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+.theme-card-glow:hover {
+  border-color: rgba(0, 110, 28, 0.38);
+  box-shadow: 0 8px 24px -3px rgba(1, 58, 19, 0.08),
+              0 0 22px 3px rgba(145, 247, 142, 0.48);
+}
+
+.theme-glow-border {
+  position: relative;
+  z-index: 10;
+  border: 1.5px solid rgba(145, 247, 142, 0.55);
+  box-shadow: 0 0 14px 1px rgba(145, 247, 142, 0.26);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-mascot-gentle-bounce,
   .animate-mascot-light-bounce,
@@ -219,7 +281,10 @@
   .animate-mascot-click-bounce,
   .animate-mascot-attention,
   .animate-mascot-soft-glow,
-  .animate-leaf-drift {
+  .animate-leaf-drift,
+  .animate-doodle-float-a,
+  .animate-doodle-float-b,
+  .animate-doodle-float-c {
     animation: none !important;
     transform: none !important;
   }

@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-fastapi
-uvicorn[standard]
-sqlalchemy
-pydantic
-python-dotenv
-python-jose[cryptography]
-passlib[bcrypt]
-
-=======
 --extra-index-url https://download.pytorch.org/whl/cu124
 torch==2.6.0+cu124
 torchvision==0.21.0+cu124
@@ -26,4 +16,9 @@ pydantic==2.13.5
 python-dotenv==1.2.3
 transformers==5.17.0
 huggingface_hub==1.33.0
->>>>>>> frontend/main
+groq>=0.11.0
+httpx>=0.27.0
+sqlalchemy>=2.0.0
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+PyJWT>=2.8.0

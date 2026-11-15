@@ -12,9 +12,9 @@ import { FloatingLeaf } from './FloatingLeaf.jsx';
  * 5. Brand text "FoodFresh AI" + tagline appear smoothly
  * 6. Smooth transition into the main Landing Page
  */
-export function LandingMascotAnimation({ onComplete, onSkip }) {
+export function LandingMascotAnimation({ onComplete, onSkip, embedded = false }) {
   // Current animation phase: 1 to 6
-  const [phase, setPhase] = useState(1);
+  const [phase, setPhase] = useState(embedded ? 2 : 1);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -24,15 +24,30 @@ export function LandingMascotAnimation({ onComplete, onSkip }) {
       const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
       if (mediaQuery.matches) {
         setPrefersReducedMotion(true);
-        // Fast path for reduced motion
-        const timer = setTimeout(() => {
-          setIsFadingOut(true);
-          setTimeout(() => onComplete?.(), 400);
-        }, 1200);
-        return () => clearTimeout(timer);
+        if (!embedded) {
+          // Fast path for reduced motion on full intro
+          const timer = setTimeout(() => {
+            setIsFadingOut(true);
+            setTimeout(() => onComplete?.(), 400);
+          }, 1200);
+          return () => clearTimeout(timer);
+        }
       }
     }
 
+    if (embedded) {
+      // In embedded panel mode: progress smoothly to active state and remain active
+      const t3 = setTimeout(() => setPhase(3), 350);
+      const t4 = setTimeout(() => setPhase(4), 900);
+      const t5 = setTimeout(() => setPhase(5), 1500);
+      return () => {
+        clearTimeout(t3);
+        clearTimeout(t4);
+        clearTimeout(t5);
+      };
+    }
+
+    // Fullscreen Splash Mode (for Landing Page intro)
     // Step 2: Leaves float in and form aura
     const t2 = setTimeout(() => setPhase(2), 500);
 
@@ -64,7 +79,7 @@ export function LandingMascotAnimation({ onComplete, onSkip }) {
       clearTimeout(t6);
       clearTimeout(tEnd);
     };
-  }, [onComplete]);
+  }, [onComplete, embedded]);
 
   const handleSkip = () => {
     setIsFadingOut(true);
@@ -74,6 +89,182 @@ export function LandingMascotAnimation({ onComplete, onSkip }) {
     }, 250);
   };
 
+  // If embedded in a page panel (e.g. Registration Page left column)
+  if (embedded) {
+    return (
+      <div
+        className="relative w-full flex flex-col items-center justify-center py-4 select-none"
+        role="region"
+        aria-label="FoodFresh AI Mascot Welcome Animation"
+      >
+        {/* CENTER STAGE: Mascot with floating aura and leaves */}
+        <div className="relative flex flex-col items-center justify-center w-full max-w-sm">
+          {/* Soft natural aura glow behind mascot */}
+          <div
+            className={`absolute w-56 h-56 sm:w-64 sm:h-64 rounded-full pointer-events-none transition-all duration-1000 ${
+              phase >= 2 ? 'opacity-60 scale-100' : 'opacity-0 scale-75'
+            }`}
+            style={{
+              background: 'radial-gradient(circle, rgba(145,247,142,0.35) 0%, rgba(30,81,40,0.2) 50%, rgba(1,58,19,0) 75%)',
+              filter: 'blur(22px)',
+            }}
+          />
+
+          {/* FLOATING LEAF PARTICLES */}
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            {/* Leaf 1 - Top Left */}
+            <div
+              className={`absolute transition-all duration-1000 ease-out ${phase >= 4 && !prefersReducedMotion ? 'animate-leaf-drift' : ''}`}
+              style={{
+                transform: phase >= 2
+                  ? 'translate(-95px, -85px) scale(0.9)'
+                  : 'translate(-140px, -130px) scale(0.5)',
+                opacity: phase >= 2 ? 0.9 : 0,
+              }}
+            >
+              <FloatingLeaf size={24} rotation={-25} />
+            </div>
+
+            {/* Leaf 2 - Top Right */}
+            <div
+              className={`absolute transition-all duration-1000 ease-out ${phase >= 4 && !prefersReducedMotion ? 'animate-leaf-drift' : ''}`}
+              style={{
+                transform: phase >= 2
+                  ? 'translate(100px, -75px) scale(0.95)'
+                  : 'translate(150px, -120px) scale(0.5)',
+                opacity: phase >= 2 ? 0.85 : 0,
+                animationDelay: '1s',
+              }}
+            >
+              <FloatingLeaf size={26} rotation={45} flip />
+            </div>
+
+            {/* Leaf 3 - Mid Left */}
+            <div
+              className={`absolute transition-all duration-1000 ease-out ${phase >= 4 && !prefersReducedMotion ? 'animate-leaf-drift' : ''}`}
+              style={{
+                transform: phase >= 2
+                  ? 'translate(-115px, 15px) scale(0.85)'
+                  : 'translate(-160px, 30px) scale(0.5)',
+                opacity: phase >= 2 ? 0.8 : 0,
+                animationDelay: '2s',
+              }}
+            >
+              <FloatingLeaf size={20} rotation={-60} />
+            </div>
+
+            {/* Leaf 4 - Mid Right */}
+            <div
+              className={`absolute transition-all duration-1000 ease-out ${phase >= 4 && !prefersReducedMotion ? 'animate-leaf-drift' : ''}`}
+              style={{
+                transform: phase >= 2
+                  ? 'translate(115px, 10px) scale(0.85)'
+                  : 'translate(170px, 20px) scale(0.5)',
+                opacity: phase >= 2 ? 0.85 : 0,
+                animationDelay: '1.5s',
+              }}
+            >
+              <FloatingLeaf size={22} rotation={65} />
+            </div>
+
+            {/* Leaf 5 - Bottom Left */}
+            <div
+              className={`absolute transition-all duration-1000 ease-out ${phase >= 4 && !prefersReducedMotion ? 'animate-leaf-drift' : ''}`}
+              style={{
+                transform: phase >= 2
+                  ? 'translate(-80px, 85px) scale(0.8)'
+                  : 'translate(-120px, 120px) scale(0.5)',
+                opacity: phase >= 2 ? 0.75 : 0,
+                animationDelay: '0.5s',
+              }}
+            >
+              <FloatingLeaf size={18} rotation={-110} flip />
+            </div>
+
+            {/* Leaf 6 - Bottom Right */}
+            <div
+              className={`absolute transition-all duration-1000 ease-out ${phase >= 4 && !prefersReducedMotion ? 'animate-leaf-drift' : ''}`}
+              style={{
+                transform: phase >= 2
+                  ? 'translate(85px, 80px) scale(0.85)'
+                  : 'translate(130px, 115px) scale(0.5)',
+                opacity: phase >= 2 ? 0.8 : 0,
+                animationDelay: '2.5s',
+              }}
+            >
+              <FloatingLeaf size={20} rotation={120} />
+            </div>
+
+            {/* Warm Sparkle Particles */}
+            {phase >= 4 && (
+              <>
+                <div
+                  className="absolute text-[#facc15] font-bold text-base select-none animate-pulse"
+                  style={{ transform: 'translate(85px, -45px)' }}
+                >
+                  ✦
+                </div>
+                <div
+                  className="absolute text-[#facc15] font-bold text-xs select-none animate-pulse"
+                  style={{ transform: 'translate(100px, -25px)', animationDelay: '300ms' }}
+                >
+                  ✦
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* MASCOT DIRECTLY ON BACKGROUND */}
+          <div
+            className={`relative z-20 flex items-center justify-center transition-all duration-700 ease-out ${
+              phase >= 4 && !prefersReducedMotion
+                ? 'animate-mascot-breathe'
+                : ''
+            }`}
+            style={{
+              transform: phase >= 3
+                ? 'translateY(0px) scale(1)'
+                : 'translateY(12px) scale(0.88)',
+              opacity: phase >= 3 ? 1 : 0,
+            }}
+          >
+            <img
+              src={MASCOT_ASSETS.officialMascotSvg}
+              alt="FoodFresh AI Official Mascot"
+              className="w-36 h-36 sm:w-44 sm:h-44 xl:w-52 xl:h-52 object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
+            />
+          </div>
+
+          {/* BRAND TEXT & TAGLINE */}
+          <div
+            className={`mt-4 sm:mt-5 flex flex-col items-center text-center transition-all duration-700 ease-out ${
+              phase >= 5
+                ? 'opacity-100 transform translate-y-0'
+                : 'opacity-0 transform translate-y-2'
+            }`}
+          >
+            <h2 className="text-2xl sm:text-3xl text-white font-extrabold tracking-tight mb-1.5 leading-tight">
+              FoodFresh <span className="text-secondary-container">AI</span>
+            </h2>
+
+            {/* Tagline Pill */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs border border-white/20 text-white text-[11px] sm:text-xs font-semibold shadow-xs mt-1">
+              <span className="text-[12px]">🍃</span>
+              <span>Know. Save. Waste Less.</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Status / Welcome Pill */}
+        <div className="mt-5 flex items-center gap-2 px-3 py-1 rounded-full bg-black/20 backdrop-blur-xs border border-white/10 text-white/85 text-[11px] font-medium z-20">
+          <span className="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse" />
+          <span>FreshoBuddy Pantry Assistant</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Fullscreen splash screen mode
   return (
     <div
       className={`fixed inset-0 z-50 flex flex-col items-center justify-between p-6 overflow-hidden select-none transition-opacity duration-700 ease-out ${

@@ -1,38 +1,30 @@
 # backend/app/database.py
+"""
+FoodFresh AI - SQLite Database Compatibility Module
+Connects seamlessly to the production FoodFresh AI database.
+"""
 import os
 import sqlite3
+from typing import Generator
 
-from ..config import DATABASE_URL
+from backend.app.database.chat_db import DB_PATH, get_db_connection
 
-# Parse the SQLite file path from the DATABASE_URL (format: sqlite:///./path/to/db)
-_db_path = DATABASE_URL.replace('sqlite:///', '', 1)
-_db_path = os.path.abspath(_db_path)
+# Base is also exposed here in case models or router imports Base from database
+try:
+    from sqlalchemy.orm import declarative_base
+    Base = declarative_base()
+except ImportError:
+    Base = object
 
-def init_db():
-    """Create the users table if it doesn't exist."""
-    conn = sqlite3.connect(_db_path, check_same_thread=False)
-    conn.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            full_name TEXT,
-            hashed_password TEXT NOT NULL
-        );
-    ''')
-    conn.commit()
+def init_db() -> None:
+    """Ensure database connection and schema initialization."""
+    conn = get_db_connection()
     conn.close()
 
-# Ensure the DB and table are ready at import time
-init_db()
-
-def get_db():
-    """Dependency that yields a SQLite connection.
-    The caller is responsible for closing it (FastAPI will do it automatically).
-    """
-    conn = sqlite3.connect(_db_path, check_same_thread=False)
-    conn.row_factory = sqlite3.Row
+def get_db() -> Generator[sqlite3.Connection, None, None]:
+    """Dependency that yields a SQLite connection to the FoodFresh AI database."""
+    conn = get_db_connection()
     try:
         yield conn
     finally:
         conn.close()
-

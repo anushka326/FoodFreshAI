@@ -2,8 +2,12 @@ import React from 'react';
 import { BRANDING_ASSETS } from '../../assets/branding/index.js';
 import { MASCOT_ASSETS } from '../../assets/mascot/index.js';
 import { authService } from '../../services/authService.js';
+import { useAuth } from '../../hooks/useAuth.js';
+import { UserAvatar } from '../common/UserAvatar.jsx';
+import { PwaInstallPrompt } from '../common/PwaInstallPrompt.jsx';
 
 export function Sidebar({ currentRoute, navigate, isOpen, onClose }) {
+  const { user } = useAuth();
   const navItems = [
     {
       id: 'dashboard',
@@ -18,10 +22,37 @@ export function Sidebar({ currentRoute, navigate, isOpen, onClose }) {
       icon: 'search_insights',
     },
     {
+      id: 'packaged-food',
+      path: '/packaged-food',
+      label: 'Packaged Foods',
+      icon: 'barcode_scanner',
+      badge: 'OCR',
+    },
+    {
       id: 'history',
       path: '/history',
       label: 'History',
       icon: 'history',
+    },
+    {
+      id: 'alerts',
+      path: '/alerts',
+      label: 'Expiry Alerts',
+      icon: 'notifications_active',
+      badge: 'ALERTS',
+    },
+    {
+      id: 'recipes',
+      path: '/recipes',
+      label: 'Recipe Ideas',
+      icon: 'restaurant_menu',
+      badge: 'NEW',
+    },
+    {
+      id: 'analytics',
+      path: '/analytics',
+      label: 'Impact Analytics',
+      icon: 'insights',
     },
     {
       id: 'fresho-buddy',
@@ -149,8 +180,37 @@ export function Sidebar({ currentRoute, navigate, isOpen, onClose }) {
           </div>
         </div>
 
-        {/* Bottom Section: Pantry Ecology & Logout */}
+        {/* Bottom Section: User Profile, Pantry Ecology & Logout */}
         <div className="p-4 space-y-3">
+          {/* User Profile Quick Card */}
+          <button
+            type="button"
+            onClick={() => handleNavClick('/settings')}
+            className="w-full p-2 rounded-2xl bg-surface hover:bg-surface-container-high/60 border border-surface-container-high/60 flex items-center gap-2.5 transition-all text-left group cursor-pointer shadow-2xs"
+            title="View Profile and Change Avatar"
+          >
+            <UserAvatar
+              avatar={user?.avatar || user?.avatarUrl}
+              src={user?.avatar || user?.avatarUrl}
+              name={user?.fullName || 'Kitchen Chef'}
+              size="sm"
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold text-on-surface truncate group-hover:text-primary transition-colors">
+                {user?.fullName || 'Kitchen Chef'}
+              </p>
+              <p className="text-[10px] text-on-surface-variant truncate">
+                View Settings
+              </p>
+            </div>
+            <span className="material-symbols-outlined text-[16px] text-on-surface-variant group-hover:text-primary transition-colors">
+              chevron_right
+            </span>
+          </button>
+
+          {/* PWA Install Card (when installable) */}
+          <PwaInstallPrompt variant="sidebar-card" />
+
           {/* Pantry Ecology Micro Badge */}
           <div className="p-3.5 rounded-2xl bg-surface-container-low/80 border border-surface-container-high/60 shadow-2xs">
             <div className="flex items-center gap-2 text-xs font-bold text-primary">

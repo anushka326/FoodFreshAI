@@ -8,7 +8,7 @@ const DEFAULT_API_BASE = 'http://localhost:8000';
 export const API_BASE_URL = 
   import.meta.env.VITE_API_BASE_URL !== undefined
     ? import.meta.env.VITE_API_BASE_URL
-    : (typeof window !== 'undefined' && (window.location.port === '3000' || window.location.port === '5173')
+    : (typeof window !== 'undefined' && window.location.port && window.location.port !== '8000'
         ? '' 
         : DEFAULT_API_BASE);
 
@@ -18,8 +18,16 @@ export const ENDPOINTS = {
   AUTH_REGISTER: `${API_BASE_URL}/api/auth/register`,
   AUTH_LOGOUT: `${API_BASE_URL}/api/auth/logout`,
   AUTH_ME: `${API_BASE_URL}/api/auth/me`,
+  AUTH_PROFILE: `${API_BASE_URL}/api/auth/profile`,
+  AUTH_AVATAR: `${API_BASE_URL}/api/auth/avatar`,
   FOOD_RECOGNITION: `${API_BASE_URL}/api/food-recognition/predict`,
   FRESHO_BUDDY_CHAT: `${API_BASE_URL}/api/fresho-buddy/chat`,
   FRESHO_BUDDY_CONVERSATIONS: `${API_BASE_URL}/api/fresho-buddy/conversations`,
   PANTRY_HISTORY: `${API_BASE_URL}/api/history`,
+  RECIPE_RECOMMENDATIONS: `${API_BASE_URL}/api/recipes/recommendations`,
+  NOTIFICATIONS: `${API_BASE_URL}/api/notifications`,
+  ANALYTICS: `${API_BASE_URL}/api/analytics`,
+  PACKAGED_FOOD_BARCODE: `${API_BASE_URL}/api/packaged-food/barcode-lookup`,
+  PACKAGED_FOOD_SCAN_IMAGE: `${API_BASE_URL}/api/packaged-food/scan-image`,
+  PACKAGED_FOOD_OCR: `${API_BASE_URL}/api/packaged-food/ocr`,
 };

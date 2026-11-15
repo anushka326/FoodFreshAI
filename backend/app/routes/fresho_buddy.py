@@ -27,6 +27,7 @@ class ChatMessageRequest(BaseModel):
     conversationId: Optional[str] = Field(default=None, description="ID of existing conversation or None to start new")
     message: str = Field(..., min_length=1, description="User's query or message")
     analysisContext: Optional[Dict[str, Any]] = Field(default=None, description="Structured food analysis context")
+    pantryMode: bool = Field(default=False, description="When True, ground responses in the user's real pantry data")
 
 
 @router.get("/conversations")
@@ -119,6 +120,7 @@ def chat_with_fresho_buddy(req: ChatMessageRequest, user: dict = Depends(get_cur
         history=existing_messages,
         analysis_context=req.analysisContext,
         pantry_items=None,
+        pantry_mode=req.pantryMode,
     )
 
     bot_msg_record = chat_db.add_message(
@@ -140,6 +142,12 @@ def chat_with_fresho_buddy(req: ChatMessageRequest, user: dict = Depends(get_cur
             "text": reply_dict["text"],
             "status": reply_dict.get("status", "success"),
             "model": reply_dict.get("model"),
+            "aiCallAttempted": reply_dict.get("aiCallAttempted", False),
+            "fallbackUsed": reply_dict.get("fallbackUsed", False),
+            "contextLevel": reply_dict.get("contextLevel"),
+            "intent": reply_dict.get("intent"),
+            "targetFood": reply_dict.get("targetFood"),
+            "providerError": reply_dict.get("providerError"),
             "timestamp": bot_msg_record["createdAt"],
         },
     }
