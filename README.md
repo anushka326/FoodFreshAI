@@ -3,8 +3,9 @@
 
 <div align="center">
 
-![FoodFresh AI Mascot](frontend/src/assets/mascot/official-mascot.svg)
+<img src="frontend/src/assets/mascot/official-mascot.svg" alt="FoodFresh AI Mascot" width="115" height="115" style="border-radius: 50%; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35); margin-bottom: 12px;" />
 
+[![Live Web App](https://img.shields.io/badge/🚀_LIVE_APP-anushka326.github.io%2FFoodFreshAI-10b981?style=for-the-badge&logo=githubpages&logoColor=white)](https://anushka326.github.io/FoodFreshAI/)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-2b5b84?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
@@ -14,9 +15,12 @@
 [![Dataset Release](https://img.shields.io/badge/Dataset-v1.0.0--data-10b981?style=for-the-badge&logo=github&logoColor=white)](https://github.com/anushka326/FoodFreshAI/releases/tag/v1.0.0-data)
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber?style=for-the-badge)](LICENSE)
 
+> 🌟 **Live Public Application**: **[https://anushka326.github.io/FoodFreshAI/](https://anushka326.github.io/FoodFreshAI/)**  
+> *Access FoodFresh AI directly from your browser! Experience the interactive gamified pantry, 36 animated companion avatars, Eat-First urgency matrix, and authentic Indian & global zero-waste recipe recommendations.*
+
 **FoodFresh AI** transforms kitchen sustainability into an interactive, gamified journey. By fusing **cutting-edge Computer Vision (GroundingDINO + SigLIP-2 + Fine-Tuned ResNet-18)**, **Machine Learning Shelf-Life Regression**, and **FreshoBuddy conversational culinary intelligence**, FoodFresh AI empowers households to eliminate food waste, conquer expiration countdowns, and turn produce into culinary triumphs.
 
-[🚀 Explore Live Demo](#-quickstart-guide) • [🎮 Gamification & Companions](#-gamified-kitchen-experience) • [🧠 AI Architecture](#-machine-learning--vision-pipeline) • [📦 Dataset Setup](#-dataset-download-and-setup) • [🧪 Testing](#-testing--verification)
+[🚀 Live Demo Link](https://anushka326.github.io/FoodFreshAI/) • [🌐 Cloud Deployment](#-live-deployment-github-pages-render--vercel) • [🎮 Gamification](#-gamified-kitchen-experience) • [🧠 AI Architecture](#-machine-learning--vision-pipeline) • [📦 Dataset Setup](#-dataset-download-and-setup) • [⚡ Quickstart](#-quickstart-guide)
 
 </div>
 
@@ -86,10 +90,10 @@ flowchart LR
 - Grounded by the **USDA FoodKeeper Database** to ensure realistic minimum/maximum lifespans across both **Countertop** and **Refrigerated** storage conditions.
 
 ### 🤖 FreshoBuddy AI (Groq & Qwen 2.5/3.8)
-Your lively AI sous-chef and culinary companion:
-- 🔄 **Pantry Mode ON**: Contextually grounded in your live pantry items. Ask *"What foods do I currently have?"* or *"What should I cook first?"* to receive tailored advice.
-- 🌐 **Pantry Mode OFF (Global Mode)**: Open culinary encyclopedia answering general storage science, food preservation, and cooking queries.
-- 🎯 **Advanced NLP Intent Engine**: Automatically identifies ownership queries, recipe searches, storage inquiries, and urgent ingredient triage.
+Your dedicated AI sous-chef, preservation expert, and culinary companion:
+- 💡 **Instant Kitchen Intelligence**: Conversational culinary advisor answering food storage science, shelf-life extension, creative ingredient substitutions, and spoilage prevention queries.
+- 🍛 **Dynamic Recipe Synthesis**: Recommends authentic Indian and global recipes dynamically matched to the produce you need to rescue first.
+- 🎯 **Advanced NLP Intent Engine**: Automatically identifies ingredient triage requests, storage temperature inquiries, culinary queries, and zero-waste cooking techniques.
 
 ### 🍛 Authentic Indian & Zero-Waste Global Recipe Engine
 - Custom-tailored to minimize food waste by turning expiring pantry items into gourmet meals.
@@ -216,6 +220,45 @@ Verify dataset integrity at any time:
 ```bash
 python scripts/validate_all_datasets.py
 ```
+
+---
+
+## 🌐 Live Deployment (GitHub Pages, Render & Vercel)
+
+FoodFresh AI can be accessed live immediately or deployed to modern cloud platforms with turnkey configurations:
+
+### 🌟 1. GitHub Live (GitHub Pages Frontend)
+The frontend application is hosted directly on GitHub Pages:
+- 🔗 **Live Link**: **[https://anushka326.github.io/FoodFreshAI/](https://anushka326.github.io/FoodFreshAI/)**
+- **Automated CI/CD**: Whenever updates are pushed to the `main` branch, [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) automatically builds the production React 19 + Vite application and deploys it.
+- **Enable on GitHub**:
+  1. Go to repository **Settings** $\rightarrow$ **Pages** (in the left navigation).
+  2. Under **Build and deployment** $\rightarrow$ **Source**, select **GitHub Actions**.
+  3. GitHub runs the deployment pipeline and activates the live site immediately!
+
+---
+
+### ⚡ 2. Vercel Deployment (Frontend)
+The repository contains a native [`vercel.json`](vercel.json) configuration for 1-click frontend deployment:
+1. Go to [Vercel](https://vercel.com/) and click **Add New Project**.
+2. Import `anushka326/FoodFreshAI`.
+3. Vercel automatically detects the Vite configuration, sets `frontend` as root, and handles all client-side routing rewrites.
+4. Click **Deploy**. Your frontend will be live on a `*.vercel.app` domain with global edge CDN.
+
+---
+
+### ☁️ 3. Render Deployment (FastAPI Backend)
+Deploy the Python REST backend on [Render](https://render.com/) using the included [`render.yaml`](render.yaml) or via the Render Dashboard:
+1. In [Render Dashboard](https://dashboard.render.com/), click **New +** $\rightarrow$ **Web Service**.
+2. Connect your GitHub repository `FoodFreshAI`.
+3. Configure the service settings:
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements-render.txt`
+   - **Start Command**: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
+4. Under **Environment Variables**, add:
+   - `PYTHON_VERSION`: `3.11.9`
+   - `GROQ_API_KEY`: *(Your key from console.groq.com)*
+5. Click **Create Web Service**. Your live backend REST API and Swagger Docs will be available at `https://<your-service>.onrender.com/docs`.
 
 ---
 

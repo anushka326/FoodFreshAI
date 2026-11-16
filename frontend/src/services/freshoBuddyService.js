@@ -212,11 +212,7 @@ export const freshoBuddyService = {
   },
 
   getPantryMode() {
-    try {
-      return localStorage.getItem(PANTRY_MODE_STORAGE_KEY) === 'true';
-    } catch {
-      return false;
-    }
+    return false;
   },
 
   setPantryMode(enabled) {

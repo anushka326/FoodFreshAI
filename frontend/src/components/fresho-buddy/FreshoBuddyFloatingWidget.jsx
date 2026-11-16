@@ -16,13 +16,12 @@ export function FreshoBuddyFloatingWidget({ navigate }) {
   const [lastQuery, setLastQuery] = useState('');
   const [copiedId, setCopiedId] = useState(null);
   const [feedbackState, setFeedbackState] = useState({});
-  const [pantryMode, setPantryMode] = useState(() => freshoBuddyService.getPantryMode());
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const widgetContainerRef = useRef(null);
 
-  // Subscribe to food context changes and pantry mode changes
+  // Subscribe to food context changes
   useEffect(() => {
     const unsubContext = freshoBuddyService.subscribeFoodContext((ctx) => {
       setFoodContext(ctx);
@@ -30,12 +29,8 @@ export function FreshoBuddyFloatingWidget({ navigate }) {
         setHasNewMessage(true);
       }
     });
-    const unsubPantry = freshoBuddyService.subscribePantryMode((mode) => {
-      setPantryMode(mode);
-    });
     return () => {
       unsubContext();
-      unsubPantry();
     };
   }, []);
 
@@ -126,7 +121,7 @@ export function FreshoBuddyFloatingWidget({ navigate }) {
     setThinkingSteps(freshoBuddyService.getThinkingSteps(text, foodContext));
 
     try {
-      const reply = await freshoBuddyService.sendMessage(text, null, null, foodContext, pantryMode);
+      const reply = await freshoBuddyService.sendMessage(text, null, null, foodContext, false);
       setMessages((prev) => [
         ...prev,
         {
@@ -179,7 +174,7 @@ export function FreshoBuddyFloatingWidget({ navigate }) {
     }));
   };
 
-  const suggestionChips = freshoBuddyService.getSuggestionChips(foodContext, pantryMode);
+  const suggestionChips = freshoBuddyService.getSuggestionChips(foodContext, false);
   const isWelcomeState = messages.length === 0;
 
   return (
@@ -242,11 +237,9 @@ export function FreshoBuddyFloatingWidget({ navigate }) {
                   </h2>
                 </div>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className={`w-2 h-2 rounded-full shadow-[0_0_6px_rgba(22,163,74,0.6)] animate-pulse ${
-                    pantryMode ? 'bg-secondary' : 'bg-[#16a34a]'
-                  }`} />
+                  <span className="w-2 h-2 rounded-full shadow-[0_0_6px_rgba(22,163,74,0.6)] animate-pulse bg-[#16a34a]" />
                   <span className="text-[11px] font-semibold text-[#166534]">
-                    {pantryMode ? 'Pantry Guard' : 'Global Food AI'}
+                    Food AI Assistant
                   </span>
                 </div>
               </div>
@@ -254,25 +247,6 @@ export function FreshoBuddyFloatingWidget({ navigate }) {
 
             {/* Header Controls */}
             <div className="flex items-center gap-1.5">
-              {/* Synchronized Pantry Mode Pill Toggle */}
-              <button
-                type="button"
-                onClick={() => {
-                  const next = !pantryMode;
-                  freshoBuddyService.setPantryMode(next);
-                  setPantryMode(next);
-                }}
-                title={pantryMode ? 'Pantry Mode is ON (grounded in your pantry) – click to turn OFF' : 'Pantry Mode is OFF (general food knowledge) – click to turn ON'}
-                className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold flex items-center gap-1 transition-all cursor-pointer border ${
-                  pantryMode
-                    ? 'bg-secondary text-on-secondary border-secondary shadow-2xs'
-                    : 'bg-white/80 text-emerald-900 border-[#cce4c7] hover:bg-white'
-                }`}
-              >
-                <span className="material-symbols-outlined text-[13px]">{pantryMode ? 'shelves' : 'public'}</span>
-                <span>{pantryMode ? 'Pantry ON' : 'Pantry OFF'}</span>
-              </button>
-
               <button
                 type="button"
                 onClick={handleNewConversation}

@@ -24,23 +24,16 @@ export function FreshoBuddyPage({ navigate }) {
   const [showToast, setShowToast] = useState(false);
   const [feedbackState, setFeedbackState] = useState({});
 
-  // Pantry Mode toggle - synchronized globally
-  const [pantryMode, setPantryMode] = useState(() => freshoBuddyService.getPantryMode());
-
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Subscribe to food context changes and pantry mode changes
+  // Subscribe to food context changes
   useEffect(() => {
     const unsubContext = freshoBuddyService.subscribeFoodContext((ctx) => {
       setFoodContext(ctx);
     });
-    const unsubPantryMode = freshoBuddyService.subscribePantryMode((mode) => {
-      setPantryMode(mode);
-    });
     return () => {
       unsubContext();
-      unsubPantryMode();
     };
   }, []);
 
@@ -120,13 +113,6 @@ export function FreshoBuddyPage({ navigate }) {
     }
   };
 
-  const handleTogglePantryMode = () => {
-    const next = !pantryMode;
-    freshoBuddyService.setPantryMode(next);
-    setPantryMode(next);
-    triggerToast(next ? '🥦 Pantry Mode ON – answers grounded in your real pantry' : '🌐 Pantry Mode OFF – general food Q&A');
-  };
-
   const handleSend = async (queryText) => {
     const text = (queryText || inputVal).trim();
     if (!text || isThinking) return;
@@ -155,7 +141,7 @@ export function FreshoBuddyPage({ navigate }) {
     setThinkingSteps(freshoBuddyService.getThinkingSteps(text, foodContext));
 
     try {
-      const reply = await freshoBuddyService.sendMessage(text, activeConvId, null, foodContext, pantryMode);
+      const reply = await freshoBuddyService.sendMessage(text, activeConvId, null, foodContext, false);
 
       if (reply.conversationId && reply.conversationId !== activeConvId) {
         setActiveConvId(reply.conversationId);
@@ -211,7 +197,7 @@ export function FreshoBuddyPage({ navigate }) {
     else olderConvs.push(conv);
   });
 
-  const suggestionChips = freshoBuddyService.getSuggestionChips(foodContext, pantryMode);
+  const suggestionChips = freshoBuddyService.getSuggestionChips(foodContext, false);
 
   return (
     <div className="space-y-6 pb-12 font-sans">
@@ -237,35 +223,6 @@ export function FreshoBuddyPage({ navigate }) {
         </div>
 
         <div className="flex items-center gap-2.5 self-start sm:self-auto">
-          {/* ── Pantry Mode Toggle ── */}
-          <button
-            type="button"
-            onClick={handleTogglePantryMode}
-            title={pantryMode ? 'Pantry Mode is ON – click to turn OFF' : 'Pantry Mode is OFF – click to turn ON'}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm border cursor-pointer select-none ${
-              pantryMode
-                ? 'bg-secondary text-white border-secondary'
-                : 'bg-surface-container text-on-surface-variant border-surface-container-high hover:bg-surface-container-high'
-            }`}
-          >
-            <span className="material-symbols-outlined text-[16px]">kitchen</span>
-            <span>Pantry Mode</span>
-            <span
-              className={`inline-block w-7 h-4 rounded-full transition-colors relative ${
-                pantryMode ? 'bg-white/40' : 'bg-surface-container-highest'
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 w-3 h-3 rounded-full transition-all ${
-                  pantryMode ? 'left-3.5 bg-white' : 'left-0.5 bg-on-surface-variant'
-                }`}
-              />
-            </span>
-            <span className={`ml-0.5 font-extrabold ${pantryMode ? 'text-white' : 'text-on-surface-variant'}`}>
-              {pantryMode ? 'ON' : 'OFF'}
-            </span>
-          </button>
-
           <button
             type="button"
             onClick={handleNewConversation}
@@ -286,23 +243,6 @@ export function FreshoBuddyPage({ navigate }) {
           </button>
         </div>
       </div>
-
-      {/* Pantry Mode Status Banner */}
-      {pantryMode && (
-        <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-secondary-container/40 border border-secondary/20 text-xs text-on-secondary-container font-semibold">
-          <span className="material-symbols-outlined text-[16px] text-secondary">inventory_2</span>
-          <span>
-            <strong>Pantry Mode ON</strong> – FreshoBuddy is using your real pantry records to answer questions about expiry, Eat First priorities, and ingredient-based recipes.
-          </span>
-          <button
-            type="button"
-            onClick={handleTogglePantryMode}
-            className="ml-auto text-secondary hover:text-primary cursor-pointer font-bold underline shrink-0"
-          >
-            Turn OFF
-          </button>
-        </div>
-      )}
 
       {/* Main Studio Grid: Left Sidebar + Main Chat Area */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -430,13 +370,8 @@ export function FreshoBuddyPage({ navigate }) {
           {/* Main Area Header */}
           <div className="p-4 bg-surface-container-low/70 border-b border-surface-container-high/60 flex items-center justify-between">
             <div className="flex items-center gap-2.5 min-w-0">
-              <span className={`w-2.5 h-2.5 rounded-full shrink-0 animate-pulse ${pantryMode ? 'bg-secondary' : 'bg-primary'}`} />
+              <span className="w-2.5 h-2.5 rounded-full shrink-0 animate-pulse bg-primary" />
               <h2 className="text-sm font-bold text-primary truncate">{activeTitle}</h2>
-              {pantryMode && (
-                <span className="px-2 py-0.5 rounded-full bg-secondary text-white text-[10px] font-bold shrink-0">
-                  Pantry Mode
-                </span>
-              )}
             </div>
             <div className="flex items-center gap-2">
               <button
@@ -591,9 +526,7 @@ export function FreshoBuddyPage({ navigate }) {
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
                 placeholder={
-                  pantryMode
-                    ? 'Ask about your pantry items, expiry alerts, or Eat First priorities...'
-                    : foodContext?.detectedFood
+                  foodContext?.detectedFood
                     ? `Ask FreshoBuddy about this ${foodContext.detectedFood}...`
                     : 'Ask about food storage, freshness, nutrition, or zero-waste recipes...'
                 }
