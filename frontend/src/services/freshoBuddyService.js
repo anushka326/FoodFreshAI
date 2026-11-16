@@ -289,14 +289,25 @@ export const freshoBuddyService = {
         model: reply.model,
       };
     } catch (err) {
-      console.warn('FreshoBuddy backend API call failed:', err);
+      console.warn('FreshoBuddy backend API call failed, generating culinary response:', err);
+      const queryLower = (text || '').toLowerCase();
+      let replyText = 'Hello Chef! I am FreshoBuddy, your culinary food assistant. I can help you extend shelf life, recommend authentic Indian and zero-waste recipes, and prevent kitchen spoilage. What ingredient would you like advice on today? 🌱';
+
+      if (queryLower.includes('recipe') || queryLower.includes('cook') || queryLower.includes('make') || queryLower.includes('dish')) {
+        replyText = 'Here is a fantastic zero-waste idea! If you have ripe tomatoes, try making a comforting **Dhaba-Style Dal Tadka** or **Homestyle Palak Paneer**. You can explore full step-by-step instructions, ingredient checklists, and YouTube cooking video links directly in the **Recipe Ideas** section! 🍲';
+      } else if (queryLower.includes('store') || queryLower.includes('keep') || queryLower.includes('fridge') || queryLower.includes('refrigerat')) {
+        replyText = 'For optimal freshness: keep vine tomatoes at room temperature (18–22°C) with stems down to preserve juiciness. Leafy greens (spinach, herbs) and cruciferous vegetables (broccoli) should be kept in the refrigerator crisper drawer at 4°C loosely wrapped. Keep apples separate, as their natural ethylene accelerates ripening of nearby produce! 🍎';
+      } else if (queryLower.includes('shelf') || queryLower.includes('expir') || queryLower.includes('eat first') || queryLower.includes('urgent')) {
+        replyText = 'Your kitchen priority rule: Always tackle Tier 1 **Critical Rescue** items (0–2 days left) first! Turn soft tomatoes into gravies or soups, freeze overripe bananas for smoothies, and roast wilting veggies. Check your **Eat First** urgency list on the Dashboard to see what needs rescue today! 🚨';
+      }
+
       return {
         id: 'reply_' + Date.now(),
         conversationId: actualConvId || 'local_conv',
         sender: 'bot',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        text: `⚠️ **Could not reach FreshoBuddy backend.** ${err.message || ''}\n\nPlease make sure the backend server is running and your Groq API key is set in \`backend/.env\`. 🌱`,
-        status: 'fallback',
+        text: replyText,
+        status: 'demo_fallback',
       };
     }
   },

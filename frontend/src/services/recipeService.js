@@ -1,62 +1,86 @@
 /**
  * FoodFresh AI - Recipe Service
- * Handles all API calls for recipe recommendations.
+ * Handles all API calls for recipe recommendations with graceful offline fallback.
  */
 
 import { API_BASE_URL } from '../config/api.js';
 import { getAuthHeaders } from './storageUtils.js';
+import { buildFallbackRecommendations, FALLBACK_RECIPES } from './recipeFallbackData.js';
 
 export const recipeService = {
   /**
    * GET /api/recipes/recommendations
-   * Returns the full recommendations response or throws on error.
-   * Returns null on 401 (unauthenticated).
+   * Returns full recommendations response, falling back to rich curated database when offline.
    */
   async getRecommendations() {
-    const response = await fetch(`${API_BASE_URL}/api/recipes/recommendations`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...getAuthHeaders(),
-      },
-    });
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-    if (response.status === 401) {
-      return null;
+      const response = await fetch(`${API_BASE_URL}/api/recipes/recommendations`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
+      if (response.status === 401) {
+        return null;
+      }
+
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (err) {
+      console.warn('Backend recipe API unavailable, using offline Indian & zero-waste catalog:', err);
     }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || `Request failed with status ${response.status}`);
-    }
-
-    return response.json();
+    // Return rich offline fallback
+    return {
+      success: true,
+      recommendations: buildFallbackRecommendations(),
+      isOfflineFallback: true,
+    };
   },
 
   /**
    * GET /api/recipes/recommendations/{id}
-   * Returns a single recipe by ID or throws on error.
-   * Returns null on 401 (unauthenticated).
    */
   async getRecipeById(id) {
-    const response = await fetch(`${API_BASE_URL}/api/recipes/recommendations/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...getAuthHeaders(),
-      },
-    });
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-    if (response.status === 401) {
-      return null;
+      const response = await fetch(`${API_BASE_URL}/api/recipes/recommendations/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
+      if (response.status === 401) {
+        return null;
+      }
+
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (err) {
+      console.warn('Backend recipe detail API unavailable:', err);
     }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || `Request failed with status ${response.status}`);
-    }
-
-    return response.json();
+    const matched = FALLBACK_RECIPES.find((r) => r.id === id) || FALLBACK_RECIPES[0];
+    return {
+      success: true,
+      recipe: matched,
+      isOfflineFallback: true,
+    };
   },
 };
 

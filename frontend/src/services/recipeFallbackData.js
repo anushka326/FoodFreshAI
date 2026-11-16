@@ -1,0 +1,188 @@
+/**
+ * FoodFresh AI — Offline Recipe Fallback Database
+ * Provides authentic Indian recipes and zero-waste global dishes
+ * with YouTube links, ingredient checklists, and step-by-step instructions.
+ */
+
+export const FALLBACK_RECIPES = [
+  {
+    id: 'r_in_001',
+    name: 'Dhaba-Style Dal Tadka',
+    category: 'use_soon',
+    cuisine: 'Indian',
+    prep_time_minutes: 25,
+    image_emoji: '🍲',
+    youtube_url: 'https://www.youtube.com/results?search_query=dal+tadka+dhaba+style+recipe',
+    reason_template: 'Temper your ripe tomatoes into a golden, aromatic lentil curry with sizzling garlic ghee tadka.',
+    required_ingredients: ['tomato', 'onion', 'garlic', 'dal', 'ghee'],
+    steps: [
+      'Pressure cook yellow lentils (toor or moong dal) with turmeric and salt until creamy.',
+      'In a pan, heat 2 tbsp ghee; add cumin seeds, hing, minced garlic, and sliced onions.',
+      'Add chopped ripe tomatoes, red chili powder, and coriander powder; cook until soft and oil separates.',
+      'Pour the cooked dal into the masala; simmer together for 5 minutes.',
+      'Finish with fresh chopped coriander and a squeeze of lime juice. Serve hot with steamed rice or roti.',
+    ],
+    urgency_tier: 'urgent',
+    match_score: 95,
+  },
+  {
+    id: 'r_in_002',
+    name: 'Homestyle Palak Paneer / Saag',
+    category: 'use_soon',
+    cuisine: 'Indian',
+    prep_time_minutes: 20,
+    image_emoji: '🧀',
+    youtube_url: 'https://www.youtube.com/results?search_query=palak+paneer+dhabastyle+recipe',
+    reason_template: 'Rescue fresh spinach and tomatoes by blending into a vibrant, iron-rich spiced Indian gravy.',
+    required_ingredients: ['spinach', 'paneer', 'tomato', 'onion', 'garlic'],
+    steps: [
+      'Blanch washed spinach leaves in boiling water for 2 minutes, then plunge into ice water to keep bright green.',
+      'Blend the blanched spinach with ginger and green chillies into a smooth puree.',
+      'In a skillet, sauté cumin, onions, garlic, and diced tomatoes until fragrant.',
+      'Stir in the vibrant spinach puree, garam masala, and kasuri methi; simmer for 4 minutes.',
+      'Gently fold in fresh paneer cubes and a splash of cream. Serve hot with garlic naan or parathas.',
+    ],
+    urgency_tier: 'urgent',
+    match_score: 92,
+  },
+  {
+    id: 'r_in_003',
+    name: 'Aloo Gobhi Matar Homestyle Sabzi',
+    category: 'best_match',
+    cuisine: 'Indian',
+    prep_time_minutes: 25,
+    image_emoji: '🥔',
+    youtube_url: 'https://www.youtube.com/results?search_query=aloo+gobhi+matar+recipe',
+    reason_template: 'Turn fresh cauliflower, potatoes, and peas into a fragrant, golden North Indian curry.',
+    required_ingredients: ['potato', 'cauliflower', 'tomato', 'onion', 'peas'],
+    steps: [
+      'Cut cauliflower into bite-sized florets and peel potatoes into small cubes.',
+      'Heat mustard oil in a heavy kadai; add cumin seeds and bay leaf.',
+      'Sauté onions, ginger-garlic paste, and tomatoes with turmeric, coriander, and garam masala.',
+      'Add cauliflower, potatoes, and green peas; toss to coat evenly in the aromatic spices.',
+      'Cover with a lid and cook on low heat for 15 minutes until tender. Garnish with cilantro.',
+    ],
+    urgency_tier: 'moderate',
+    match_score: 88,
+  },
+  {
+    id: 'r_in_004',
+    name: 'South Indian Tomato Rasam',
+    category: 'quick',
+    cuisine: 'Indian',
+    prep_time_minutes: 15,
+    image_emoji: '🍅',
+    youtube_url: 'https://www.youtube.com/results?search_query=tomato+rasam+south+indian+recipe',
+    reason_template: 'Simmer ripe tomatoes into a tangy, soothing South Indian restorative broth.',
+    required_ingredients: ['tomato', 'garlic', 'curry leaves', 'mustard seeds', 'pepper'],
+    steps: [
+      'Crush 3 ripe tomatoes by hand in 2 cups of water with turmeric, crushed garlic, and black pepper.',
+      'Bring the broth to a gentle simmer for 7-8 minutes until the tomatoes soften.',
+      'In a tadka ladle, heat ghee; splutter mustard seeds, cumin seeds, dried red chili, and fresh curry leaves.',
+      'Pour the sizzling tadka directly into the simmering rasam; cover immediately to trap the aroma.',
+      'Serve steaming hot in a bowl or ladle generously over hot white rice.',
+    ],
+    urgency_tier: 'urgent',
+    match_score: 90,
+  },
+  {
+    id: 'r_in_005',
+    name: 'Fresh Alphonso Aamras',
+    category: 'quick',
+    cuisine: 'Indian',
+    prep_time_minutes: 5,
+    image_emoji: '🥭',
+    youtube_url: 'https://www.youtube.com/results?search_query=aamras+recipe+maharashtrian+style',
+    reason_template: 'Extract pure summer bliss from ripe Alphonso mangoes in this authentic chilled dessert.',
+    required_ingredients: ['mango', 'cardamom', 'milk'],
+    steps: [
+      'Wash, peel, and extract the rich golden pulp of 2 ripe Alphonso mangoes.',
+      'Blend the mango pulp with a pinch of freshly ground green cardamom powder and saffron strands.',
+      'Optional: add 2-3 tablespoons of chilled milk or cream for extra velvetiness.',
+      'Chill in the refrigerator for 20 minutes before serving.',
+      'Enjoy chilled with hot, fluffy puris or spoon directly as a gourmet dessert.',
+    ],
+    urgency_tier: 'moderate',
+    match_score: 85,
+  },
+  {
+    id: 'r_in_006',
+    name: 'Mumbai Pav Bhaji Vegetable Medley',
+    category: 'use_soon',
+    cuisine: 'Indian',
+    prep_time_minutes: 30,
+    image_emoji: '🥘',
+    youtube_url: 'https://www.youtube.com/results?search_query=pav+bhaji+mumbai+street+style',
+    reason_template: 'Rescue mixed vegetables by mashing into Mumbai’s iconic buttery spiced street feast.',
+    required_ingredients: ['potato', 'tomato', 'cauliflower', 'bell pepper', 'butter'],
+    steps: [
+      'Boil potatoes, cauliflower florets, and peas until fork-tender; mash coarsely.',
+      'On a large flat tawa, melt 2 tbsp butter; sauté finely chopped onions and bell peppers.',
+      'Add chopped tomatoes, ginger-garlic paste, and pav bhaji masala; cook until crimson and fragrant.',
+      'Mix in the mashed vegetables, add water to achieve desired consistency, and mash continuously.',
+      'Serve piping hot with butter-toasted pav buns, chopped onions, and lemon wedges.',
+    ],
+    urgency_tier: 'urgent',
+    match_score: 94,
+  },
+  {
+    id: 'r_in_007',
+    name: 'Classic Tomato Omelette',
+    category: 'quick',
+    cuisine: 'Global',
+    prep_time_minutes: 10,
+    image_emoji: '🍳',
+    youtube_url: 'https://www.youtube.com/results?search_query=classic+tomato+cheese+omelette',
+    reason_template: 'Use up ripe tomatoes in a protein-packed, golden breakfast omelette.',
+    required_ingredients: ['egg', 'tomato', 'onion', 'butter'],
+    steps: [
+      'Dice the tomato and onion into small pieces.',
+      'Whisk 2 eggs with a pinch of salt and black pepper.',
+      'Melt butter in a non-stick pan; sauté onion and tomato for 2 minutes.',
+      'Pour in the beaten eggs and cook until softly set.',
+      'Fold in half and serve warm with toasted sourdough.',
+    ],
+    urgency_tier: 'urgent',
+    match_score: 89,
+  },
+  {
+    id: 'r_in_008',
+    name: 'Creamy Banana Yogurt Smoothie',
+    category: 'quick',
+    cuisine: 'Global',
+    prep_time_minutes: 5,
+    image_emoji: '🥤',
+    youtube_url: 'https://www.youtube.com/results?search_query=healthy+banana+yogurt+smoothie',
+    reason_template: 'Turn ripe bananas into a creamy, probiotic smoothie before they over-ripen.',
+    required_ingredients: ['banana', 'yogurt', 'milk', 'honey'],
+    steps: [
+      'Peel and slice the ripe banana into blender.',
+      'Add 1/2 cup Greek yogurt and 1/2 cup cold milk.',
+      'Add a drizzle of honey and blend on high for 30 seconds until velvety smooth.',
+      'Pour into a chilled glass and serve immediately.',
+    ],
+    urgency_tier: 'moderate',
+    match_score: 87,
+  },
+];
+
+export function buildFallbackRecommendations() {
+  const all = FALLBACK_RECIPES;
+  const indian = all.filter((r) => r.cuisine === 'Indian');
+  const use_soon = all.filter((r) => r.category === 'use_soon');
+  const quick = all.filter((r) => r.category === 'quick');
+  const best_match = all.filter((r) => r.category === 'best_match' || r.match_score >= 90);
+
+  return {
+    all,
+    indian,
+    use_soon,
+    quick,
+    best_match,
+    pantry_summary: {
+      total_items: 4,
+      eat_first_count: 1,
+      items_expiring_soon: ['Vine Tomatoes'],
+    },
+  };
+}

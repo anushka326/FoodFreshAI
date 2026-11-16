@@ -1,16 +1,34 @@
 /**
  * FoodFresh AI - Frontend API Configuration
- * Supports environment overrides and falls back to proxy / direct FastAPI backend.
+ * Supports environment overrides, custom backend URL setting, and local fallback.
  */
 
 const DEFAULT_API_BASE = 'http://localhost:8000';
 
-export const API_BASE_URL = 
-  import.meta.env.VITE_API_BASE_URL !== undefined
-    ? import.meta.env.VITE_API_BASE_URL
-    : (typeof window !== 'undefined' && window.location.port && window.location.port !== '8000'
-        ? '' 
-        : DEFAULT_API_BASE);
+function resolveApiBaseUrl() {
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL !== undefined) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  if (typeof window !== 'undefined') {
+    try {
+      const customUrl = localStorage.getItem('foodfresh_backend_url');
+      if (customUrl && customUrl.trim()) {
+        return customUrl.trim().replace(/\/+$/, '');
+      }
+    } catch {}
+
+    // On localhost development, use Vite proxy or direct backend
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return window.location.port && window.location.port !== '8000' ? '' : DEFAULT_API_BASE;
+    }
+
+    // On GitHub Pages or static web hosts without custom backend set, use relative or empty
+    return '';
+  }
+  return DEFAULT_API_BASE;
+}
+
+export const API_BASE_URL = resolveApiBaseUrl();
 
 export const ENDPOINTS = {
   HEALTH: `${API_BASE_URL}/api/health`,

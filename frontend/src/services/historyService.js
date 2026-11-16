@@ -7,6 +7,7 @@ import { getAuthHeaders, getCurrentUserId } from './storageUtils.js';
 import { roadmapService } from './roadmapService.js';
 import { offlineSyncService } from './offlineSyncService.js';
 import { FOOD_ASSETS } from '../assets/food/index.js';
+import { seedDefaultPantryIfEmpty } from './authService.js';
 
 function getStorageKey(userId) {
   return `foodfresh_history_${userId || 'unknown'}`;
@@ -70,7 +71,11 @@ export const historyService = {
 
     // Offline fallback: return cached active items
     if (currentUid) {
-      const cached = getStoredHistory(currentUid);
+      let cached = getStoredHistory(currentUid);
+      if (!cached || cached.length === 0) {
+        seedDefaultPantryIfEmpty(currentUid);
+        cached = getStoredHistory(currentUid);
+      }
       if (cached && cached.length > 0) {
         const cachedItems = cached.map((item) => ({
           ...item,
@@ -242,8 +247,14 @@ export const historyService = {
         throw new Error('Please sign in to save items to your pantry history.');
       }
     } catch (e) {
-      console.warn('Backend save to history failed:', e);
-      throw e;
+      if (e.message && e.message.includes('sign in')) {
+        throw e;
+      }
+      console.warn('Backend save to history failed, using local offline storage:', e);
+      if (currentUid) {
+        const cached = getStoredHistory(currentUid);
+        saveStoredHistory(currentUid, [record, ...cached.filter((it) => it.id !== record.id)]);
+      }
     }
 
     await roadmapService.addFoodToRoadmap(record);
