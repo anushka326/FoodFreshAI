@@ -6,7 +6,6 @@ import { freshoBuddyService } from '../../services/freshoBuddyService.js';
 import { Toast } from '../../components/common/Toast.jsx';
 
 export function AnalyzeFoodPage({ navigate }) {
-  const [analysisMode, setAnalysisMode] = useState('single'); // 'single' | 'compare'
   const [uploadedImage, setUploadedImage] = useState(null);
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
   const [storageLocation, setStorageLocation] = useState('countertop'); // 'countertop' | 'fridge'
@@ -24,7 +23,6 @@ export function AnalyzeFoodPage({ navigate }) {
 
   // Results state conforming to FoodAnalysisResult
   const [singleResult, setSingleResult] = useState(null);
-  const [compareResults, setCompareResults] = useState(null);
 
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
@@ -140,7 +138,6 @@ export function AnalyzeFoodPage({ navigate }) {
     // Converge directly into the common image state
     setUploadedImage(capturedDataUrl);
     setSingleResult(null);
-    setCompareResults(null);
     setAnalysisError(null);
 
     // Mandatory cleanup of camera hardware stream
@@ -174,23 +171,17 @@ export function AnalyzeFoodPage({ navigate }) {
 
     setAnalysisError(null);
     setSingleResult(null);
-    setCompareResults(null);
     setIsScanning(true);
 
     try {
-      if (analysisMode === 'single') {
-        const result = await analysisService.analyzeSingleFood(uploadedImage, {
-          storage: storageLocation,
-          daysInPantry: daysInKitchen,
-        });
-        if (!result) {
-          throw new Error('Food analysis could not be completed.');
-        }
-        setSingleResult(result);
-      } else {
-        const results = await analysisService.compareMultipleFoods([uploadedImage]);
-        setCompareResults(results);
+      const result = await analysisService.analyzeSingleFood(uploadedImage, {
+        storage: storageLocation,
+        daysInPantry: daysInKitchen,
+      });
+      if (!result) {
+        throw new Error('Food analysis could not be completed.');
       }
+      setSingleResult(result);
     } catch (err) {
       setAnalysisError(err.message || 'Food analysis could not be completed.');
       triggerToast(err.message || 'Food analysis could not be completed.');
@@ -221,7 +212,6 @@ export function AnalyzeFoodPage({ navigate }) {
       reader.onload = (uploadEvent) => {
         setUploadedImage(uploadEvent.target.result);
         setSingleResult(null);
-        setCompareResults(null);
         setAnalysisError(null);
       };
       reader.readAsDataURL(file);
@@ -235,7 +225,6 @@ export function AnalyzeFoodPage({ navigate }) {
     stopCameraStream();
     setUploadedImage(null);
     setSingleResult(null);
-    setCompareResults(null);
     setAnalysisError(null);
     setCameraError(null);
     setIsScanning(false);
@@ -247,23 +236,15 @@ export function AnalyzeFoodPage({ navigate }) {
     stopCameraStream();
     setUploadedImage(null);
     setSingleResult(null);
-    setCompareResults(null);
     setAnalysisError(null);
     setCameraError(null);
-  };
-
-  const getPriorityLabel = (tier) => {
-    if (tier === 1) return 'Consume First';
-    if (tier === 2) return 'Consume Soon';
-    if (tier === 3) return 'Can Wait';
-    return 'Pending Evaluation';
   };
 
   return (
     <div className="space-y-8 pb-12 font-sans">
       <Toast message={toastMessage} visible={showToast} />
 
-      {/* Header & Mode Switcher */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight">
@@ -272,42 +253,6 @@ export function AnalyzeFoodPage({ navigate }) {
           <p className="text-xs sm:text-sm text-on-surface-variant mt-0.5">
             Inspect produce photos, evaluate visible quality, and prepare for ML model inference.
           </p>
-        </div>
-
-        {/* Tab Controls */}
-        <div className="flex items-center p-1 bg-surface-container-low rounded-2xl border border-surface-container-high self-start sm:self-auto">
-          <button
-            type="button"
-            onClick={() => {
-              setAnalysisMode('single');
-              setSingleResult(null);
-              setCompareResults(null);
-              setAnalysisError(null);
-            }}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              analysisMode === 'single'
-                ? 'bg-primary text-white shadow-2xs'
-                : 'text-on-surface-variant hover:text-primary'
-            }`}
-          >
-            🍎 Single Food Item
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setAnalysisMode('compare');
-              setSingleResult(null);
-              setCompareResults(null);
-              setAnalysisError(null);
-            }}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              analysisMode === 'compare'
-                ? 'bg-primary text-white shadow-2xs'
-                : 'text-on-surface-variant hover:text-primary'
-            }`}
-          >
-            🥇 Compare & Prioritize
-          </button>
         </div>
       </div>
 
@@ -561,7 +506,7 @@ export function AnalyzeFoodPage({ navigate }) {
           </div>
         </div>
 
-        {/* RIGHT WORKBENCH: Scanning Loader, Structured Result Card, Compare State, Error State, or Idle Workbench (7 cols) */}
+        {/* RIGHT WORKBENCH: Scanning Loader, Structured Result Card, Error State, or Idle Workbench (7 cols) */}
         <div className="lg:col-span-7">
           {/* STATE 3: SCANNING LOADER */}
           {isScanning && (
@@ -615,7 +560,7 @@ export function AnalyzeFoodPage({ navigate }) {
           )}
 
           {/* STATE 4: STRUCTURED FOOD ANALYSIS RESULT CARD */}
-          {analysisMode === 'single' && singleResult && !isScanning && !analysisError && (
+          {singleResult && !isScanning && !analysisError && (
             <div className="p-6 sm:p-8 rounded-3xl bg-white border border-surface-container-high/80 shadow-md space-y-6 animate-in fade-in duration-300">
               {/* Header / Pipeline Status */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-container-low">
@@ -917,21 +862,8 @@ export function AnalyzeFoodPage({ navigate }) {
             </div>
           )}
 
-          {/* MULTI-FOOD COMPARISON WORKBENCH */}
-          {analysisMode === 'compare' && !isScanning && (
-            <div className="p-8 rounded-3xl bg-white border border-surface-container-high/80 shadow-md space-y-4 text-center">
-              <div className="w-16 h-16 rounded-full bg-surface-container mx-auto flex items-center justify-center text-3xl shadow-2xs">
-                🥇
-              </div>
-              <h3 className="text-lg font-bold text-primary">Multi-Food Prioritization</h3>
-              <p className="text-xs text-on-surface-variant max-w-md mx-auto leading-relaxed">
-                Multi-item Eat First prioritization and comparison will be available when the shelf-life model and ranking pipeline are integrated.
-              </p>
-            </div>
-          )}
-
           {/* STATE 2: IMAGE LOADED, READY FOR ANALYSIS */}
-          {analysisMode === 'single' && uploadedImage && !isScanning && !singleResult && !analysisError && (
+          {uploadedImage && !isScanning && !singleResult && !analysisError && (
             <div className="p-10 rounded-3xl bg-surface-container-low/70 border border-dashed border-secondary/40 text-center space-y-3 animate-in fade-in duration-200">
               <div className="w-16 h-16 rounded-full bg-white mx-auto flex items-center justify-center text-3xl shadow-2xs">
                 📷
@@ -944,7 +876,7 @@ export function AnalyzeFoodPage({ navigate }) {
           )}
 
           {/* STATE 1: IDLE EMPTY STATE (NO IMAGE LOADED) */}
-          {analysisMode === 'single' && !uploadedImage && !isScanning && !singleResult && !analysisError && (
+          {!uploadedImage && !isScanning && !singleResult && !analysisError && (
             <div className="p-10 rounded-3xl bg-surface-container-low/60 border border-dashed border-surface-container-high text-center space-y-3">
               <div className="w-16 h-16 rounded-full bg-white mx-auto flex items-center justify-center text-3xl shadow-2xs">
                 🌿

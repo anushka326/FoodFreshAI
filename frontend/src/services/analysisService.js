@@ -236,17 +236,6 @@ export const analysisService = {
       analyzedAt: new Date().toISOString(),
       message: data.message || (data.detectedFood ? `Recognized as ${data.detectedFood} with ${rawConfPercent}% confidence.` : 'Analysis complete.'),
     };
-
-  },
-
-  /**
-   * Multi-item comparison stub for future stages
-   * @param {Array<File|string>} items
-   * @returns {Promise<Array<object>>}
-   */
-  async compareMultipleFoods(items = []) {
-    await new Promise((res) => setTimeout(res, 400));
-    return [];
   },
 };
 
