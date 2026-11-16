@@ -40,6 +40,9 @@ jobs:
       - name: Ensure 404 fallback for SPA routing
         run: cp frontend/dist/index.html frontend/dist/404.html
 
+      - name: Bypass Jekyll processing
+        run: touch frontend/dist/.nojekyll
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
