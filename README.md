@@ -1,184 +1,333 @@
 # FoodFresh AI 🌱
-*Know. Save. Waste Less.*
+### *Know Your Food. Save Your Food. Waste Less.*
 
-FoodFresh AI is an intelligent computer vision, machine learning, and culinary intelligence platform designed to eliminate household food waste, accurately predict produce freshness and shelf life, and provide grounded zero-waste guidance.
+<div align="center">
+
+![FoodFresh AI Mascot](frontend/src/assets/mascot/official-mascot.svg)
+
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-2b5b84?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React 19](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Vite 6](https://img.shields.io/badge/Vite-6.4-646cff?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Groq AI](https://img.shields.io/badge/Groq-Qwen_2.5-f55036?style=for-the-badge&logo=groq&logoColor=white)](https://groq.com/)
+[![Dataset Release](https://img.shields.io/badge/Dataset-v1.0.0--data-10b981?style=for-the-badge&logo=github&logoColor=white)](https://github.com/anushka326/FoodFreshAI/releases/tag/v1.0.0-data)
+[![License: MIT](https://img.shields.io/badge/License-MIT-amber?style=for-the-badge)](LICENSE)
+
+**FoodFresh AI** transforms kitchen sustainability into an interactive, gamified journey. By fusing **cutting-edge Computer Vision (GroundingDINO + SigLIP-2 + Fine-Tuned ResNet-18)**, **Machine Learning Shelf-Life Regression**, and **FreshoBuddy conversational culinary intelligence**, FoodFresh AI empowers households to eliminate food waste, conquer expiration countdowns, and turn produce into culinary triumphs.
+
+[🚀 Explore Live Demo](#-quickstart-guide) • [🎮 Gamification & Companions](#-gamified-kitchen-experience) • [🧠 AI Architecture](#-machine-learning--vision-pipeline) • [📦 Dataset Setup](#-dataset-download-and-setup) • [🧪 Testing](#-testing--verification)
+
+</div>
+
+---
+
+## 🎮 Gamified Kitchen Experience
+
+FoodFresh AI turns zero-waste living into an engaging, score-driven kitchen RPG where every rescued food item levels up your sustainability stats.
+
+```
++---------------------------------------------------------------------------------------+
+|  🌿 KITCHEN PANTRY ECOLOGY INDEX: 94%                                🏆 LEVEL 7 CHEF   |
+|  [████████████████████████████████████████████████████████░░░░]       1,420 / 2,000 XP |
++---------------------------------------------------------------------------------------+
+|  🍽️ 8 Items Tracked     |  🚨 2 Eat-First Urgent    |  💧 1,278 L Water Saved         |
+|  🥬 7 Rescued in Time   |  🎉 89% Stewardship Rate  |  💨 1.08 kg CO₂e Diverted       |
++---------------------------------------------------------------------------------------+
+```
+
+### 1. 🏅 3-Tier "Eat First" Urgency Quests
+The system monitors produce age and dynamically issues real-time kitchen quests:
+- 🔴 **Tier 1 — Critical Rescue (0–2 Days Left)**: Immediate priority! Ingredients close to their quality limit receive red alerts and instant recipe matches.
+- 🟡 **Tier 2 — Prep Squad (3–5 Days Left)**: Moderate priority. Proactively suggested for weekday dinners and meal planning.
+- 🟢 **Tier 3 — Fresh & Crisp (6+ Days Left)**: Safe and stable. Long-term storage optimization applied.
+
+### 2. 🎭 36-Companion Kitchen Avatar Matrix
+Personalize your chef identity! Choose from **36 original vector illustrated companions** across 6 distinct culinary and eco guilds:
+
+| Guild | Icon | Representative Characters | Kitchen Specialty |
+|---|:---:|---|---|
+| **Fruit Buddies** | 🍎 | Pip the Apple, Bella Banana, Ruby Strawberry, Sunny Alphonso, Ollie Orange, Gaby Grape | Crispness guardians & fruit basket masters |
+| **Veggie Friends** | 🥦 | Benny Broccoli, Chloe Carrot, Tommy Tomato, Sammy Spinach, Pippa Bell Pepper, Percy Pea Pod | Crisper-drawer nutrition champions |
+| **Nature Lovers** | 🌱 | Sunny Sunflower, Rosie Rose, Daisy Blossom, Ferny Frond, Lily Lotus, Honey Lavender | Botanical storage & seasonal harvest buffs |
+| **Animal Pals** | 🦊 | Barnaby Bear, Cleo Cat, Dash Dog, Poppy Penguin, Toby Turtle, Barnaby Bunny | Pollinator appreciation & pantry foraging scouts |
+| **Little Chefs** | 👨‍🍳 | Chef Leo, Baker Bella, Squeezy Sam, Stirry Stella, Whisk Walter, Baker Bonnie | Zero-waste culinary mastery & creative substitutions |
+| **Eco Heroes** | ♻️ | Terra Sprout, Hydro Drop, Solar Sol, Breeze Zephyr, Composting Charlie, Recycle Riley | Composting champions & closed-loop living |
+
+### 3. 🌍 Scientifically Grounded Impact Analytics
+Say goodbye to arbitrary constants. FoodFresh AI calculates your environmental footprint using authenticated **Life Cycle Assessment (LCA)** coefficients adapted from the **UN Food and Agriculture Organization (FAO)** and **Poore & Nemecek (2018)**:
+- ⚖️ **Avoided Landfill Mass**: Cumulative weight of ingredients consumed before spoilage.
+- 💨 **Mitigated $\text{CO}_2\text{e}$ Footprint**: Item-specific greenhouse gas reduction based on agricultural emission profiles.
+- 💧 **Virtual Water Conserved**: Embedded crop irrigation and blue/green water savings.
+- 📊 **Stewardship Ratio**: Interactive visual doughnut gauge tracking produce saved versus discarded.
 
 ---
 
 ## 🌟 Key Features
 
-1. **AI Vision & Freshness Detection**:
-   - Computer vision pipelines classifying produce items, determining visible freshness status, and projecting remaining shelf-life days.
-2. **FreshoBuddy AI (Groq & Qwen 2.5/3.8)**:
-   - Intelligent kitchen companion with **Pantry Mode ON/OFF** toggle.
-   - **Global Mode (Pantry OFF)**: Answers general culinary, storage, and food science questions without requiring saved pantry items.
-   - **Pantry Mode (Pantry ON)**: Grounded in the user's authentic pantry inventory with deterministic Eat First urgency rankings.
-3. **Themed Avatar Selection System**:
-   - Custom-crafted profile avatar collection featuring 6 categories: *Fruit Buddies*, *Veggie Friends*, *Nature Lovers*, *Animal Pals*, *Little Chefs*, and *Eco Heroes*.
-4. **Impact Analytics & Sustainability Metrics**:
-   - Visual tracking of monthly money saved, food waste diverted (kg), CO₂ reduction, and waste reduction percentage.
-5. **Packaged Food Scanner & OCR**:
-   - Barcode lookup via OpenFoodFacts and nutritional label optical character recognition.
-6. **Smart Recipe Recommendations**:
-   - Dynamic recipe generator prioritizing produce approaching its quality limit.
-7. **PWA & Offline Resilience**:
-   - Service worker caching, offline status indicators, and background synchronization.
+```mermaid
+flowchart LR
+    A["📸 Produce Photo / Barcode"] --> B["🧠 Hybrid Vision Pipeline"]
+    B --> C["🔬 Freshness & Shelf-Life ML"]
+    C --> D["🚨 Eat First Prioritization"]
+    D --> E["🥫 Active Smart Pantry"]
+    E --> F["🤖 FreshoBuddy AI"]
+    E --> G["🍛 Zero-Waste Indian & Global Recipes"]
+    E --> H["📊 Impact Analytics & Eco Footprint"]
+```
+
+### 👁️ AI Vision & Produce Freshness Detection
+- Upload photos or use live mobile camera capture without filters.
+- **Master Hybrid Vision Pipeline** identifies produce species, detects visible deterioration, calculates freshness confidence scores, and projects remaining shelf-life days.
+- **Smart Temperature Calibration**: Prevents overconfidence on ambiguous lighting or dark skins.
+
+### ⏳ Trained Shelf-Life Regressor + USDA Guardrails
+- Powered by a machine-learning **GradientBoostingRegressor** trained on produce decay intervals.
+- Grounded by the **USDA FoodKeeper Database** to ensure realistic minimum/maximum lifespans across both **Countertop** and **Refrigerated** storage conditions.
+
+### 🤖 FreshoBuddy AI (Groq & Qwen 2.5/3.8)
+Your lively AI sous-chef and culinary companion:
+- 🔄 **Pantry Mode ON**: Contextually grounded in your live pantry items. Ask *"What foods do I currently have?"* or *"What should I cook first?"* to receive tailored advice.
+- 🌐 **Pantry Mode OFF (Global Mode)**: Open culinary encyclopedia answering general storage science, food preservation, and cooking queries.
+- 🎯 **Advanced NLP Intent Engine**: Automatically identifies ownership queries, recipe searches, storage inquiries, and urgent ingredient triage.
+
+### 🍛 Authentic Indian & Zero-Waste Global Recipe Engine
+- Custom-tailored to minimize food waste by turning expiring pantry items into gourmet meals.
+- Expansive catalogue of **authentic Indian recipes** (Dals, Sabzis, Curries, Biryanis, Street Snacks, Chutneys) and international cuisines.
+- Includes YouTube cooking video links, ingredient checklists, prep times, and step-by-step instructions.
+
+### 📦 Packaged Foods Scanner & Nutrition OCR
+- Seamless barcode lookups backed by OpenFoodFacts.
+- On-device optical character recognition to extract shelf-life dates, ingredients, and nutrition facts from packaging labels.
+
+### 🔔 Slide-Over Expiry Alerts & Notification Drawer
+- High-visibility slide-over drawer notifying you of expiring items without interrupting your active workflow.
+- Direct links to analyze or cook with alert items.
+
+### 🔐 Hardened Authentication & SQLite Architecture
+- Multi-user isolation with non-destructive schema migrations.
+- Supports email, full name, and lowercase username login aliases.
+- Secure password hashing with legacy hash backward-compatibility.
+
+---
+
+## 🧠 Machine Learning & Vision Pipeline
+
+FoodFresh AI deploys a layered hybrid intelligence stack:
+
+```
++-----------------------------------------------------------------------------------------+
+|                                MASTER HYBRID VISION PIPELINE                             |
++-----------------------------------------------------------------------------------------+
+|  [Stage 1] Object Detection     | IDEA-Research/grounding-dino-base                     |
+|                                 | Extracts bounding boxes & isolates food regions       |
++---------------------------------+-------------------------------------------------------+
+|  [Stage 2] Semantic Recognition | google/siglip2-base-patch16-224                       |
+|                                 | Zero-shot multi-modal feature vector extraction       |
++---------------------------------+-------------------------------------------------------+
+|  [Stage 3] Domain Specialist    | AgriFreshNET Fine-Tuned ResNet-18 (V2)                |
+|                                 | Classifies Freshness: Fresh, Semi-Fresh, Rotten       |
++---------------------------------+-------------------------------------------------------+
+|  [Stage 4] Shelf-Life Regressor | GradientBoostingRegressor + USDA FoodKeeper Engine     |
+|                                 | Estimates exact days remaining given kitchen storage  |
++---------------------------------+-------------------------------------------------------+
+|  [Stage 5] Priority Engine      | Deterministic 3-Tier Eat First Multi-Factor Ranking   |
++-----------------------------------------------------------------------------------------+
+```
 
 ---
 
 ## 📁 Repository Structure
 
-```
+```text
 FoodFreshAI/
-├─ frontend/          # React 19, Vite, Tailwind CSS application
-│  ├─ src/
-│  │  ├─ assets/avatars/   # Themed SVG avatar catalog
-│  │  ├─ components/       # UI components & floating FreshoBuddy widget
-│  │  ├─ pages/            # Dashboard, FreshoBuddy, Analytics, History, etc.
-│  │  └─ services/         # API clients (auth, history, pantry, chatbot)
-├─ backend/           # FastAPI REST API & SQLite persistence
-│  ├─ app/
-│  │  ├─ database/chat_db.py # SQLite database engine & schema management
-│  │  ├─ deps/               # Authentication & dependency injection
-│  │  ├─ routes/             # API routes (auth, chatbot, pantry, analytics, etc.)
-│  │  └─ services/           # Intent classifier, triage engine, Groq client
-├─ ml/                # Machine learning vision & freshness pipelines
-├─ scripts/           # Automated verification suites & test tools
-└─ README.md
+├── backend/                              # FastAPI REST API Backend
+│   ├── app/
+│   │   ├── database/chat_db.py           # SQLite database engine & schema migration
+│   │   ├── deps/                         # JWT authentication & dependencies
+│   │   ├── routes/                       # API routes (auth, food-recognition, pantry, analytics)
+│   │   ├── schemas/                      # Pydantic request/response schemas
+│   │   └── services/                     # Intent triage, analytics, Groq client
+│   └── requirements.txt                  # Python dependencies
+├── frontend/                             # React 19 + Vite 6 Application
+│   ├── src/
+│   │   ├── assets/avatars/               # 36-avatar SVG vector catalog
+│   │   ├── assets/mascot/                # Official FreshoBuddy vector brand assets
+│   │   ├── components/                   # Reusable UI components, widgets, modals
+│   │   ├── pages/                        # Dashboard, Analyze, Pantry, Analytics, History
+│   │   └── services/                     # Frontend API clients
+│   ├── package.json                      # Node.js dependencies
+│   └── vite.config.js                    # Vite bundler configuration
+├── ml/                                   # Machine Learning Core
+│   ├── hybrid_vision/                    # GroundingDINO, SigLIP-2 & ResNet fusion
+│   ├── freshness/                        # AgriFreshNET ResNet-18 fine-tuning
+│   └── shelf_life/                       # Shelf-life ML regressor & feature encoders
+├── data/                                 # Datasets & Manifests (See Dataset Setup)
+│   ├── raw/Synthetic data/               # 41,280-row synthetic shelf-life CSV & schema
+│   ├── raw/foodkeeper/                   # USDA FoodKeeper official JSON
+│   ├── processed/                        # 35 train/val/test split manifests & mappings
+│   ├── real_world_eval/                  # Curated consumer smartphone evaluation photos
+│   └── real_world_food/                  # Domain-adaptation category structures
+├── models/                               # Pretrained & trained model weights (.joblib, .pth)
+├── reports/                              # Dataset inspection & benchmark verification reports
+├── scripts/                              # Automation & verification scripts
+│   ├── download_datasets.py              # Automated 1.16 GB dataset downloader & extractor
+│   └── validate_all_datasets.py          # 5-stage comprehensive dataset validation
+└── README.md
 ```
 
 ---
 
 ## 📦 Dataset Download and Setup
 
-FoodFresh AI relies on comprehensive multi-modal food datasets combining real-world produce images, laboratory visual datasets, USDA food safety benchmarks, and synthetic regression data.
+FoodFresh AI combines laboratory produce datasets, agricultural real-world images, USDA food-safety benchmarks, and synthetic regression data.
 
-### 1. Datasets Included Directly in this Repository
+### 1. Datasets Committed Directly to the Repository
+The following supporting datasets are included directly in the Git repository:
+- **FoodFreshAI Synthetic Dataset** (`data/raw/Synthetic data/`): 41,280 annotated entries across 43 classes covering produce, bakery, and environmental condition variations.
+- **USDA FoodKeeper Database** (`data/raw/foodkeeper/FoodKeeper.json`): Official USDA reference shelf-life intervals.
+- **Processed Split Manifests** (`data/processed/`): 35 train/val/test split CSV manifests and label mapping JSONs for AgriFreshNET and Fruits-360.
+- **Real-World Test Images** (`data/real_world_eval/` & `data/real_world_food/`): Consumer evaluation images for testing domain adaptation.
 
-The following supporting datasets and metadata are committed directly to the repository:
+### 2. Complete 1.16 GB Image Dataset (GitHub Releases)
+The complete image dataset consists of **approximately 199,560 images** across **AgriFreshNET** (14,160 produce images with freshness stages) and **Fruits-360** (~184,840 high-resolution images).
 
-- **Synthetic Freshness & Shelf-Life Dataset** (`data/raw/Synthetic data/`): 41,280 annotated entries across 43 food classes covering produce, bakery, and environmental condition variations. Includes schema and evaluation documentation.
-- **USDA FoodKeeper Database** (`data/raw/foodkeeper/FoodKeeper.json`): Ground-truth storage guidelines, maximum shelf-life intervals, and refrigerated/pantry thresholds from the USDA Food Safety and Inspection Service.
-- **Processed Split Manifests & Label Maps** (`data/processed/`): 35 train/validation/test CSV manifests and JSON mappings partitioning AgriFreshNET and Fruits-360 for reproducible training.
-- **Real-World Evaluation Sets** (`data/real_world_eval/` & `data/real_world_food/`): Consumer smartphone images across kitchen environments to evaluate model generalization under domain shift.
+Because committing 200,000 raw image files directly to Git exceeds GitHub's 100 MiB limit and bloats repository clone sizes, the full archive is published as an official GitHub Release asset:
 
-### 2. Why the Complete Image Dataset is Distributed Separately
-
-The full visual dataset consists of **approximately 199,560 images** across two primary computer vision datasets:
-- **AgriFreshNET**: 14,160 real-world images across 24 produce freshness stages and shelf-life categories.
-- **Fruits-360**: High-resolution classification images across fruit and vegetable categories.
-
-The complete packaged archive ([`data.zip`](https://github.com/anushka326/FoodFreshAI/releases/download/v1.0.0-data/data.zip)) is **1.16 GB (1,218,547,758 bytes)**. Committing nearly 200,000 raw image files directly to the Git repository would exceed GitHub's 100 MiB single-file limit, severely bloat the repository object database, and degrade cloning performance.
-
-To provide clean, fast cloning while keeping the full dataset accessible, the complete dataset is published as an official release asset on GitHub Releases:
-- **GitHub Release**: [FoodFreshAI Complete Dataset v1.0.0 (tag: v1.0.0-data)](https://github.com/anushka326/FoodFreshAI/releases/tag/v1.0.0-data)
+- **Release Page**: [FoodFreshAI Complete Dataset v1.0.0 (Tag: v1.0.0-data)](https://github.com/anushka326/FoodFreshAI/releases/tag/v1.0.0-data)
 - **Direct Download URL**: [https://github.com/anushka326/FoodFreshAI/releases/download/v1.0.0-data/data.zip](https://github.com/anushka326/FoodFreshAI/releases/download/v1.0.0-data/data.zip)
-- **Archive Size**: 1,218,547,758 bytes (1,162.10 MB)
+- **Archive Size**: 1,218,547,758 bytes (1,162.10 MB / 1.13 GB)
 - **SHA-256 Checksum**: `dffbb071227a40c20d140a6a60c38872947ed5ec8ce9b3158338474816a145b2`
 
-### 3. Automatic Download & Setup
-
-To download, verify, and extract the complete dataset in one step, run:
+### 3. Automated One-Command Setup
+To download, verify, and extract the complete dataset archive automatically:
 
 ```bash
 python scripts/download_datasets.py
 ```
 
-The script will:
-1. Verify whether the dataset is already extracted locally.
-2. Download `data.zip` from the official GitHub Release with a live progress display.
-3. Validate the archive against the expected SHA-256 checksum (`dffbb0...`).
-4. Safely extract all image directories into `data/raw/` preserving the original directory layout.
+The script features:
+- Instant detection: skips downloading if the dataset is already present.
+- Live progress indicator with download speed.
+- Strict SHA-256 integrity validation.
+- Safe extraction directly into `data/raw/`.
 
-#### Expected Directory Layout After Extraction:
-```text
-data/
-├── raw/
-│   ├── AgriFreshNET Freshness and Shelf-Life Image Datase/
-│   │   └── Processed Data/Processed Data/
-│   │       ├── Fresh Banana(1-4)/
-│   │       ├── Rotten banana(7-13)/
-│   │       └── ... (24 produce categories)
-│   ├── fruits-360-100x100-main/
-│   │   ├── Training/
-│   │   └── Test/
-│   ├── Synthetic data/
-│   │   ├── FoodFreshAI_Synthetic_Freshness_ShelfLife_Dataset.csv
-│   │   └── ...
-│   └── foodkeeper/
-│       └── FoodKeeper.json
-├── processed/
-│   ├── agrifreshnet/
-│   ├── cross_dataset/
-│   ├── food_recognition_v3/
-│   ├── freshness_v2/
-│   ├── fruits360/
-│   └── fruits360_v2/
-├── real_world_eval/
-└── real_world_food/
-```
-
-After extraction, you can verify dataset integrity at any time with:
+Verify dataset integrity at any time:
 ```bash
 python scripts/validate_all_datasets.py
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quickstart Guide
 
 ### Prerequisites
-- Python 3.10+
-- Node.js 18+ & npm
-- Groq API Key (for FreshoBuddy AI)
+- **Python**: 3.10 or higher
+- **Node.js**: 18.x or higher with npm
+- **Groq API Key**: (Free tier available at [console.groq.com](https://console.groq.com/))
 
-### Backend Setup
+### 1. Clone the Repository
 ```bash
-# 1. Activate virtual environment
-.\.venv\Scripts\Activate.ps1  # Windows
-# or: source .venv/bin/activate  # Linux/macOS
+git clone https://github.com/anushka326/FoodFreshAI.git
+cd FoodFreshAI
+```
 
-# 2. Install dependencies
+### 2. Backend Setup
+```bash
+# Create and activate virtual environment
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1   # Windows PowerShell
+# source .venv/bin/activate    # Linux / macOS
+
+# Install backend dependencies
 pip install -r backend/requirements.txt
 
-# 3. Configure environment
+# Configure environment variables
 # Copy .env.example to backend/.env and populate your GROQ_API_KEY
+copy backend\.env.example backend\.env   # Windows
+# cp backend/.env.example backend/.env    # Linux / macOS
 
-# 4. Start backend server
+# Launch FastAPI backend server
 uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
+*Backend Swagger Docs will be available at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)*
 
-### Frontend Setup
+### 3. Frontend Setup
 ```bash
-# 1. Navigate to frontend directory
+# In a separate terminal window
 cd frontend
 
-# 2. Install dependencies
+# Install Node modules
 npm install
 
-# 3. Start development server
+# Start Vite development server
 npm run dev
-# Running on http://localhost:3000
 ```
+*Open [http://localhost:3000](http://localhost:3000) in your browser to experience FoodFresh AI.*
 
 ---
 
-## 🔐 Authentication & API Flow
+## 🧪 Testing & Verification
 
-- **Register**: `POST /api/auth/register` (creates user account & initializes default avatar)
-- **Login**: `POST /api/auth/login` (returns bearer session token & user profile)
-- **Current User**: `GET /api/auth/me` (requires `Authorization: Bearer <token>`)
-- **Avatar Selection**: `PATCH /api/auth/avatar` (persists chosen themed avatar across all devices)
-- **Chat with FreshoBuddy**: `POST /api/fresho-buddy/chat` (supports `pantryMode: true/false`)
-- **Health Check**: `GET /api/health`
+FoodFresh AI includes comprehensive automated test suites covering ML regression, authentication, intent triage, and analytics:
 
----
-
-## 🧪 Testing
-
-Run comprehensive live verification:
 ```bash
-python scripts/test_live_all_scenarios.py
-python scripts/test_auth_full_verification.py
-python scripts/test_avatar_integration.py
+# Run core test suite (ML shelf-life, countdowns, intents, user isolation)
+pytest tests/test_food_form_regression.py tests/test_fresho_buddy_intents.py \
+  tests/test_food_recognition.py tests/test_shelf_life_regression.py \
+  tests/test_synthetic_dataset_integration.py tests/test_pantry_countdown.py \
+  tests/test_auth_user_isolation.py
+
+# Test food recognition API endpoints
+python -m unittest tests/test_food_recognition_api.py
+
+# Verify LCA sustainability impact calculations
+python scripts/test_impact_analytics_comprehensive.py
+
+# Test FreshoBuddy conversational context & pantry ownership queries
+python scripts/test_fresho_buddy_history_intelligence.py
+
+# Build frontend for production
+npm --prefix frontend run build
 ```
+
+---
+
+## 🛠️ Technology Stack
+
+| Domain | Technologies |
+|---|---|
+| **Frontend UI/UX** | React 19, Vite 6, Tailwind CSS 4, Material Symbols, Lucide Icons, Canvas API |
+| **Backend & REST APIs** | FastAPI, Uvicorn, Python 3.12, Pydantic V2, SQLite3 with WAL mode |
+| **Computer Vision & ML** | PyTorch, Hugging Face Transformers, GroundingDINO, SigLIP-2, ResNet-18 / ResNet-50 |
+| **Shelf-Life ML** | Scikit-Learn GradientBoostingRegressor, Joblib, NumPy, Pandas |
+| **Conversational AI** | Groq Cloud API, Qwen 2.5 / Qwen 3.8, Custom Rule-Based Intent Classifier |
+| **Security & Persistence** | JWT Bearer Tokens, Passlib / BCrypt, PBKDF2 Legacy Support, Isolated Databases |
+| **Data & Benchmarks** | AgriFreshNET, Fruits-360, USDA FoodKeeper, UN FAO LCA Benchmarks |
+
+---
+
+## 🤝 Contributing & Community
+
+Contributions make the open-source food sustainability community thrive!
+1. Fork the Project (`https://github.com/anushka326/FoodFreshAI`)
+2. Create your Feature Branch (`git checkout -b feature/CoolPantryFeature`)
+3. Commit your Changes (`git commit -m "feat: add zero-waste recipe generator"`)
+4. Push to the Branch (`git push origin feature/CoolPantryFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**. See `LICENSE` for details.
+
+---
+
+<div align="center">
+
+🌱 **FoodFresh AI** — *Empowering kitchens worldwide to eliminate food waste, one delicious meal at a time.*
+
+Made with 💚 by **Anushka Pise** & the FoodFresh AI Team.
+
+</div>
