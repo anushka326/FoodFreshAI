@@ -4,11 +4,31 @@ import { UserAvatar } from '../common/UserAvatar.jsx';
 import { NotificationCenter } from '../notifications/NotificationCenter.jsx';
 import { PwaInstallPrompt } from '../common/PwaInstallPrompt.jsx';
 import { offlineSyncService } from '../../services/offlineSyncService.js';
+import { ENDPOINTS } from '../../config/api.js';
 
 export function Navbar({ onMenuToggle, currentRoute, navigate }) {
   const { user } = useAuth();
   const displayName = user?.fullName || 'Kitchen Chef';
   const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+  const [backendLive, setBackendLive] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    const probe = async () => {
+      try {
+        const res = await fetch(ENDPOINTS.HEALTH, { signal: AbortSignal.timeout(2500) });
+        if (active) setBackendLive(res.ok);
+      } catch {
+        if (active) setBackendLive(false);
+      }
+    };
+    probe();
+    const timer = setInterval(probe, 8000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, []);
 
   useEffect(() => {
     const unsub = offlineSyncService.subscribe((state) => {
@@ -41,6 +61,27 @@ export function Navbar({ onMenuToggle, currentRoute, navigate }) {
 
       {/* Right User Telemetry & Avatar */}
       <div className="flex items-center gap-2.5 sm:gap-4">
+        {/* Backend Live Indicator */}
+        <div
+          className={`hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-colors shadow-2xs ${
+            backendLive
+              ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+              : 'bg-surface-container text-on-surface-variant border-surface-container-high'
+          }`}
+          title={
+            backendLive
+              ? 'FastAPI Backend is running on http://127.0.0.1:8000'
+              : 'Backend disconnected (Demo mode active)'
+          }
+        >
+          <span
+            className={`w-2 h-2 rounded-full ${
+              backendLive ? 'bg-emerald-500 animate-pulse' : 'bg-outline'
+            }`}
+          />
+          <span>{backendLive ? 'Backend Live (:8000)' : 'Demo Mode'}</span>
+        </div>
+
         {/* PWA Install Button */}
         <PwaInstallPrompt variant="navbar-pill" />
 
