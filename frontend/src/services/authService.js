@@ -181,7 +181,7 @@ export const authService = {
   /**
    * Log in user: attempts live backend first, falls back gracefully to local demo session on static hosts.
    */
-  async login(email, password, rememberMe = false) {
+  async login(email, password, rememberMe = true) {
     if (!email || !email.trim() || !password) {
       throw new Error('Please enter both your email address and password.');
     }
@@ -201,7 +201,15 @@ export const authService = {
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
-      backendAvailable = true;
+
+      // A real backend responds with 200, 401, or 400.
+      // 404 means the endpoint doesn't exist (e.g. GitHub Pages static hosting).
+      // >= 500 means proxy or gateway error (e.g. Vite proxy ECONNREFUSED).
+      if (res && res.status !== 404 && res.status < 500) {
+        backendAvailable = true;
+      } else {
+        backendAvailable = false;
+      }
     } catch {
       // Backend unreachable or offline (e.g. GitHub Pages static deployment)
       backendAvailable = false;
@@ -210,7 +218,7 @@ export const authService = {
     if (backendAvailable && res) {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(apiErrorMessage(data, 'Invalid email or password.'));
+        throw new Error(apiErrorMessage(data, 'Invalid email or password. Please verify your credentials.'));
       }
 
       setAuthToken(data.token, rememberMe);
@@ -287,7 +295,7 @@ export const authService = {
   /**
    * Register new user: attempts backend first, falls back to local storage registration.
    */
-  async register({ fullName, email, password, rememberMe = false }) {
+  async register({ fullName, email, password, rememberMe = true }) {
     if (!fullName || !fullName.trim()) {
       throw new Error('Please enter your full name or kitchen title.');
     }
@@ -314,13 +322,19 @@ export const authService = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           fullName: fullName.trim(),
+          full_name: fullName.trim(),
           email: cleanEmail,
           password,
         }),
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
-      backendAvailable = true;
+
+      if (res && res.status !== 404 && res.status < 500) {
+        backendAvailable = true;
+      } else {
+        backendAvailable = false;
+      }
     } catch {
       backendAvailable = false;
     }

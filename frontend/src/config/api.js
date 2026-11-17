@@ -1,9 +1,9 @@
 /**
  * FoodFresh AI - Frontend API Configuration
- * Supports environment overrides, custom backend URL setting, and local fallback.
+ * Supports environment overrides, direct local backend connection, and cloud endpoints.
  */
 
-const DEFAULT_API_BASE = 'http://localhost:8000';
+const DEFAULT_API_BASE = 'http://127.0.0.1:8000';
 
 function resolveApiBaseUrl() {
   if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL !== undefined) {
@@ -17,12 +17,12 @@ function resolveApiBaseUrl() {
       }
     } catch {}
 
-    // On localhost development, use Vite proxy or direct backend
+    // On local development, talk directly to the FastAPI server at 127.0.0.1:8000
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return window.location.port && window.location.port !== '8000' ? '' : DEFAULT_API_BASE;
+      return 'http://127.0.0.1:8000';
     }
 
-    // On GitHub Pages or static web hosts without custom backend set, use relative or empty
+    // On GitHub Pages or static hosting without custom URL, use relative
     return '';
   }
   return DEFAULT_API_BASE;
